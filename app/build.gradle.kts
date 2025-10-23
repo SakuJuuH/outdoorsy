@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.weatherapp"
+    namespace = "com.example.outdoorsy"
     compileSdk {
         version = release(36)
     }
