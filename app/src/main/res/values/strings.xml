@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    
+    <!-- Navigation Items -->
+    <string name="nav_weather">Weather</string>
+    <string name="nav_history">History</string>
+    <string name="nav_activity">Activity</string>
+    <string name="nav_shopping">Shopping</string>
+    <string name="nav_settings">Settings</string>
 </resources>
