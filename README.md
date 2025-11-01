@@ -18,3 +18,4 @@ activity based on weather forecasts.
 - Jetpack Compose
 - Retrofit
 - Room
+- Hilt
