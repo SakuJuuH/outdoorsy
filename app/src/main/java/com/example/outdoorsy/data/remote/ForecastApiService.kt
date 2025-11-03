@@ -1,22 +1,22 @@
 package com.example.outdoorsy.data.remote
 
-import com.example.outdoorsy.data.remote.dto.WeatherResponseDto
+import com.example.outdoorsy.data.remote.dto.ForecastResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherApiService {
-    @GET("data/2.5/weather")
-    suspend fun getCurrentWeatherByCoordinates(
+interface ForecastApiService {
+    @GET("data/2.5/forecast")
+    suspend fun getForecastByCoordinates(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("units") units: String = "metric",
         @Query("lang") language: String = "en"
-    ): WeatherResponseDto
+    ): ForecastResponseDto
 
-    @GET("data/2.5/weather")
-    suspend fun getCurrentWeatherByCity(
+    @GET("data/2.5/forecast")
+    suspend fun getForecastByCity(
         @Query("q") city: String,
         @Query("units") units: String = "metric",
         @Query("lang") language: String = "en"
-    ): WeatherResponseDto
+    ): ForecastResponseDto
 }
