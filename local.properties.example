@@ -1,0 +1,3 @@
+"Add this to your existing local.properties file"
+
+OPENWEATHER_API_KEY=your_openweather_api_key_here
