@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TaskAlt
@@ -30,6 +31,7 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 
 enum class NavItem {
+    SEARCH,
     WEATHER,
     HISTORY,
     ACTIVITY,
@@ -46,6 +48,7 @@ fun BottomNavBar(
     val context = androidx.compose.ui.platform.LocalContext.current
     
     val navItems = listOf(
+        NavItem.SEARCH to context.getString(R.string.nav_search),
         NavItem.WEATHER to context.getString(R.string.nav_weather),
         NavItem.HISTORY to context.getString(R.string.nav_history),
         NavItem.ACTIVITY to context.getString(R.string.nav_activity),
@@ -79,6 +82,7 @@ private fun NavItem(
     onClick: () -> Unit
 ) {
     val icon = when (item) {
+        NavItem.SEARCH -> Icons.Outlined.Search
         NavItem.WEATHER -> Icons.Outlined.Cloud
         NavItem.HISTORY -> Icons.Outlined.History
         NavItem.ACTIVITY -> Icons.Outlined.TaskAlt

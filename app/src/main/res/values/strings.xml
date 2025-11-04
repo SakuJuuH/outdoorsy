@@ -2,6 +2,7 @@
     <string name="app_name">WeatherApp</string>
     
     <!-- Navigation Items -->
+    <string name="nav_search">Search</string>
     <string name="nav_weather">Weather</string>
     <string name="nav_history">History</string>
     <string name="nav_activity">Activity</string>
