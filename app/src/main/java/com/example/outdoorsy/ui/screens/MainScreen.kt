@@ -31,7 +31,7 @@ fun MainScreen() {
         val contentModifier = Modifier.padding(innerPadding)
         when (selected) {
             NavItem.SEARCH -> SearchScreen(modifier = contentModifier)
-            NavItem.WEATHER -> PlaceholderScreen("Weather", modifier = contentModifier)
+            NavItem.WEATHER -> WeatherScreen( modifier = contentModifier)
             NavItem.HISTORY -> PlaceholderScreen("History", modifier = contentModifier)
             NavItem.ACTIVITY -> PlaceholderScreen("Activity", modifier = contentModifier)
             NavItem.SHOPPING -> PlaceholderScreen("Shopping", modifier = contentModifier)
