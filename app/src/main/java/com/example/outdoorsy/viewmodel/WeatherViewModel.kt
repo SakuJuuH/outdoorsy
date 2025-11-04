@@ -1,6 +1,7 @@
 package com.example.outdoorsy.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -21,9 +22,32 @@ class WeatherViewModel : ViewModel() {
 
     private fun loadMockData() {
         _locations.value = listOf(
-            WeatherData("Helsinki", 5, "Cloudy", 7, 3, 70, 15),
-            WeatherData("New York", 18, "Sunny", 22, 15, 55, 10),
-            WeatherData("Tokyo", 21, "Rainy", 24, 18, 80, 20)
+            WeatherData(
+                location = "Helsinki",
+                temp = 5,
+                condition = "Cloudy",
+                high = 7,
+                low = 3,
+                humidity = 70,
+                windSpeed = 15,
+                visibility = 8.0,
+                pressure = 29.9,
+                sunrise = "8:15 AM",
+                sunset = "3:45 PM"
+            ),
+            WeatherData(
+                location = "New York",
+                temp = 18,
+                condition = "Sunny",
+                high = 22,
+                low = 15,
+                humidity = 55,
+                windSpeed = 10,
+                visibility = 10.0,
+                pressure = 30.1,
+                sunrise = "6:45 AM",
+                sunset = "5:30 PM"
+            )
         )
     }
 
@@ -41,6 +65,10 @@ data class WeatherData(
     val high: Int,
     val low: Int,
     val humidity: Int,
-    val windSpeed: Int
+    val windSpeed: Int,
+    val visibility: Double,
+    val pressure: Double,
+    val sunrise: String,
+    val sunset: String
 )
 

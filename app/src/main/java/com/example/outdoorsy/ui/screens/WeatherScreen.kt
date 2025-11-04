@@ -11,31 +11,30 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,66 +46,129 @@ import com.example.outdoorsy.viewmodel.WeatherViewModel
 fun WeatherScreen(
     viewModel: WeatherViewModel = viewModel(),
     modifier: Modifier = Modifier
-    ) {
+) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val locations by viewModel.locations.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { viewModel.updateSearchQuery(it) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { },
-            placeholder = { Text("Search for a city or location...") },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-            singleLine = true,
-            shape = MaterialTheme.shapes.medium
-        )
-
 
         Spacer(modifier = Modifier.height(24.dp))
 
-
+        // Weather Info
         if (locations.isNotEmpty()) {
-            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxWidth()) { page ->
-                WeatherCard(weatherData = locations[page], modifier = Modifier.padding(horizontal = 8.dp))
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxWidth()
+            ) { page ->
+                WeatherCard(
+                    weatherData = locations[page],
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Weather Details Grid
+            Text(
+                text = "Weather Details",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.height(400.dp)
+            ) {
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.WaterDrop,
+                        label = "Humidity",
+                        value = "${locations[pagerState.currentPage].humidity}%"
+                    )
+                }
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.Air,
+                        label = "Wind Speed",
+                        value = "${locations[pagerState.currentPage].windSpeed} km/h"
+                    )
+                }
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.Visibility,
+                        label = "Visibility",
+                        value = "${locations[pagerState.currentPage].visibility} mi"
+                    )
+                }
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.Speed,
+                        label = "Pressure",
+                        value = "${locations[pagerState.currentPage].pressure} in"
+                    )
+                }
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.WbSunny,
+                        label = "Sunrise",
+                        value = locations[pagerState.currentPage].sunrise
+                    )
+                }
+                item {
+                    WeatherDetailCard(
+                        icon = Icons.Default.WbSunny,
+                        label = "Sunset",
+                        value = locations[pagerState.currentPage].sunset
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
+            // Page indicators
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(locations.size) { iteration ->
-                    val color = if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary else Color.Gray
+                    val color = if (pagerState.currentPage == iteration) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    }
                     Box(
                         modifier = Modifier
                             .padding(4.dp)
                             .size(8.dp)
-                            .clip(MaterialTheme.shapes.small)
-                            .background(color)
+                            .background(color, CircleShape)
                     )
                 }
             }
+
+
         }
     }
 }
 
 
 @Composable
-fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
+fun WeatherCard(
+    weatherData: WeatherData,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -115,57 +177,102 @@ fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(weatherData.location, style = MaterialTheme.typography.titleLarge)
-            Icon(Icons.Default.Cloud, contentDescription = null, modifier = Modifier.size(64.dp))
-            Text(text = "${weatherData.temp}°C", style = MaterialTheme.typography.displayMedium)
-            Text(weatherData.condition, style = MaterialTheme.typography.bodyLarge)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("H: ${weatherData.high}°")
-                Text("L: ${weatherData.low}°")
-            }
+            // Location
+            Text(
+                text = weatherData.location,
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            val weatherDetails = listOf(
-                Pair(Icons.Default.WaterDrop, "Humidity: ${weatherData.humidity}%"),
-                Pair(Icons.Default.Air, "Wind: ${weatherData.windSpeed} km/h")
+            // Weather icon
+            Icon(
+                imageVector = Icons.Default.Cloud,
+                contentDescription = null,
+                modifier = Modifier.size(72.dp),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Temperature
+            Text(
+                text = "${weatherData.temp}°C",
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+
+            // Condition
+            Text(
+                text = weatherData.condition,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // High/Low
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(weatherDetails) { (icon, label) ->
-                    WeatherDetailCard(icon, label)
-                }
+                Text(
+                    text = "H: ${weatherData.high}°",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
+                )
+                Text(
+                    text = "L: ${weatherData.low}°",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
+                )
             }
         }
     }
 }
+
 
 
 
 
 @Composable
-fun WeatherDetailCard(icon: ImageVector, label: String) {
+fun WeatherDetailCard(
+    icon: ImageVector,
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            Spacer(Modifier.width(8.dp))
-            Text(label, style = MaterialTheme.typography.bodyMedium)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(28.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Column {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
-
 
