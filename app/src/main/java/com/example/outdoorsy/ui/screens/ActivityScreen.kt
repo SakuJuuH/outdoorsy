@@ -24,7 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,7 +50,8 @@ fun ActivityScreen(
 
         EditableDropdownMenu(
             options = uiState.locations,
-            label = "Choose a location",
+            label = "Select Location",
+            prompt = "Choose a location...",
             selectedText = uiState.selectedLocation,
             onValueSelected = viewModel::updateLocation
         )
@@ -59,7 +60,8 @@ fun ActivityScreen(
 
         EditableDropdownMenu(
             options = uiState.activities,
-            label = "Choose an activity",
+            label = "Select Activity",
+            prompt = "Choose an activity...",
             selectedText = uiState.selectedActivity,
             onValueSelected = viewModel::updateActivity
         )
@@ -77,28 +79,44 @@ fun ActivityScreen(
     }
 }
 
+// TODO: Fix dropdown stealing focus from TextField when text changes
 @Composable
 fun EditableDropdownMenu(
     options: List<String>,
     label: String,
+    prompt: String,
     selectedText: String,
     onValueSelected: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val focusManager = LocalFocusManager.current
+    var text by remember { mutableStateOf(selectedText) }
+
+    val filteredOptions = options.filter {
+        it.contains(text, ignoreCase = true)
+    }
 
     Column {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
         OutlinedTextField(
-            value = selectedText,
-            onValueChange = { onValueSelected(it) },
-            label = { Text(label) },
+            value = text,
+            onValueChange = {
+                text = it
+                expanded = true
+            },
+            label = { Text(prompt) },
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = true },
             trailingIcon = {
                 Icon(
                     imageVector = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.clickable { expanded = !expanded }
                 )
             },
             singleLine = true
@@ -106,21 +124,25 @@ fun EditableDropdownMenu(
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-                focusManager.clearFocus()
-            },
+            onDismissRequest = { expanded = false },
             modifier = Modifier.fillMaxWidth()
         ) {
-            options.forEach { option ->
+            if (filteredOptions.isEmpty()) {
                 DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        onValueSelected(option)
-                        expanded = false
-                        focusManager.clearFocus()
-                    }
+                    text = { Text("No matches found") },
+                    onClick = { expanded = false }
                 )
+            } else {
+                filteredOptions.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            text = option
+                            onValueSelected(option)
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }
