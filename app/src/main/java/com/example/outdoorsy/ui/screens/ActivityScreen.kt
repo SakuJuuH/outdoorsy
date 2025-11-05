@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.screens
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.DropdownMenu
@@ -28,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.viewmodel.ActivityViewModel
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ActivityScreen(
@@ -62,7 +66,14 @@ fun ActivityScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // TODO: Add time specification, search button and search output
+        TimePickerField(
+            label = "Select Time",
+            prompt = "Choose a time...",
+            selectedTime = uiState.selectedTime,
+            onTimeSelected = viewModel::updateTime
+        )
+
+        // TODO: Add search button and search output
     }
 }
 
@@ -111,6 +122,60 @@ fun EditableDropdownMenu(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun TimePickerField(
+    label: String,
+    prompt: String,
+    selectedTime: LocalTime,
+    onTimeSelected: (LocalTime) -> Unit
+) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+
+    val formattedTime = remember(selectedTime) {
+        selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+    }
+
+    Column {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        OutlinedTextField(
+            value = formattedTime,
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(prompt) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showDialog = true },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.AccessTime,
+                    contentDescription = null,
+                    modifier = Modifier.clickable { showDialog = true }
+                )
+            },
+            singleLine = true
+        )
+
+        if (showDialog) {
+            TimePickerDialog(
+                context,
+                { _, hour: Int, minute: Int ->
+                    onTimeSelected(LocalTime.of(hour, minute))
+                    showDialog = false
+                },
+                selectedTime.hour,
+                selectedTime.minute,
+                true
+            ).show()
         }
     }
 }
