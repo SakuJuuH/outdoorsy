@@ -20,10 +20,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -44,17 +44,13 @@ import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
 
 @Composable
-fun WeatherScreen(
-    viewModel: WeatherViewModel = viewModel(),
-    modifier: Modifier = Modifier
-) {
+fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier = Modifier) {
     val searchQuery by viewModel.searchQuery.collectAsState()
-    val showRecentSearches by viewModel.showRecentSearches.collectAsState()
     val locations by viewModel.locations.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
@@ -79,6 +75,29 @@ fun WeatherScreen(
                     weatherData = locations[page],
                     modifier = Modifier.padding(horizontal = 4.dp)
                 )
+            }
+
+            // Page Indicators
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(locations.size) { iteration ->
+                    val color = if (pagerState.currentPage == iteration) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    }
+                    Box(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .size(8.dp)
+                            .background(color, CircleShape)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -159,38 +178,12 @@ fun WeatherScreen(
             ForecastCard(forecast = locations[pagerState.currentPage].forecast)
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            // Page indicators
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(locations.size) { iteration ->
-                    val color = if (pagerState.currentPage == iteration) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                    }
-                    Box(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .size(8.dp)
-                            .background(color, CircleShape)
-                    )
-                }
-            }
-
-            // Bottom padding to keep content above nav bar
-            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 }
 
 @Composable
-fun ForecastCard(
-    forecast: List<DailyForecast>,
-    modifier: Modifier = Modifier
-) {
+fun ForecastCard(forecast: List<DailyForecast>, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -212,10 +205,7 @@ fun ForecastCard(
 }
 
 @Composable
-fun ForecastDayItem(
-    dailyForecast: DailyForecast,
-    modifier: Modifier = Modifier
-) {
+fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -264,7 +254,6 @@ fun ForecastDayItem(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-
         }
     }
 }
@@ -293,10 +282,7 @@ fun SearchBar(
 }
 
 @Composable
-fun WeatherCard(
-    weatherData: WeatherData,
-    modifier: Modifier = Modifier
-) {
+fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -357,7 +343,6 @@ fun WeatherCard(
                     text = "H: ${weatherData.high}°",
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
                 )
-
             }
         }
     }
