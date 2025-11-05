@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -21,26 +19,29 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
-
 
 @Composable
 fun WeatherScreen(
@@ -48,6 +49,7 @@ fun WeatherScreen(
     modifier: Modifier = Modifier
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val showRecentSearches by viewModel.showRecentSearches.collectAsState()
     val locations by viewModel.locations.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
 
@@ -57,10 +59,17 @@ fun WeatherScreen(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
+        // Search Bar
+        SearchBar(
+            query = searchQuery,
+            onQueryChange = { viewModel.updateSearchQuery(it) },
+            onFocusChange = { viewModel.setShowRecentSearches(it) },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Weather Info
+        // Weather Carousel (HorizontalPager)
         if (locations.isNotEmpty()) {
             HorizontalPager(
                 state = pagerState,
@@ -81,55 +90,73 @@ fun WeatherScreen(
                 modifier = Modifier.padding(bottom = 12.dp)
             )
 
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.height(400.dp)
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     WeatherDetailCard(
                         icon = Icons.Default.WaterDrop,
                         label = "Humidity",
-                        value = "${locations[pagerState.currentPage].humidity}%"
+                        value = "${locations[pagerState.currentPage].humidity}%",
+                        modifier = Modifier.weight(1f)
                     )
-                }
-                item {
                     WeatherDetailCard(
                         icon = Icons.Default.Air,
                         label = "Wind Speed",
-                        value = "${locations[pagerState.currentPage].windSpeed} km/h"
+                        value = "${locations[pagerState.currentPage].windSpeed} km/h",
+                        modifier = Modifier.weight(1f)
                     )
                 }
-                item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     WeatherDetailCard(
                         icon = Icons.Default.Visibility,
                         label = "Visibility",
-                        value = "${locations[pagerState.currentPage].visibility} mi"
+                        value = "${locations[pagerState.currentPage].visibility} mi",
+                        modifier = Modifier.weight(1f)
                     )
-                }
-                item {
                     WeatherDetailCard(
                         icon = Icons.Default.Speed,
                         label = "Pressure",
-                        value = "${locations[pagerState.currentPage].pressure} in"
+                        value = "${locations[pagerState.currentPage].pressure} in",
+                        modifier = Modifier.weight(1f)
                     )
                 }
-                item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     WeatherDetailCard(
                         icon = Icons.Default.WbSunny,
                         label = "Sunrise",
-                        value = locations[pagerState.currentPage].sunrise
+                        value = locations[pagerState.currentPage].sunrise,
+                        modifier = Modifier.weight(1f)
                     )
-                }
-                item {
                     WeatherDetailCard(
                         icon = Icons.Default.WbSunny,
                         label = "Sunset",
-                        value = locations[pagerState.currentPage].sunset
+                        value = locations[pagerState.currentPage].sunset,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 5-Day Forecast
+            Text(
+                text = "5-Day Forecast",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            ForecastCard(forecast = locations[pagerState.currentPage].forecast)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -153,11 +180,117 @@ fun WeatherScreen(
                 }
             }
 
+            // Bottom padding to keep content above nav bar
+            Spacer(modifier = Modifier.height(80.dp))
+        }
+    }
+}
+
+@Composable
+fun ForecastCard(
+    forecast: List<DailyForecast>,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            forecast.forEach { day ->
+                ForecastDayItem(dailyForecast = day)
+            }
+        }
+    }
+}
+
+@Composable
+fun ForecastDayItem(
+    dailyForecast: DailyForecast,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = dailyForecast.day,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1f)
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(2f)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Cloud,
+                contentDescription = dailyForecast.condition,
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Text(
+                text = dailyForecast.condition,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = "${dailyForecast.low}°",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+            )
+            Text(
+                text = "${dailyForecast.high}°",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
         }
     }
 }
 
+@Composable
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onFocusChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = modifier.onFocusChanged { onFocusChange(it.isFocused) },
+        placeholder = { Text("Search for a city or location...") },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search"
+            )
+        },
+        singleLine = true,
+        shape = MaterialTheme.shapes.medium
+    )
+}
 
 @Composable
 fun WeatherCard(
@@ -217,21 +350,18 @@ fun WeatherCard(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "H: ${weatherData.high}°",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
-                )
-                Text(
                     text = "L: ${weatherData.low}°",
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
                 )
+                Text(
+                    text = "H: ${weatherData.high}°",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f)
+                )
+
             }
         }
     }
 }
-
-
-
-
 
 @Composable
 fun WeatherDetailCard(
@@ -275,4 +405,3 @@ fun WeatherDetailCard(
         }
     }
 }
-
