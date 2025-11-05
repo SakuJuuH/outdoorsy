@@ -3,6 +3,7 @@ package com.example.outdoorsy.viewmodel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalTime
 
 class ActivityViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(
@@ -20,5 +21,9 @@ class ActivityViewModel : ViewModel() {
 
     fun updateActivity(newActivity: String) {
         _uiState.value = _uiState.value.copy(selectedActivity = newActivity)
+    }
+
+    fun updateTime(time: LocalTime) {
+        _uiState.value = _uiState.value.copy(selectedTime = time)
     }
 }
