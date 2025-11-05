@@ -1,5 +1,6 @@
 package com.example.outdoorsy.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,5 +26,14 @@ class ActivityViewModel : ViewModel() {
 
     fun updateTime(time: LocalTime) {
         _uiState.value = _uiState.value.copy(selectedTime = time)
+    }
+
+    fun performSearch() {
+        val location = _uiState.value.selectedLocation
+        val activity = _uiState.value.selectedActivity
+        val time = _uiState.value.selectedTime
+
+        // Perform search logic here
+        Log.d("ActivitySearch", "Searching for $activity in $location at $time")
     }
 }
