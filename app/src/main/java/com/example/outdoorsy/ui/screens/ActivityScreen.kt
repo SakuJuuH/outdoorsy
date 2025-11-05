@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -39,6 +40,9 @@ fun ActivityScreen(
     viewModel: ActivityViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
+            uiState.selectedActivity.isNotBlank()
 
     Column(modifier = modifier.padding(16.dp)) {
         Text(
@@ -75,7 +79,17 @@ fun ActivityScreen(
             onTimeSelected = viewModel::updateTime
         )
 
-        // TODO: Add search button and search output
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { viewModel.performSearch() },
+            enabled = isSearchEnabled,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Search")
+        }
+
+        // TODO: Add search output
     }
 }
 
