@@ -37,7 +37,7 @@ fun MainScreen(modifier: Modifier) {
             NavItem.WEATHER -> WeatherScreen(modifier = contentModifier)
             NavItem.HISTORY -> PlaceholderScreen("History", modifier = contentModifier)
             NavItem.ACTIVITY -> ActivityScreen(modifier = contentModifier)
-            NavItem.SHOPPING -> PlaceholderScreen("Shopping", modifier = contentModifier)
+            NavItem.SHOPPING -> ShoppingScreen()
             NavItem.SETTINGS -> SettingsScreen(modifier = contentModifier.padding())
         }
     }
