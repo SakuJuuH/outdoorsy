@@ -33,7 +33,7 @@ fun MainScreen() {
             NavItem.SEARCH -> SearchScreen(modifier = contentModifier)
             NavItem.WEATHER -> PlaceholderScreen("Weather", modifier = contentModifier)
             NavItem.HISTORY -> PlaceholderScreen("History", modifier = contentModifier)
-            NavItem.ACTIVITY -> PlaceholderScreen("Activity", modifier = contentModifier)
+            NavItem.ACTIVITY -> ActivityScreen(modifier = contentModifier)
             NavItem.SHOPPING -> PlaceholderScreen("Shopping", modifier = contentModifier)
             NavItem.SETTINGS -> PlaceholderScreen("Settings", modifier = contentModifier)
         }
