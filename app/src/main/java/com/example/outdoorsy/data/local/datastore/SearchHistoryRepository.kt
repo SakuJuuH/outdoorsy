@@ -44,5 +44,3 @@ class SearchHistoryRepository(private val application: Application) {
         }
     }
 }
-
-
