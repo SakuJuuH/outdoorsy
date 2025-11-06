@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -35,19 +36,18 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun ActivityScreen(
-    modifier: Modifier = Modifier,
-    viewModel: ActivityViewModel = viewModel()
-) {
+fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-            uiState.selectedActivity.isNotBlank()
+        uiState.selectedActivity.isNotBlank()
 
-    Column(modifier = modifier.padding(16.dp)) {
+    Column(modifier = modifier) {
         Text(
             text = "Activity Planner",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -128,11 +128,16 @@ fun EditableDropdownMenu(
                 .clickable { expanded = true },
             trailingIcon = {
                 Icon(
-                    imageVector = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                    imageVector = if (expanded) {
+                        Icons.Default.ArrowDropUp
+                    } else {
+                        Icons.Default.ArrowDropDown
+                    },
                     contentDescription = null,
                     modifier = Modifier.clickable { expanded = !expanded }
                 )
             },
+            shape = MaterialTheme.shapes.medium,
             singleLine = true
         )
 
@@ -198,6 +203,7 @@ fun TimePickerField(
                     modifier = Modifier.clickable { showDialog = true }
                 )
             },
+            shape = MaterialTheme.shapes.medium,
             singleLine = true
         )
 

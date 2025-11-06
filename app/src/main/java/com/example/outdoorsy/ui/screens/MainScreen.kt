@@ -3,9 +3,7 @@ package com.example.outdoorsy.ui.screens
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -15,38 +13,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.outdoorsy.ui.components.BottomNavBar
 import com.example.outdoorsy.ui.components.NavItem
-import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun MainScreen(modifier: Modifier) {
-    var selected by remember { mutableStateOf(NavItem.SEARCH) }
+    var selected by remember { mutableStateOf(NavItem.WEATHER) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             BottomNavBar(
-                modifier = modifier.padding(bottom = 6.dp),
+                modifier = modifier
+                    .padding(bottom = 12.dp),
                 selectedItem = selected,
                 onItemClick = { selected = it }
             )
         }
     ) { innerPadding: PaddingValues ->
-        val contentModifier = Modifier.padding(innerPadding)
+        val contentModifier = Modifier
+            .padding(innerPadding)
+            .padding(16.dp)
         when (selected) {
-            NavItem.SEARCH -> SearchScreen(modifier = contentModifier)
             NavItem.WEATHER -> WeatherScreen(modifier = contentModifier)
-            NavItem.HISTORY -> PlaceholderScreen("History", modifier = contentModifier)
+            NavItem.HISTORY -> SearchScreen(modifier = contentModifier)
             NavItem.ACTIVITY -> ActivityScreen(modifier = contentModifier)
-            NavItem.SHOPPING -> ShoppingScreen()
-            NavItem.SETTINGS -> SettingsScreen(modifier = contentModifier.padding())
+            NavItem.SHOPPING -> ShoppingScreen(modifier = contentModifier)
+            NavItem.SETTINGS -> SettingsScreen(modifier = contentModifier)
         }
     }
-}
-
-@Composable
-private fun PlaceholderScreen(title: String, modifier: Modifier = Modifier) {
-    Text(
-        text = title,
-        modifier = modifier.padding(MaterialTheme.spacing(4))
-    )
 }
