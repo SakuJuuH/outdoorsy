@@ -28,5 +28,3 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch { repository.clear() }
     }
 }
-
-
