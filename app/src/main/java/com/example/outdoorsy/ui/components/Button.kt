@@ -35,7 +35,7 @@ fun CustomButton(
         ButtonType.PRIMARY -> MaterialTheme.colorScheme.primary
         ButtonType.SECONDARY -> MaterialTheme.colorScheme.secondary
     }
-    
+
     val contentColor = when (type) {
         ButtonType.PRIMARY -> MaterialTheme.colorScheme.onPrimary
         ButtonType.SECONDARY -> MaterialTheme.colorScheme.onSecondary
@@ -80,17 +80,17 @@ fun CustomButtonPreview() {
                 text = "Primary Button",
                 type = ButtonType.PRIMARY
             )
-            
+
             Spacer(modifier = Modifier.padding(8.dp))
-            
+
             CustomButton(
                 onClick = { },
                 text = "Secondary Button",
                 type = ButtonType.SECONDARY
             )
-            
+
             Spacer(modifier = Modifier.padding(8.dp))
-            
+
             CustomButton(
                 onClick = { },
                 text = "Disabled Button",

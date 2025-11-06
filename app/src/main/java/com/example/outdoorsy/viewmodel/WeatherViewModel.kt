@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-
 class WeatherViewModel : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -169,9 +168,4 @@ data class WeatherData(
     val forecast: List<DailyForecast>
 )
 
-data class DailyForecast(
-    val day: String,
-    val high: Int,
-    val low: Int,
-    val condition: String
-)
+data class DailyForecast(val day: String, val high: Int, val low: Int, val condition: String)

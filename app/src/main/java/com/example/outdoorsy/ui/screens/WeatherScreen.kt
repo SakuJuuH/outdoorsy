@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -51,9 +50,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
     Column(
         modifier = modifier
-            .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
     ) {
         // Search Bar
         SearchBar(
@@ -268,8 +265,8 @@ fun SearchBar(
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
+        label = { Text("Search for a city or location...") },
         modifier = modifier.onFocusChanged { onFocusChange(it.isFocused) },
-        placeholder = { Text("Search for a city or location...") },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,

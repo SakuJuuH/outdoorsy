@@ -2,9 +2,9 @@ package com.example.outdoorsy.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import java.time.LocalTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.time.LocalTime
 
 class ActivityViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(

@@ -13,5 +13,3 @@ val LocalSpacing = staticCompositionLocalOf { Spacing() }
 
 val androidx.compose.material3.MaterialTheme.spacing: Spacing
     @Composable get() = LocalSpacing.current
-
-

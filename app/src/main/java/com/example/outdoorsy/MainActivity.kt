@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.outdoorsy.ui.screens.MainScreen
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,5 +21,13 @@ class MainActivity : ComponentActivity() {
                 MainScreen(Modifier)
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun WeatherAppPreview() {
+    WeatherAppTheme {
+        MainScreen(Modifier)
     }
 }
