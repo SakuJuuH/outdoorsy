@@ -37,12 +37,9 @@ import androidx.compose.ui.res.stringResource
 import com.example.outdoorsy.R
 
 @Composable
-fun ShoppingScreen(
-    modifier: Modifier = Modifier,
-    shoppingViewModel: ShoppingViewModel = viewModel()
-) {
-    val recommendedItems by shoppingViewModel.recommendedItems.collectAsState()
-    val allItems by shoppingViewModel.allItems.collectAsState()
+fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = viewModel()) {
+    val recommendedItems by viewModel.recommendedItems.collectAsState()
+    val allItems by viewModel.allItems.collectAsState()
 
     LazyColumn(
         modifier = modifier,
@@ -73,7 +70,7 @@ fun ShoppingScreen(
         items(recommendedItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
 
@@ -92,7 +89,7 @@ fun ShoppingScreen(
         items(allItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
     }
