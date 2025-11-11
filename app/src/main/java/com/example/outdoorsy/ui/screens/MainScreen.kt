@@ -34,7 +34,7 @@ fun MainScreen(modifier: Modifier) {
             .padding(16.dp)
         when (selected) {
             NavItem.WEATHER -> WeatherScreen(modifier = contentModifier)
-            NavItem.HISTORY -> SearchScreen(modifier = contentModifier)
+            NavItem.HISTORY -> HistoryScreen(modifier = contentModifier)
             NavItem.ACTIVITY -> ActivityScreen(modifier = contentModifier)
             NavItem.SHOPPING -> ShoppingScreen(modifier = contentModifier)
             NavItem.SETTINGS -> SettingsScreen(modifier = contentModifier)
