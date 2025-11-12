@@ -2,7 +2,9 @@ package com.example.outdoorsy.ui.screens
 
 import android.app.TimePickerDialog
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,12 +79,26 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TimePickerField(
-            label = "Select Time",
-            prompt = "Choose a time...",
-            selectedTime = uiState.selectedTime,
-            onTimeSelected = viewModel::updateTime
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            TimePickerField(
+                label = "Start Time",
+                prompt = "Choose a time...",
+                selectedTime = uiState.selectedStartTime,
+                onTimeSelected = viewModel::updateStartTime,
+                modifier = Modifier.weight(1f)
+            )
+
+            TimePickerField(
+                label = "End Time",
+                prompt = "Choose a time...",
+                selectedTime = uiState.selectedEndTime,
+                onTimeSelected = viewModel::updateEndTime,
+                modifier = Modifier.weight(1f)
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -197,7 +213,8 @@ fun TimePickerField(
     label: String,
     prompt: String,
     selectedTime: LocalTime,
-    onTimeSelected: (LocalTime) -> Unit
+    onTimeSelected: (LocalTime) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
@@ -208,7 +225,9 @@ fun TimePickerField(
         selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
