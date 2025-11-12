@@ -1,5 +1,6 @@
 package com.example.outdoorsy.di
 
+import com.example.outdoorsy.data.remote.AiAssistantApiService
 import com.example.outdoorsy.data.remote.ForecastApiService
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.utils.BASE_URL
@@ -45,4 +46,9 @@ object NetworkModule {
     @Singleton
     fun provideForecastApi(retrofit: Retrofit): ForecastApiService =
         retrofit.create(ForecastApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAssistantApi(retrofit: Retrofit): AiAssistantApiService =
+        retrofit.create(AiAssistantApiService::class.java)
 }
