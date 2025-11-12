@@ -202,6 +202,8 @@ fun TimePickerField(
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
 
+    val focusRequester = remember { FocusRequester() }
+
     val formattedTime = remember(selectedTime) {
         selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     }
@@ -220,7 +222,13 @@ fun TimePickerField(
             label = { Text(prompt) },
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { showDialog = true },
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    if (focusState.isFocused) {
+                        showDialog = true
+                        focusRequester.freeFocus()
+                    }
+                },
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.AccessTime,
@@ -233,7 +241,7 @@ fun TimePickerField(
         )
 
         if (showDialog) {
-            TimePickerDialog(
+            val dialog = TimePickerDialog(
                 context,
                 { _, hour: Int, minute: Int ->
                     onTimeSelected(LocalTime.of(hour, minute))
@@ -242,7 +250,11 @@ fun TimePickerField(
                 selectedTime.hour,
                 selectedTime.minute,
                 true
-            ).show()
+            )
+            dialog.setOnDismissListener {
+                showDialog = false
+            }
+            dialog.show()
         }
     }
 }
