@@ -1,10 +1,24 @@
 package com.example.outdoorsy.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.domain.model.WeatherResponse
+import com.example.outdoorsy.domain.usecase.GetCurrentWeather
+import com.example.outdoorsy.domain.usecase.GetForecast
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class WeatherViewModel : ViewModel() {
+@HiltViewModel
+class WeatherViewModel @Inject constructor(
+    private val getCurrentWeather: GetCurrentWeather,
+    private val getForecast: GetForecast
+) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
@@ -17,124 +31,77 @@ class WeatherViewModel : ViewModel() {
     private val _recentSearches = MutableStateFlow<List<String>>(emptyList())
     val recentSearches: StateFlow<List<String>> = _recentSearches
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
-        loadMockData()
         loadRecentSearches()
+        fetchWeatherData("London")
     }
 
-    private fun loadMockData() {
-        _locations.value = listOf(
-            WeatherData(
-                location = "Helsinki",
-                temp = 5,
-                condition = "Cloudy",
-                high = 7,
-                low = 3,
-                humidity = 70,
-                windSpeed = 15,
-                visibility = 8.0,
-                pressure = 29.9,
-                sunrise = "8:15 AM",
-                sunset = "3:45 PM",
-                forecast = listOf(
-                    DailyForecast("Mon", 8, 4, "Cloudy"),
-                    DailyForecast("Tue", 6, 2, "Rainy"),
-                    DailyForecast("Wed", 9, 5, "Partly Cloudy"),
-                    DailyForecast("Thu", 7, 3, "Sunny"),
-                    DailyForecast("Fri", 10, 6, "Clear")
+    private fun fetchWeatherData(city: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val weatherResponse = getCurrentWeather(
+                    city = city,
+                    units = "metric",
+                    language = "en"
                 )
-            ),
-            WeatherData(
-                location = "New York",
-                temp = 18,
-                condition = "Sunny",
-                high = 22,
-                low = 15,
-                humidity = 55,
-                windSpeed = 10,
-                visibility = 10.0,
-                pressure = 30.1,
-                sunrise = "6:45 AM",
-                sunset = "5:30 PM",
-                forecast = listOf(
-                    DailyForecast("Mon", 23, 16, "Sunny"),
-                    DailyForecast("Tue", 20, 14, "Partly Cloudy"),
-                    DailyForecast("Wed", 19, 13, "Cloudy"),
-                    DailyForecast("Thu", 21, 15, "Clear"),
-                    DailyForecast("Fri", 24, 17, "Sunny")
+                val forecastResponse = getForecast(
+                    city = city,
+                    units = "metric",
+                    language = "en"
                 )
-            ),
-            WeatherData(
-                location = "Tokyo",
-                temp = 21,
-                condition = "Rainy",
-                high = 24,
-                low = 18,
-                humidity = 80,
-                windSpeed = 20,
-                visibility = 5.0,
-                pressure = 29.7,
-                sunrise = "6:20 AM",
-                sunset = "5:15 PM",
-                forecast = listOf(
-                    DailyForecast("Mon", 22, 17, "Rainy"),
-                    DailyForecast("Tue", 23, 18, "Cloudy"),
-                    DailyForecast("Wed", 25, 19, "Partly Cloudy"),
-                    DailyForecast("Thu", 26, 20, "Sunny"),
-                    DailyForecast("Fri", 24, 19, "Clear")
+                val weatherData = mapToWeatherData(weatherResponse, forecastResponse.listOfForecastItems)
+                _locations.value = listOf(weatherData)
+                addRecentSearch(city)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    private fun mapToWeatherData(response: WeatherResponse, forecastItems: List<com.example.outdoorsy.domain.model.ForecastItem>): WeatherData {
+        val dailyForecasts = forecastItems
+            .groupBy { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.timeOfData.toLong() * 1000)) }
+            .values
+            .take(5)
+            .map { dayItems ->
+                val temps = dayItems.map { it.main.maxTemperature }
+                DailyForecast(
+                    day = SimpleDateFormat("EEE", Locale.getDefault()).format(Date(dayItems.first().timeOfData.toLong() * 1000)),
+                    high = temps.maxOrNull()?.toInt() ?: 0,
+                    low = temps.minOrNull()?.toInt() ?: 0,
+                    condition = dayItems.first().weather.firstOrNull()?.group ?: "Unknown"
                 )
-            ),
-            WeatherData(
-                location = "London",
-                temp = 12,
-                condition = "Partly Cloudy",
-                high = 15,
-                low = 9,
-                humidity = 65,
-                windSpeed = 12,
-                visibility = 7.0,
-                pressure = 30.0,
-                sunrise = "7:30 AM",
-                sunset = "4:45 PM",
-                forecast = listOf(
-                    DailyForecast("Mon", 14, 8, "Cloudy"),
-                    DailyForecast("Tue", 16, 10, "Rainy"),
-                    DailyForecast("Wed", 13, 9, "Cloudy"),
-                    DailyForecast("Thu", 15, 11, "Partly Cloudy"),
-                    DailyForecast("Fri", 17, 12, "Sunny")
-                )
-            ),
-            WeatherData(
-                location = "Sydney",
-                temp = 25,
-                condition = "Clear",
-                high = 28,
-                low = 22,
-                humidity = 45,
-                windSpeed = 8,
-                visibility = 12.0,
-                pressure = 30.2,
-                sunrise = "5:50 AM",
-                sunset = "7:45 PM",
-                forecast = listOf(
-                    DailyForecast("Mon", 29, 23, "Sunny"),
-                    DailyForecast("Tue", 27, 21, "Clear"),
-                    DailyForecast("Wed", 26, 22, "Sunny"),
-                    DailyForecast("Thu", 28, 23, "Partly Cloudy"),
-                    DailyForecast("Fri", 30, 24, "Clear")
-                )
-            )
+            }
+
+        return WeatherData(
+            location = response.name,
+            temp = response.main.temperature.toInt(),
+            condition = response.weather.firstOrNull()?.group ?: "Unknown",
+            high = response.main.maxTemperature.toInt(),
+            low = response.main.minTemperature.toInt(),
+            humidity = response.main.humidity,
+            windSpeed = response.wind.speed.toInt(),
+            visibility = response.visibility / 1000.0,
+            pressure = response.main.pressure / 10.0,
+            sunrise = formatTime(response.sys.sunrise),
+            sunset = formatTime(response.sys.sunset),
+            forecast = dailyForecasts
         )
+    }
+
+    private fun formatTime(timestamp: Long): String {
+        val sdf = SimpleDateFormat("HH:mm a", Locale.getDefault())
+        return sdf.format(Date(timestamp * 1000))
     }
 
     private fun loadRecentSearches() {
-        _recentSearches.value = listOf(
-            "Paris",
-            "Berlin",
-            "Barcelona",
-            "Amsterdam",
-            "Rome"
-        )
+        _recentSearches.value = listOf("Paris", "Berlin", "Barcelona", "Amsterdam", "Rome")
     }
 
     fun updateSearchQuery(query: String) {
@@ -143,6 +110,14 @@ class WeatherViewModel : ViewModel() {
 
     fun setShowRecentSearches(show: Boolean) {
         _showRecentSearches.value = show
+    }
+
+    fun searchLocation(city: String) {
+        if (city.isNotBlank()) {
+            fetchWeatherData(city)
+            _searchQuery.value = ""
+            _showRecentSearches.value = false
+        }
     }
 
     fun addRecentSearch(location: String) {

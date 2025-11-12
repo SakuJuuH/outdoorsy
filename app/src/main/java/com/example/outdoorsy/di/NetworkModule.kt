@@ -2,7 +2,12 @@ package com.example.outdoorsy.di
 
 import com.example.outdoorsy.data.remote.ForecastApiService
 import com.example.outdoorsy.data.remote.WeatherApiService
+import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
+import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
+import com.example.outdoorsy.domain.repository.ForecastRepository
+import com.example.outdoorsy.domain.repository.WeatherRepository
 import com.example.outdoorsy.utils.BASE_URL
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,4 +50,15 @@ object NetworkModule {
     @Singleton
     fun provideForecastApi(retrofit: Retrofit): ForecastApiService =
         retrofit.create(ForecastApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWeatherRepository(weatherApiService: WeatherApiService): WeatherRepository =
+        WeatherRepositoryImpl(weatherApiService)
+
+    @Provides
+    @Singleton
+    fun provideForecastRepository(forecastApiService: ForecastApiService): ForecastRepository =
+        ForecastRepositoryImpl(forecastApiService)
+
 }
