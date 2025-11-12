@@ -24,16 +24,21 @@ class ActivityViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(selectedActivity = newActivity)
     }
 
-    fun updateTime(time: LocalTime) {
-        _uiState.value = _uiState.value.copy(selectedTime = time)
+    fun updateStartTime(time: LocalTime) {
+        _uiState.value = _uiState.value.copy(selectedStartTime = time)
+    }
+
+    fun updateEndTime(time: LocalTime) {
+        _uiState.value = _uiState.value.copy(selectedEndTime = time)
     }
 
     fun performSearch() {
         val location = _uiState.value.selectedLocation
         val activity = _uiState.value.selectedActivity
-        val time = _uiState.value.selectedTime
+        val startTime = _uiState.value.selectedStartTime
+        val endTime = _uiState.value.selectedEndTime
 
         // Perform search logic here
-        Log.d("ActivitySearch", "Searching for $activity in $location at $time")
+        Log.d("ActivitySearch", "Searching for $activity in $location from $startTime to $endTime")
     }
 }
