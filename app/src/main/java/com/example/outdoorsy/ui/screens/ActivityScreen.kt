@@ -87,7 +87,9 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 label = "Start Time",
                 prompt = "Choose a time...",
                 selectedTime = uiState.selectedStartTime,
-                onTimeSelected = viewModel::updateStartTime,
+                onTimeSelected = { newStartTime ->
+                    viewModel.updateStartTime(newStartTime, uiState.selectedEndTime)
+                },
                 modifier = Modifier.weight(1f)
             )
 
@@ -95,12 +97,24 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 label = "End Time",
                 prompt = "Choose a time...",
                 selectedTime = uiState.selectedEndTime,
-                onTimeSelected = viewModel::updateEndTime,
+                onTimeSelected = { newEndTime ->
+                    viewModel.updateEndTime(newEndTime, uiState.selectedStartTime)
+                },
                 modifier = Modifier.weight(1f)
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        if (uiState.timeRangeError != null) {
+            Text(
+                text = uiState.timeRangeError!!,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        } else {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
 
         Button(
             onClick = { viewModel.performSearch() },
