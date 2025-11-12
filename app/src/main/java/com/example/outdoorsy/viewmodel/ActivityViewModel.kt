@@ -2,6 +2,7 @@ package com.example.outdoorsy.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.outdoorsy.data.test.ActivitiesData
 import java.time.LocalTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.update
 class ActivityViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(
-            // TODO: Replace placeholder values with proper database queries
+            // TODO: Replace location placeholder values with proper database queries
             locations = listOf("Helsinki", "Espoo", "Vantaa"),
-            activities = listOf("Hiking", "Gardening", "Cycling", "Swimming")
+            activities = ActivitiesData.activities
         )
     )
     val uiState: StateFlow<ActivityUiState> = _uiState
