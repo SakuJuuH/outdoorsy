@@ -34,6 +34,8 @@ import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.viewmodel.ActivityViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 @Composable
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
@@ -44,7 +46,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
     Column(modifier = modifier) {
         Text(
-            text = "Activity Planner",
+            text = stringResource(id = R.string.activity_screen_title),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
@@ -54,8 +56,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         EditableDropdownMenu(
             options = uiState.locations,
-            label = "Select Location",
-            prompt = "Choose a location...",
+            label = stringResource(id = R.string.activity_screen_location_label),
+            prompt = stringResource(id = R.string.activity_screen_location_prompt),
             selectedText = uiState.selectedLocation,
             onValueSelected = viewModel::updateLocation
         )
@@ -64,8 +66,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         EditableDropdownMenu(
             options = uiState.activities,
-            label = "Select Activity",
-            prompt = "Choose an activity...",
+            label = stringResource(id = R.string.activity_screen_activity_label),
+            prompt = stringResource(id = R.string.activity_screen_activity_prompt),
             selectedText = uiState.selectedActivity,
             onValueSelected = viewModel::updateActivity
         )
@@ -73,8 +75,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         Spacer(modifier = Modifier.height(16.dp))
 
         TimePickerField(
-            label = "Select Time",
-            prompt = "Choose a time...",
+            label = stringResource(id = R.string.activity_screen_time_label),
+            prompt = stringResource(id = R.string.activity_screen_time_prompt),
             selectedTime = uiState.selectedTime,
             onTimeSelected = viewModel::updateTime
         )
@@ -86,7 +88,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             enabled = isSearchEnabled,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Search")
+            Text(stringResource(id = R.string.activity_screen_search_button))
         }
 
         // TODO: Add search output
@@ -148,7 +150,7 @@ fun EditableDropdownMenu(
         ) {
             if (filteredOptions.isEmpty()) {
                 DropdownMenuItem(
-                    text = { Text("No matches found") },
+                    text = { Text(stringResource(id = R.string.activity_screen_no_matches)) },
                     onClick = { expanded = false }
                 )
             } else {

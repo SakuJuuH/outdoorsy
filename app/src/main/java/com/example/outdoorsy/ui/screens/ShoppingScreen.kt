@@ -33,6 +33,8 @@ import com.example.outdoorsy.viewmodel.ShoppingItem
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import java.text.NumberFormat
 import java.util.Locale
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 @Composable
 fun ShoppingScreen(
@@ -49,7 +51,7 @@ fun ShoppingScreen(
         // Main Page Title
         item {
             Text(
-                text = "Weather Gear Shop",
+                text = stringResource(id = R.string.shopping_screen_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -60,7 +62,7 @@ fun ShoppingScreen(
         // --- Recommended Items Section ---
         item {
             Text(
-                text = "Recommended for Current Weather",
+                text = stringResource(id = R.string.shopping_screen_recommended_items_section_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -80,7 +82,7 @@ fun ShoppingScreen(
             // Add a spacer for visual separation before the next section
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "All Items",
+                text = stringResource(id = R.string.shopping_screen_all_items_section_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -148,7 +150,7 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 )
                 CustomButton(
                     onClick = onAddToCartClicked,
-                    text = "Add to Cart",
+                    text = stringResource(id = R.string.shopping_screen_add_to_cart_button),
                     type = ButtonType.PRIMARY
                 )
             }
