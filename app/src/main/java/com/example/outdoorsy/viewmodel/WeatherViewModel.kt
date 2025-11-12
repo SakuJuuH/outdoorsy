@@ -35,7 +35,7 @@ class WeatherViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-        loadRecentSearches()
+//        loadRecentSearches()
         fetchWeatherData("London")
     }
 

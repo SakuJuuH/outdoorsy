@@ -57,8 +57,10 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
             query = searchQuery,
             onQueryChange = { viewModel.updateSearchQuery(it) },
             onFocusChange = { viewModel.setShowRecentSearches(it) },
+            onSearch = { viewModel.searchLocation(it) },
             modifier = Modifier.fillMaxWidth()
         )
+
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -260,13 +262,16 @@ fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     onFocusChange: (Boolean) -> Unit,
+    onSearch: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
         label = { Text("Search for a city or location...") },
-        modifier = modifier.onFocusChanged { onFocusChange(it.isFocused) },
+        modifier = modifier
+            .onFocusChanged { onFocusChange(it.isFocused) }
+            .fillMaxWidth(),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -274,9 +279,14 @@ fun SearchBar(
             )
         },
         singleLine = true,
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+            onDone = { onSearch(query) }
+        )
     )
 }
+
+
 
 @Composable
 fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
