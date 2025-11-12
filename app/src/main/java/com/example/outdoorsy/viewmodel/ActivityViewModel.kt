@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import java.time.LocalTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 class ActivityViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(
@@ -24,12 +25,49 @@ class ActivityViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(selectedActivity = newActivity)
     }
 
-    fun updateStartTime(time: LocalTime) {
-        _uiState.value = _uiState.value.copy(selectedStartTime = time)
+    fun updateStartTime(newTime: LocalTime, endTime: LocalTime) {
+        _uiState.update {
+            it.copy(
+                selectedStartTime = newTime,
+                timeRangeError = null
+            )
+        }
+
+        if (endTime.isBefore(newTime)) {
+            val errorMessage = "End time was automatically adjusted."
+            val adjustedEndTime = newTime.plusHours(1)
+
+            _uiState.update {
+                it.copy(
+                    selectedEndTime = adjustedEndTime,
+                    timeRangeError = errorMessage
+                )
+            }
+        } else {
+            _uiState.update {
+                it.copy(timeRangeError = null)
+            }
+        }
     }
 
-    fun updateEndTime(time: LocalTime) {
-        _uiState.value = _uiState.value.copy(selectedEndTime = time)
+    fun updateEndTime(newTime: LocalTime, startTime: LocalTime) {
+        if (newTime.isBefore(startTime)) {
+            val errorMessage = "End time must be after start time."
+
+            _uiState.update {
+                it.copy(
+                    timeRangeError = errorMessage
+                )
+            }
+
+        } else {
+            _uiState.update {
+                it.copy(
+                    selectedEndTime = newTime,
+                    timeRangeError = null
+                )
+            }
+        }
     }
 
     fun performSearch() {

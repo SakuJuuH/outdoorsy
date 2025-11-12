@@ -8,5 +8,6 @@ data class ActivityUiState(
     val selectedLocation: String = "",
     val selectedActivity: String = "",
     val selectedStartTime: LocalTime = LocalTime.now(),
-    val selectedEndTime: LocalTime = LocalTime.now().plusHours(1)
+    val selectedEndTime: LocalTime = LocalTime.now().plusHours(1),
+    val timeRangeError: String? = null
 )
