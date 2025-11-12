@@ -37,6 +37,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.utils.Language
 import com.example.outdoorsy.utils.TemperatureSystem
 import com.example.outdoorsy.viewmodel.SettingsViewModel
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
@@ -52,7 +54,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = "Settings",
+            text = stringResource(id = R.string.settings_screen_title),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.Bold
@@ -60,30 +62,30 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
 
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        SettingsSectionHeader(title = "General")
+        SettingsSectionHeader(title = stringResource(id = R.string.settings_screen_section_header_general))
 
         SettingsItem(
             icon = Icons.Default.Language,
-            title = "Language",
+            title = stringResource(id = R.string.settings_screen_language_title),
             subtitle = Language.DISPLAY_NAMES[selectedLanguage] ?: "",
             onClick = { showLanguageDialog = true }
         )
 
         SettingsItemWithSwitch(
             icon = Icons.Default.DarkMode,
-            title = "Dark Mode",
-            subtitle = "Adjust app theme",
+            title = stringResource(id = R.string.settings_screen_dark_mode_title),
+            subtitle = stringResource(id = R.string.settings_screen_dark_mode_sub_title),
             checked = isDarkMode,
             onCheckedChange = { viewModel.setIsDarkMode(it) }
         )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-        SettingsSectionHeader(title = "Units")
+        SettingsSectionHeader(title = stringResource(id = R.string.settings_screen_section_header_units))
 
         SettingsItem(
             icon = Icons.Default.Thermostat,
-            title = "Unit System",
+            title = stringResource(id = R.string.settings_screen_unit_item_title),
             subtitle = TemperatureSystem.DISPLAY_NAMES[selectedUnit] ?: "",
             onClick = { showUnitDialog = true }
         )
@@ -92,7 +94,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     if (showLanguageDialog) {
         AlertDialog(
             onDismissRequest = { showLanguageDialog = false },
-            title = { Text("Select Language") },
+            title = { Text(stringResource(id = R.string.settings_screen_language_dialog_title)) },
             text = {
                 Column {
                     Language.DISPLAY_NAMES.forEach { (code, name) ->
@@ -119,7 +121,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text("OK")
+                    Text(stringResource(id = R.string.settings_screen_dialog_confirm_button))
                 }
             }
         )
@@ -128,7 +130,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     if (showUnitDialog) {
         AlertDialog(
             onDismissRequest = { showUnitDialog = false },
-            title = { Text("Select Unit System") },
+            title = { Text(stringResource(id = R.string.settings_screen_unit_dialog_title)) },
             text = {
                 Column {
                     TemperatureSystem.DISPLAY_NAMES.forEach { (unit, name) ->
@@ -151,7 +153,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             },
             confirmButton = {
                 TextButton(onClick = { showUnitDialog = false }) {
-                    Text("OK")
+                    Text(stringResource(id = R.string.settings_screen_dialog_confirm_button))
                 }
             }
         )
