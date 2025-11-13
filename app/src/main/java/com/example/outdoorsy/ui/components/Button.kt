@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 enum class ButtonType {
     PRIMARY,
@@ -77,7 +79,7 @@ fun CustomButtonPreview() {
         ) {
             CustomButton(
                 onClick = { },
-                text = "Primary Button",
+                text = stringResource(id = R.string.button_primary),
                 type = ButtonType.PRIMARY
             )
 
@@ -85,7 +87,7 @@ fun CustomButtonPreview() {
 
             CustomButton(
                 onClick = { },
-                text = "Secondary Button",
+                text = stringResource(id = R.string.button_secondary),
                 type = ButtonType.SECONDARY
             )
 
@@ -93,7 +95,7 @@ fun CustomButtonPreview() {
 
             CustomButton(
                 onClick = { },
-                text = "Disabled Button",
+                text = stringResource(id = R.string.button_disabled),
                 type = ButtonType.PRIMARY,
                 enabled = false
             )

@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WeatherAppTheme {
+            WeatherAppTheme (dynamicColor = false) {
                 MainScreen(Modifier)
             }
         }
