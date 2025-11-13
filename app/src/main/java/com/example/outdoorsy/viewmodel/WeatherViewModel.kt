@@ -35,34 +35,40 @@ class WeatherViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-//        loadRecentSearches()
-        fetchWeatherData("London")
+        fetchWeatherDataForMultipleCities(listOf("Helsinki", "Paris", "New York", "Tokyo", "Sydney"))
     }
 
-    private fun fetchWeatherData(city: String) {
+    private fun fetchWeatherDataForMultipleCities(cities: List<String>) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val weatherResponse = getCurrentWeather(
-                    city = city,
-                    units = "metric",
-                    language = "en"
-                )
-                val forecastResponse = getForecast(
-                    city = city,
-                    units = "metric",
-                    language = "en"
-                )
-                val weatherData = mapToWeatherData(weatherResponse, forecastResponse.listOfForecastItems)
-                _locations.value = listOf(weatherData)
-                addRecentSearch(city)
-            } catch (e: Exception) {
-                e.printStackTrace()
+                val allWeatherData = mutableListOf<WeatherData>()
+                cities.forEach { city ->
+                    try {
+                        val weatherResponse = getCurrentWeather(
+                            city = city,
+                            units = "metric",
+                            language = "en"
+                        )
+                        val forecastResponse = getForecast(
+                            city = city,
+                            units = "metric",
+                            language = "en"
+                        )
+                        val weatherData = mapToWeatherData(weatherResponse, forecastResponse.listOfForecastItems)
+                        allWeatherData.add(weatherData)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                _locations.value = allWeatherData
+                addRecentSearch(cities.first())
             } finally {
                 _isLoading.value = false
             }
         }
     }
+
 
     private fun mapToWeatherData(response: WeatherResponse, forecastItems: List<com.example.outdoorsy.domain.model.ForecastItem>): WeatherData {
         val dailyForecasts = forecastItems
@@ -114,7 +120,7 @@ class WeatherViewModel @Inject constructor(
 
     fun searchLocation(city: String) {
         if (city.isNotBlank()) {
-            fetchWeatherData(city)
+            fetchWeatherDataForMultipleCities(listOf(city))
             _searchQuery.value = ""
             _showRecentSearches.value = false
         }
