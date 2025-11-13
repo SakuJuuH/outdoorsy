@@ -39,17 +39,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.outdoorsy.R
 import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
-import androidx.compose.ui.res.stringResource
-import com.example.outdoorsy.R
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier = Modifier) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val locations by viewModel.locations.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Column(
         modifier = modifier
@@ -60,6 +60,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
             query = searchQuery,
             onQueryChange = { viewModel.updateSearchQuery(it) },
             onFocusChange = { viewModel.setShowRecentSearches(it) },
+            onSearch = { viewModel.searchLocation(it) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -119,13 +120,17 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.WaterDrop,
-                        label = stringResource(id = R.string.weather_screen_weather_detail_humidity),
+                        label = stringResource(
+                            id = R.string.weather_screen_weather_detail_humidity
+                        ),
                         value = "${locations[pagerState.currentPage].humidity}%",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Air,
-                        label = stringResource(id = R.string.weather_screen_weather_detail_wind_speed),
+                        label = stringResource(
+                            id = R.string.weather_screen_weather_detail_wind_speed
+                        ),
                         value = "${locations[pagerState.currentPage].windSpeed} km/h",
                         modifier = Modifier.weight(1f)
                     )
@@ -136,13 +141,17 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.Visibility,
-                        label = stringResource(id = R.string.weather_screen_weather_detail_visibility),
+                        label = stringResource(
+                            id = R.string.weather_screen_weather_detail_visibility
+                        ),
                         value = "${locations[pagerState.currentPage].visibility} mi",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Speed,
-                        label = stringResource(id = R.string.weather_screen_weather_detail_pressure),
+                        label = stringResource(
+                            id = R.string.weather_screen_weather_detail_pressure
+                        ),
                         value = "${locations[pagerState.currentPage].pressure} in",
                         modifier = Modifier.weight(1f)
                     )
@@ -170,7 +179,9 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
             // 5-Day Forecast
             Text(
-                text = stringResource(id = R.string.weather_screen_weather_detail_five_day_forecast),
+                text = stringResource(
+                    id = R.string.weather_screen_weather_detail_five_day_forecast
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
@@ -263,21 +274,29 @@ fun SearchBar(
     query: String,
     onQueryChange: (String) -> Unit,
     onFocusChange: (Boolean) -> Unit,
+    onSearch: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
         label = { Text(stringResource(id = R.string.weather_screen_search_bar_hint)) },
-        modifier = modifier.onFocusChanged { onFocusChange(it.isFocused) },
+        modifier = modifier
+            .onFocusChanged { onFocusChange(it.isFocused) }
+            .fillMaxWidth(),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = stringResource(id = R.string.weather_screen_search_bar_icon_description)
+                contentDescription = stringResource(
+                    id = R.string.weather_screen_search_bar_icon_description
+                )
             )
         },
         singleLine = true,
-        shape = MaterialTheme.shapes.medium
+        shape = MaterialTheme.shapes.medium,
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+            onDone = { onSearch(query) }
+        )
     )
 }
 

@@ -19,4 +19,3 @@ enum class ConditionRating(val displayName: String) {
     VERY_GOOD("Very Good"),
     GOOD("Good")
 }
-

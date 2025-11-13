@@ -1,14 +1,17 @@
 package com.example.outdoorsy.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.local.datastore.SearchHistoryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class HistoryViewModel @Inject constructor(application: Application) : ViewModel() {
     private val repository = SearchHistoryRepository(application)
 
     val recentSearches = repository.recentSearches
