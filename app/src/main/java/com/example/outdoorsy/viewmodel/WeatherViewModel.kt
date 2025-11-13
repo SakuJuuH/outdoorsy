@@ -6,13 +6,13 @@ import com.example.outdoorsy.domain.model.WeatherResponse
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
@@ -35,7 +35,9 @@ class WeatherViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-        fetchWeatherDataForMultipleCities(listOf("Helsinki", "Paris", "New York", "Tokyo", "Sydney"))
+        fetchWeatherDataForMultipleCities(
+            listOf("Helsinki", "Paris", "New York", "Tokyo", "Sydney")
+        )
     }
 
     private fun fetchWeatherDataForMultipleCities(cities: List<String>) {
@@ -55,7 +57,8 @@ class WeatherViewModel @Inject constructor(
                             units = "metric",
                             language = "en"
                         )
-                        val weatherData = mapToWeatherData(weatherResponse, forecastResponse.listOfForecastItems)
+                        val weatherData =
+                            mapToWeatherData(weatherResponse, forecastResponse.listOfForecastItems)
                         allWeatherData.add(weatherData)
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -69,16 +72,26 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-
-    private fun mapToWeatherData(response: WeatherResponse, forecastItems: List<com.example.outdoorsy.domain.model.ForecastItem>): WeatherData {
+    private fun mapToWeatherData(
+        response: WeatherResponse,
+        forecastItems: List<com.example.outdoorsy.domain.model.ForecastItem>
+    ): WeatherData {
         val dailyForecasts = forecastItems
-            .groupBy { SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(it.timeOfData.toLong() * 1000)) }
+            .groupBy {
+                SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(Date(it.timeOfData.toLong() * 1000))
+            }
             .values
             .take(5)
             .map { dayItems ->
                 val temps = dayItems.map { it.main.maxTemperature }
                 DailyForecast(
-                    day = SimpleDateFormat("EEE", Locale.getDefault()).format(Date(dayItems.first().timeOfData.toLong() * 1000)),
+                    day = SimpleDateFormat(
+                        "EEE",
+                        Locale.getDefault()
+                    ).format(Date(dayItems.first().timeOfData.toLong() * 1000)),
                     high = temps.maxOrNull()?.toInt() ?: 0,
                     low = temps.minOrNull()?.toInt() ?: 0,
                     condition = dayItems.first().weather.firstOrNull()?.group ?: "Unknown"

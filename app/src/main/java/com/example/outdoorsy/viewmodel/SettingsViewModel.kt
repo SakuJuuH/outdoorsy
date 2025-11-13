@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.utils.Language
+import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -39,6 +40,7 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
     fun setLanguage(language: String) {
         viewModelScope.launch {
             settingsRepository.saveLanguage(language)
+            LocaleHelper.setLocale(languageCode = language)
         }
     }
 }

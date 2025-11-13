@@ -7,8 +7,7 @@ object WeatherPromptProvider {
         date: String,
         startTime: String,
         endTime: String
-    ): String {
-        return """
+    ): String = """
         You are an assistant providing weather-based activity recommendations. The user has selected:
 
         - Activity: $activity
@@ -38,6 +37,5 @@ object WeatherPromptProvider {
         }
 
         Do not include any extra commentary or formatting outside the JSON block.
-        """.trimIndent()
-    }
+    """.trimIndent()
 }

@@ -4,7 +4,7 @@
 
     <string name="nav_search">Hae</string>
     <string name="nav_weather">Sää</string>
-    <string name="nav_activity">Aktiivisuus/Aktiviteetti</string>
+    <string name="nav_activity">Aktiviteetti</string>
     <string name="nav_shopping">Shoppaile</string>
     <string name="nav_settings">Asetukset</string>
     <string name="nav_history">Historia</string>
@@ -15,12 +15,12 @@
 
     <string name="activity_screen_title">Aktiviteetti suunnittelija</string>
     <string name="activity_screen_activity_label">Valitse aktiviteetti</string>
-    <string name="activity_screen_activity_prompt">Valitse aktiviteetti...</string>
+    <string name="activity_screen_activity_prompt">Valitse aktiviteetti…</string>
     <string name="activity_screen_time_label">Valitse aika</string>
-    <string name="activity_screen_time_prompt">Valitse aika...</string>
+    <string name="activity_screen_time_prompt">Valitse aika…</string>
     <string name="activity_screen_search_button">Hae</string>
     <string name="activity_screen_location_label">Valitse sijainti</string>
-    <string name="activity_screen_location_prompt">Valitse sijainti...</string>
+    <string name="activity_screen_location_prompt">Valitse sijainti…</string>
 
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
