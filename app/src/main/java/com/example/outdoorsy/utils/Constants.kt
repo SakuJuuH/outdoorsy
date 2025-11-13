@@ -14,8 +14,5 @@ object TemperatureSystem {
 
 object Language {
     const val ENGLISH = "en"
-
-    val DISPLAY_NAMES = mapOf(
-        ENGLISH to "English"
-    )
+    const val FINNISH = "fi"
 }
