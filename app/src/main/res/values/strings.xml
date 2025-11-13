@@ -50,7 +50,7 @@
     <!-- ui - screens - ShoppingScreen -->
 
     <string name="shopping_screen_title">Weather Gear Shop</string>
-    <string name="shopping_screen_recommended_items_section_title">Recommended for Current</string>
+    <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
     <string name="shopping_screen_all_items_section_title">All Items</string>
     <string name="shopping_screen_add_to_cart_button">Add to Cart</string>
 
