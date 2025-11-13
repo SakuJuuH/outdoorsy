@@ -8,4 +8,64 @@
     <string name="nav_activity">Activity</string>
     <string name="nav_shopping">Shopping</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- ui - components - Button -->
+    <string name="button_primary">Primary Button</string>
+    <string name="button_secondary">Secondary Button</string>
+    <string name="button_disabled">Disabled</string>
+
+    <!-- ui - screens - ActivityScreen -->
+    <string name="activity_screen_title">Activity Planner</string>"
+    <string name="activity_screen_location_label">Select Location</string>
+    <string name="activity_screen_location_prompt">Choose a location...</string>
+    <string name="activity_screen_activity_label">Select Activity</string>
+    <string name="activity_screen_activity_prompt">Choose an activity...</string>
+    <string name="activity_screen_time_label">Select Time</string>
+    <string name="activity_screen_time_prompt">Choose a time...</string>
+    <string name="activity_screen_search_button">Search</string>
+    <string name="activity_screen_no_matches">No matches found</string>
+
+    <!-- ui - screens - HistoryScreen -->
+    <string name="history_screen_title">Activity History</string>
+    <string name="history_screen_view_previous_activity_search">View your previous activity searches and conditions</string>
+
+    <!-- ui - screens - SearchScreen -->
+    <string name="search_screen_content_label">Search</string>
+    <string name="search_screen_content_suggestions">Suggestions</string>
+    <string name="search_screen_content_recent">Recent</string>
+    <string name="search_screen_history_row_button">Remove</string>
+
+    <!-- ui - screens - SettingsScreen -->
+    <string name="settings_screen_title">Settings</string>
+    <string name="settings_screen_section_header_general">General</string>
+    <string name="settings_screen_language_title">Language</string>
+    <string name="settings_screen_dark_mode_title">Dark Mode</string>
+    <string name="settings_screen_dark_mode_sub_title">Adjust app theme</string>
+    <string name="settings_screen_section_header_units">Units</string>
+    <string name="settings_screen_unit_item_title">Unit System</string>
+    <string name="settings_screen_language_dialog_title">Select Language</string>
+    <string name="settings_screen_dialog_confirm_button">OK</string>
+    <string name="settings_screen_unit_dialog_title">Select Unit System</string>
+
+    <!-- ui - screens - ShoppingScreen -->
+
+    <string name="shopping_screen_title">Weather Gear Shop</string>
+    <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
+    <string name="shopping_screen_all_items_section_title">All Items</string>
+    <string name="shopping_screen_add_to_cart_button">Add to Cart</string>
+
+    <!-- ui - screens - WeatherScreen -->
+
+    <string name="weather_screen_weather_detail_title">Weather Details</string>
+    <string name="weather_screen_weather_detail_humidity">Humidity</string>
+    <string name="weather_screen_weather_detail_wind_speed">Wind Speed</string>
+    <string name="weather_screen_weather_detail_visibility">Visibility</string>
+    <string name="weather_screen_weather_detail_pressure">Pressure</string>
+    <string name="weather_screen_weather_detail_sunrise">Sunrise</string>
+    <string name="weather_screen_weather_detail_sunset">Sunset</string>
+    <string name="weather_screen_weather_detail_five_day_forecast">5-Day Forecast</string>
+    <string name="weather_screen_search_bar_hint">Search for a city or location...</string>
+    <string name="weather_screen_search_bar_icon_description">Search</string>
+
+
 </resources>
