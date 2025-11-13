@@ -41,12 +41,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier = Modifier) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val locations by viewModel.locations.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
+    val isLoading by viewModel.isLoading.collectAsState()
+
 
     Column(
         modifier = modifier
