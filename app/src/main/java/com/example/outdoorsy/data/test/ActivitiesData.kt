@@ -24,5 +24,3 @@ object ActivitiesData {
         "Kitesurfing"
     )
 }
-
-

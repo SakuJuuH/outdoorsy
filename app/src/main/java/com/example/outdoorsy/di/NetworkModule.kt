@@ -66,5 +66,4 @@ object NetworkModule {
     @Singleton
     fun provideForecastRepository(forecastApiService: ForecastApiService): ForecastRepository =
         ForecastRepositoryImpl(forecastApiService)
-
 }

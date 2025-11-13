@@ -175,7 +175,11 @@ fun EditableFilteringInput(
             singleLine = true,
             trailingIcon = {
                 Icon(
-                    imageVector = if (expanded) Icons.Default.ArrowDropUp else Icons.Default.ArrowDropDown,
+                    imageVector = if (expanded) {
+                        Icons.Default.ArrowDropUp
+                    } else {
+                        Icons.Default.ArrowDropDown
+                    },
                     contentDescription = if (expanded) "Hide options" else "Show options",
                     modifier = Modifier.clickable {
                         expanded = !expanded

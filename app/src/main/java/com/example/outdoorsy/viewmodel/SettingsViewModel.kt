@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) : ViewModel() {
+class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
+    ViewModel() {
 
     val temperatureUnit = settingsRepository.getTemperatureUnit()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TemperatureSystem.METRIC)

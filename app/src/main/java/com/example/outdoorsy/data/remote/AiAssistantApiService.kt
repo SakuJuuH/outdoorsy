@@ -7,7 +7,5 @@ import retrofit2.http.POST
 
 interface AiAssistantApiService {
     @POST("assistant/session")
-    suspend fun startAiSession(
-        @Body request: AiAssistantRequestDto
-    ): AiAssistantResponseDto
+    suspend fun startAiSession(@Body request: AiAssistantRequestDto): AiAssistantResponseDto
 }
