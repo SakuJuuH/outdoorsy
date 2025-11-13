@@ -13,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.outdoorsy.ui.components.AppBottomNavBar
 import com.example.outdoorsy.ui.navigation.Screen
 import com.example.outdoorsy.viewmodel.ActivityViewModel
-import com.example.outdoorsy.viewmodel.SearchViewModel
+import com.example.outdoorsy.viewmodel.HistoryViewModel
 import com.example.outdoorsy.viewmodel.SettingsViewModel
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import com.example.outdoorsy.viewmodel.WeatherViewModel
@@ -41,8 +41,8 @@ fun AppContainer(mainNavController: NavHostController) {
             }
 
             composable(Screen.AppNav.History.route) {
-                val viewModel: SearchViewModel = hiltViewModel()
-                SearchScreen(viewModel = viewModel)
+                val viewModel: HistoryViewModel = hiltViewModel()
+                HistoryScreen(viewModel = viewModel)
             }
 
             composable(Screen.AppNav.Activity.route) {
