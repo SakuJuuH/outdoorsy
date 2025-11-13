@@ -19,11 +19,19 @@ class ActivityViewModel : ViewModel() {
     val uiState: StateFlow<ActivityUiState> = _uiState
 
     fun updateLocation(newLocation: String) {
-        _uiState.value = _uiState.value.copy(selectedLocation = newLocation)
+        _uiState.update {
+            it.copy(
+                selectedLocation = newLocation
+            )
+        }
     }
 
     fun updateActivity(newActivity: String) {
-        _uiState.value = _uiState.value.copy(selectedActivity = newActivity)
+        _uiState.update {
+            it.copy(
+                selectedActivity = newActivity
+            )
+        }
     }
 
     fun updateStartTime(newTime: LocalTime, endTime: LocalTime) {
