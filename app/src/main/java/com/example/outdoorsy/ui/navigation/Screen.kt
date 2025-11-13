@@ -7,16 +7,33 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingBasket
 import androidx.compose.material.icons.outlined.TaskAlt
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.outdoorsy.R
 
 sealed class Screen(val route: String) {
     object AppContainer : Screen("app_container")
 
-    sealed class AppNav(route: String, val title: String, val icon: ImageVector) : Screen(route) {
-        object Weather : AppNav("weather_screen", "Weather", Icons.Outlined.Cloud)
-        object History : AppNav("history_screen", "History", Icons.Outlined.History)
-        object Activity : AppNav("activity_screen", "Activity", Icons.Outlined.TaskAlt)
-        object Shopping : AppNav("shopping_screen", "Shopping", Icons.Outlined.ShoppingBasket)
-        object Settings : AppNav("settings_screen", "Settings", Icons.Outlined.Settings)
+    sealed class AppNav(route: String, val title: Int, val icon: ImageVector) : Screen(route) {
+        object Weather :
+            AppNav("weather_screen", R.string.nav_weather, Icons.Outlined.Cloud)
+
+        object History :
+            AppNav("history_screen", R.string.nav_history, Icons.Outlined.History)
+
+        object Activity :
+            AppNav(
+                "activity_screen",
+                R.string.nav_activity,
+                icon = Icons.Outlined.TaskAlt
+            )
+
+        object Shopping : AppNav(
+            "shopping_screen",
+            R.string.nav_shopping,
+            Icons.Outlined.ShoppingBasket
+        )
+
+        object Settings :
+            AppNav("settings_screen", R.string.nav_settings, Icons.Outlined.Settings)
     }
 }
 

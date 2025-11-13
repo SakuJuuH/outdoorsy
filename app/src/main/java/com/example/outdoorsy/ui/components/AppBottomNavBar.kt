@@ -6,6 +6,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.outdoorsy.ui.navigation.bottomNavItems
@@ -21,10 +22,10 @@ fun AppBottomNavBar(navController: NavHostController) {
                 icon = {
                     Icon(
                         imageVector = screen.icon,
-                        contentDescription = screen.title
+                        contentDescription = stringResource(screen.title)
                     )
                 },
-                label = { Text(screen.title) },
+                label = { Text(stringResource((screen.title))) },
                 selected = currentDestination?.route == screen.route,
                 onClick = {
                     navController.navigate(screen.route) {
