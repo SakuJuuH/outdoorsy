@@ -28,17 +28,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.outdoorsy.R
 import com.example.outdoorsy.data.model.ActivityHistoryItem
 import com.example.outdoorsy.data.model.ConditionRating
 import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
+import com.example.outdoorsy.viewmodel.HistoryViewModel
 
 @Composable
-fun HistoryScreen(modifier: Modifier = Modifier) {
+fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
     val historyItems = ActivityHistoryData.historyItems
 
     Column(
@@ -51,14 +55,14 @@ fun HistoryScreen(modifier: Modifier = Modifier) {
                 .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
         ) {
             Text(
-                text = "Activity History",
+                text = stringResource(id = R.string.history_screen_title),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
             Text(
-                text = "View your previous activity searches and conditions.",
+                text = stringResource(id = R.string.history_screen_view_previous_activity_search),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
@@ -191,10 +195,7 @@ private fun ActivityHistoryCard(item: ActivityHistoryItem) {
 }
 
 @Composable
-private fun ConditionRatingPill(
-    condition: ConditionRating,
-    modifier: Modifier = Modifier
-) {
+private fun ConditionRatingPill(condition: ConditionRating, modifier: Modifier = Modifier) {
     val backgroundColor = when (condition) {
         ConditionRating.EXCELLENT -> Color(0xFF4CAF50) // Green
         ConditionRating.VERY_GOOD -> Color(0xFF8BC34A) // Light Green
@@ -244,4 +245,3 @@ private fun ActivityHistoryCardPreview() {
         )
     }
 }
-

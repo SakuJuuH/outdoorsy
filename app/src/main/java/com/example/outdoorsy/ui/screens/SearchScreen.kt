@@ -24,15 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.outdoorsy.R
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.SearchViewModel
+import com.example.outdoorsy.viewmodel.HistoryViewModel
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchViewModel = viewModel()) {
+fun SearchScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = viewModel()) {
     var query by rememberSaveable { mutableStateOf("") }
     val history by viewModel.recentSearches.collectAsState()
     SearchScreenContent(
@@ -76,7 +78,7 @@ private fun SearchScreenContent(
     ) {
         OutlinedTextField(
             value = query,
-            label = { Text(text = "Search") },
+            label = { Text(text = stringResource(id = R.string.search_screen_content_label)) },
             onValueChange = onQueryChange,
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
@@ -89,7 +91,7 @@ private fun SearchScreenContent(
 
         if (suggestions.isNotEmpty()) {
             Text(
-                text = "Suggestions",
+                text = stringResource(id = R.string.search_screen_content_suggestions),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -110,7 +112,7 @@ private fun SearchScreenContent(
 
         if (history.isNotEmpty()) {
             Text(
-                text = "Recent",
+                text = stringResource(id = R.string.search_screen_content_recent),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -141,7 +143,12 @@ private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit) 
         },
         trailingContent = {
             IconButton(onClick = onRemove) {
-                Icon(imageVector = Icons.Outlined.Clear, contentDescription = "Remove")
+                Icon(
+                    imageVector = Icons.Outlined.Clear,
+                    contentDescription = stringResource(
+                        id = R.string.search_screen_history_row_button
+                    )
+                )
             }
         },
         modifier = Modifier

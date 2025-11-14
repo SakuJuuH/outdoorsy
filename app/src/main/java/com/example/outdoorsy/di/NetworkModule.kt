@@ -1,5 +1,6 @@
 package com.example.outdoorsy.di
 
+import com.example.outdoorsy.data.remote.AiAssistantApiService
 import com.example.outdoorsy.data.remote.ForecastApiService
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
@@ -53,6 +54,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideAssistantApi(retrofit: Retrofit): AiAssistantApiService =
+        retrofit.create(AiAssistantApiService::class.java)
+
+    @Provides
+    @Singleton
     fun provideWeatherRepository(weatherApiService: WeatherApiService): WeatherRepository =
         WeatherRepositoryImpl(weatherApiService)
 
@@ -60,5 +66,4 @@ object NetworkModule {
     @Singleton
     fun provideForecastRepository(forecastApiService: ForecastApiService): ForecastRepository =
         ForecastRepositoryImpl(forecastApiService)
-
 }

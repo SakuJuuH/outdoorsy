@@ -22,10 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
@@ -35,12 +37,9 @@ import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
-fun ShoppingScreen(
-    modifier: Modifier = Modifier,
-    shoppingViewModel: ShoppingViewModel = viewModel()
-) {
-    val recommendedItems by shoppingViewModel.recommendedItems.collectAsState()
-    val allItems by shoppingViewModel.allItems.collectAsState()
+fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = viewModel()) {
+    val recommendedItems by viewModel.recommendedItems.collectAsState()
+    val allItems by viewModel.allItems.collectAsState()
 
     LazyColumn(
         modifier = modifier,
@@ -49,7 +48,7 @@ fun ShoppingScreen(
         // Main Page Title
         item {
             Text(
-                text = "Weather Gear Shop",
+                text = stringResource(id = R.string.shopping_screen_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -60,7 +59,9 @@ fun ShoppingScreen(
         // --- Recommended Items Section ---
         item {
             Text(
-                text = "Recommended for Current Weather",
+                text = stringResource(
+                    id = R.string.shopping_screen_recommended_items_section_title
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -71,7 +72,7 @@ fun ShoppingScreen(
         items(recommendedItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
 
@@ -80,7 +81,7 @@ fun ShoppingScreen(
             // Add a spacer for visual separation before the next section
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "All Items",
+                text = stringResource(id = R.string.shopping_screen_all_items_section_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -90,7 +91,7 @@ fun ShoppingScreen(
         items(allItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
     }
@@ -148,7 +149,7 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 )
                 CustomButton(
                     onClick = onAddToCartClicked,
-                    text = "Add to Cart",
+                    text = stringResource(id = R.string.shopping_screen_add_to_cart_button),
                     type = ButtonType.PRIMARY
                 )
             }
