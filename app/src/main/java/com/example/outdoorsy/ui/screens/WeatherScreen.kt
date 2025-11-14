@@ -1,4 +1,3 @@
-// File: app/src/main/java/com/example/outdoorsy/ui/screens/WeatherScreen.kt
 package com.example.outdoorsy.ui.screens
 
 import androidx.compose.foundation.background
@@ -171,7 +170,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
-                        icon = Icons.Default.WbSunny,
+                        icon = Icons.Default.NightsStay,
                         label = stringResource(id = R.string.weather_screen_weather_detail_sunset),
                         value = locations[pagerState.currentPage].sunset,
                         modifier = Modifier.weight(1f)

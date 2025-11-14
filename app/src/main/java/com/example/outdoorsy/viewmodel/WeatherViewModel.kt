@@ -1,4 +1,3 @@
-// File: app/src/main/java/com/example/outdoorsy/viewmodel/WeatherViewModel.kt
 package com.example.outdoorsy.viewmodel
 
 import androidx.lifecycle.ViewModel
