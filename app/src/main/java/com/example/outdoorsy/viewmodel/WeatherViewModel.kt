@@ -1,7 +1,9 @@
+// File: app/src/main/java/com/example/outdoorsy/viewmodel/WeatherViewModel.kt
 package com.example.outdoorsy.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.domain.model.ForecastItem
 import com.example.outdoorsy.domain.model.WeatherResponse
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
@@ -72,10 +74,8 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private fun mapToWeatherData(
-        response: WeatherResponse,
-        forecastItems: List<com.example.outdoorsy.domain.model.ForecastItem>
-    ): WeatherData {
+
+    private fun mapToWeatherData(response: WeatherResponse, forecastItems: List<ForecastItem>): WeatherData {
         val dailyForecasts = forecastItems
             .groupBy {
                 SimpleDateFormat(
@@ -94,7 +94,8 @@ class WeatherViewModel @Inject constructor(
                     ).format(Date(dayItems.first().timeOfData.toLong() * 1000)),
                     high = temps.maxOrNull()?.toInt() ?: 0,
                     low = temps.minOrNull()?.toInt() ?: 0,
-                    condition = dayItems.first().weather.firstOrNull()?.group ?: "Unknown"
+                    condition = dayItems.first().weather.firstOrNull()?.group ?: "Unknown",
+                    icon = dayItems.first().weather.firstOrNull()?.icon ?: ""
                 )
             }
 
@@ -110,7 +111,8 @@ class WeatherViewModel @Inject constructor(
             pressure = response.main.pressure / 10.0,
             sunrise = formatTime(response.sys.sunrise),
             sunset = formatTime(response.sys.sunset),
-            forecast = dailyForecasts
+            forecast = dailyForecasts,
+            icon = response.weather.firstOrNull()?.icon ?: ""
         )
     }
 
@@ -159,7 +161,14 @@ data class WeatherData(
     val pressure: Double,
     val sunrise: String,
     val sunset: String,
-    val forecast: List<DailyForecast>
+    val forecast: List<DailyForecast>,
+    val icon: String
 )
 
-data class DailyForecast(val day: String, val high: Int, val low: Int, val condition: String)
+data class DailyForecast(
+    val day: String,
+    val high: Int,
+    val low: Int,
+    val condition: String,
+    val icon: String
+)

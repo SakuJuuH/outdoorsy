@@ -1,3 +1,4 @@
+// File: app/src/main/java/com/example/outdoorsy/ui/screens/WeatherScreen.kt
 package com.example.outdoorsy.ui.screens
 
 import androidx.compose.foundation.background
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -43,6 +43,10 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.filled.NightsStay
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier = Modifier) {
@@ -68,7 +72,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
         // Weather Carousel (HorizontalPager)
         if (locations.isNotEmpty()) {
-            HorizontalPager(
+            androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxWidth()
             ) { page ->
@@ -236,12 +240,21 @@ fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier)
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(2f)
         ) {
-            Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = dailyForecast.condition,
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
+            if (dailyForecast.icon.isNotBlank()) {
+                AsyncImage(
+                    model = "https://openweathermap.org/img/wn/${dailyForecast.icon}@2x.png",
+                    contentDescription = dailyForecast.condition,
+                    modifier = Modifier.size(24.dp),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = dailyForecast.condition,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
 
             Text(
                 text = dailyForecast.condition,
@@ -294,7 +307,7 @@ fun SearchBar(
         },
         singleLine = true,
         shape = MaterialTheme.shapes.medium,
-        keyboardActions = androidx.compose.foundation.text.KeyboardActions(
+        keyboardActions = KeyboardActions(
             onDone = { onSearch(query) }
         )
     )
@@ -324,13 +337,22 @@ fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Weather icon
-            Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = null,
-                modifier = Modifier.size(72.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            // Weather icon - load from OpenWeather
+            if (weatherData.icon.isNotBlank()) {
+                AsyncImage(
+                    model = "https://openweathermap.org/img/wn/${weatherData.icon}@4x.png",
+                    contentDescription = weatherData.condition,
+                    modifier = Modifier.size(72.dp),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = null,
+                    modifier = Modifier.size(72.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
