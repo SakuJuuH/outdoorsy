@@ -2,8 +2,8 @@ package com.example.outdoorsy
 
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
-import com.example.outdoorsy.di.ApiKeyInterceptor
-import com.example.outdoorsy.utils.BASE_URL
+import com.example.outdoorsy.di.interceptor.OpenWeatherInterceptor
+import com.example.outdoorsy.utils.OWM_BASE_URL
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.test.runTest
@@ -22,14 +22,14 @@ class WeatherRepositoryTest {
     @Before
     fun setUp() {
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(ApiKeyInterceptor())
+            .addInterceptor(OpenWeatherInterceptor())
             .addInterceptor(
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             )
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(OWM_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
