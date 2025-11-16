@@ -1,4 +1,4 @@
-package com.example.outdoorsy.domain.model
+package com.example.outdoorsy.domain.model.weather
 
 enum class PartOfDay(val code: String) {
     DAY("d"),

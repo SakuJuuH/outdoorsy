@@ -1,6 +1,6 @@
-package com.example.outdoorsy.data.remote.dto
+package com.example.outdoorsy.data.remote.dto.weather
 
-import com.example.outdoorsy.domain.model.WeatherResponse
+import com.example.outdoorsy.domain.model.weather.WeatherResponse
 
 data class WeatherResponseDto(
     val coord: CoordDto,

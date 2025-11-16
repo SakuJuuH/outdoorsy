@@ -1,8 +1,8 @@
 package com.example.outdoorsy.data.repository
 
 import com.example.outdoorsy.data.remote.ForecastApiService
-import com.example.outdoorsy.data.remote.dto.toDomain
-import com.example.outdoorsy.domain.model.ForecastResponse
+import com.example.outdoorsy.data.remote.dto.weather.toDomain
+import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.repository.ForecastRepository
 import javax.inject.Inject
 

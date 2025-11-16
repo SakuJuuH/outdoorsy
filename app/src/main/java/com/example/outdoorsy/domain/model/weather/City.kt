@@ -1,4 +1,4 @@
-package com.example.outdoorsy.domain.model
+package com.example.outdoorsy.domain.model.weather
 
 data class City(
     val id: Int,

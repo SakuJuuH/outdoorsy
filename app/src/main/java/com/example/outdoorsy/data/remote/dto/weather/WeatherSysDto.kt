@@ -1,6 +1,6 @@
-package com.example.outdoorsy.data.remote.dto
+package com.example.outdoorsy.data.remote.dto.weather
 
-import com.example.outdoorsy.domain.model.WeatherSys
+import com.example.outdoorsy.domain.model.weather.WeatherSys
 
 data class WeatherSysDto(
     val type: Int,

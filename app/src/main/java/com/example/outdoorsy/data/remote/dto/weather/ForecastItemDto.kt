@@ -1,6 +1,6 @@
-package com.example.outdoorsy.data.remote.dto
+package com.example.outdoorsy.data.remote.dto.weather
 
-import com.example.outdoorsy.domain.model.ForecastItem
+import com.example.outdoorsy.domain.model.weather.ForecastItem
 import com.google.gson.annotations.SerializedName
 
 data class ForecastItemDto(
