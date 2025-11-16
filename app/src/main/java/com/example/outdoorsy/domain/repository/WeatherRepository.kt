@@ -1,6 +1,6 @@
 package com.example.outdoorsy.domain.repository
 
-import com.example.outdoorsy.domain.model.WeatherResponse
+import com.example.outdoorsy.domain.model.weather.WeatherResponse
 
 interface WeatherRepository {
     suspend fun getCurrentWeatherByCoordinates(

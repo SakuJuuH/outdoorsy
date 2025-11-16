@@ -1,6 +1,6 @@
 package com.example.outdoorsy.data.remote
 
-import com.example.outdoorsy.data.remote.dto.WeatherResponseDto
+import com.example.outdoorsy.data.remote.dto.weather.WeatherResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

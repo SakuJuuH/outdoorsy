@@ -2,8 +2,8 @@ package com.example.outdoorsy.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.outdoorsy.domain.model.ForecastItem
-import com.example.outdoorsy.domain.model.WeatherResponse
+import com.example.outdoorsy.domain.model.weather.ForecastItem
+import com.example.outdoorsy.domain.model.weather.WeatherResponse
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,8 +73,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-
-    private fun mapToWeatherData(response: WeatherResponse, forecastItems: List<ForecastItem>): WeatherData {
+    private fun mapToWeatherData(
+        response: WeatherResponse,
+        forecastItems: List<ForecastItem>
+    ): WeatherData {
         val dailyForecasts = forecastItems
             .groupBy {
                 SimpleDateFormat(
