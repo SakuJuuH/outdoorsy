@@ -31,20 +31,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.outdoorsy.utils.Language
+import com.example.outdoorsy.R
+import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
 import com.example.outdoorsy.viewmodel.SettingsViewModel
-import androidx.compose.ui.res.stringResource
-import com.example.outdoorsy.R
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
-    val selectedLanguage = viewModel.language.collectAsState().value
-    val selectedUnit = viewModel.temperatureUnit.collectAsState().value
+    val language = viewModel.language.collectAsState().value
+    val unit = viewModel.temperatureUnit.collectAsState().value
     val isDarkMode = viewModel.isDarkMode.collectAsState().value
+
+    var selectedLanguage by remember { mutableStateOf(language) }
+    var selectedUnit by remember { mutableStateOf(unit) }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
@@ -62,13 +65,21 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
 
         Spacer(modifier = Modifier.padding(vertical = 8.dp))
 
-        SettingsSectionHeader(title = stringResource(id = R.string.settings_screen_section_header_general))
+        SettingsSectionHeader(
+            title = stringResource(id = R.string.settings_screen_section_header_general)
+        )
 
         SettingsItem(
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
-            subtitle = Language.DISPLAY_NAMES[selectedLanguage] ?: "",
-            onClick = { showLanguageDialog = true }
+            subtitle =
+                LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar(
+                    Char::uppercase
+                ) ?: "",
+            onClick = {
+                selectedLanguage = language
+                showLanguageDialog = true
+            }
         )
 
         SettingsItemWithSwitch(
@@ -81,28 +92,36 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-        SettingsSectionHeader(title = stringResource(id = R.string.settings_screen_section_header_units))
+        SettingsSectionHeader(
+            title = stringResource(id = R.string.settings_screen_section_header_units)
+        )
 
         SettingsItem(
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),
             subtitle = TemperatureSystem.DISPLAY_NAMES[selectedUnit] ?: "",
-            onClick = { showUnitDialog = true }
+            onClick = {
+                selectedUnit = unit
+                showUnitDialog = true
+            }
         )
     }
 
     if (showLanguageDialog) {
         AlertDialog(
-            onDismissRequest = { showLanguageDialog = false },
+            onDismissRequest = {
+                selectedLanguage = language
+                showLanguageDialog = false
+            },
             title = { Text(stringResource(id = R.string.settings_screen_language_dialog_title)) },
             text = {
                 Column {
-                    Language.DISPLAY_NAMES.forEach { (code, name) ->
+                    LocaleHelper.supportedLanguages.forEach { (code, locale) ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.setLanguage(code)
+                                    selectedLanguage = code
                                 }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -110,17 +129,21 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                             RadioButton(
                                 selected = code == selectedLanguage,
                                 onClick = {
-                                    viewModel.setLanguage(code)
                                 }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(name)
+                            Text(
+                                locale.displayLanguage.replaceFirstChar(Char::uppercase)
+                            )
                         }
                     }
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showLanguageDialog = false }) {
+                TextButton(onClick = {
+                    viewModel.setLanguage(selectedLanguage)
+                    showLanguageDialog = false
+                }) {
                     Text(stringResource(id = R.string.settings_screen_dialog_confirm_button))
                 }
             }
@@ -129,7 +152,10 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
 
     if (showUnitDialog) {
         AlertDialog(
-            onDismissRequest = { showUnitDialog = false },
+            onDismissRequest = {
+                selectedUnit = unit
+                showUnitDialog = false
+            },
             title = { Text(stringResource(id = R.string.settings_screen_unit_dialog_title)) },
             text = {
                 Column {
@@ -137,13 +163,13 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { viewModel.setTemperatureUnit(unit) }
+                                .clickable { selectedUnit = unit }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
                                 selected = unit == selectedUnit,
-                                onClick = { viewModel.setTemperatureUnit(unit) }
+                                onClick = {}
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(name)
@@ -152,7 +178,10 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                 }
             },
             confirmButton = {
-                TextButton(onClick = { showUnitDialog = false }) {
+                TextButton(onClick = {
+                    viewModel.setTemperatureUnit(selectedUnit)
+                    showUnitDialog = false
+                }) {
                     Text(stringResource(id = R.string.settings_screen_dialog_confirm_button))
                 }
             }
