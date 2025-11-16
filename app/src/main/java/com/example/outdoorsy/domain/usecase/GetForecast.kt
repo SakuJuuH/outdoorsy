@@ -1,6 +1,6 @@
 package com.example.outdoorsy.domain.usecase
 
-import com.example.outdoorsy.domain.model.ForecastResponse
+import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.repository.ForecastRepository
 import javax.inject.Inject
 

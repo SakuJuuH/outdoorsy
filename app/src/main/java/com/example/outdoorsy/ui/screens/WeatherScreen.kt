@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -47,6 +46,10 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.icons.filled.NightsStay
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
@@ -261,12 +264,22 @@ fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier)
                 centerVerticallyTo(parent)
             }
         ) {
-            Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = dailyForecast.condition,
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
+            if (dailyForecast.icon.isNotBlank()) {
+                AsyncImage(
+                    model = "https://openweathermap.org/img/wn/${dailyForecast.icon}@2x.png",
+                    contentDescription = dailyForecast.condition,
+                    modifier = Modifier.size(24.dp),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = dailyForecast.condition,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+
             Text(
                 text = dailyForecast.condition,
                 style = MaterialTheme.typography.bodyMedium,
@@ -351,13 +364,22 @@ fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Weather icon
-            Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = null,
-                modifier = Modifier.size(72.dp),
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
-            )
+            // Weather icon - load from OpenWeather
+            if (weatherData.icon.isNotBlank()) {
+                AsyncImage(
+                    model = "https://openweathermap.org/img/wn/${weatherData.icon}@4x.png",
+                    contentDescription = weatherData.condition,
+                    modifier = Modifier.size(72.dp),
+                    contentScale = ContentScale.Fit
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = null,
+                    modifier = Modifier.size(72.dp),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

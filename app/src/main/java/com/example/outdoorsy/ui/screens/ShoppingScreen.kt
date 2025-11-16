@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,13 +17,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.outdoorsy.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
@@ -33,16 +33,16 @@ import com.example.outdoorsy.viewmodel.ShoppingItem
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import java.text.NumberFormat
 import java.util.Locale
-import androidx.compose.ui.res.stringResource
-import com.example.outdoorsy.R
 
 @Composable
-fun ShoppingScreen(
-    modifier: Modifier = Modifier,
-    shoppingViewModel: ShoppingViewModel = viewModel()
-) {
-    val recommendedItems by shoppingViewModel.recommendedItems.collectAsState()
-    val allItems by shoppingViewModel.allItems.collectAsState()
+fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
+    viewModel.uiState.collectAsState()
+
+    /* Todo: Uncomment these variables and use these for the UI
+    val isLoading = uiState.value.isLoading
+    val error = uiState.value.error
+    val items = uiState.value.items
+     */
 
     LazyColumn(
         modifier = modifier,
@@ -62,21 +62,23 @@ fun ShoppingScreen(
         // --- Recommended Items Section ---
         item {
             Text(
-                text = stringResource(id = R.string.shopping_screen_recommended_items_section_title),
+                text = stringResource(
+                    id = R.string.shopping_screen_recommended_items_section_title
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-
+        /*
         // Display "Recommended" items in a vertical list
-        items(recommendedItems) { item ->
+        items(uiStat) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
-
+         */
         // --- All Items Section ---
         item {
             // Add a spacer for visual separation before the next section
@@ -87,14 +89,16 @@ fun ShoppingScreen(
                 fontWeight = FontWeight.Bold
             )
         }
-
+        /*
         // Display "All Items" in a vertical list
         items(allItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
+                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
+
+         */
     }
 }
 
@@ -112,6 +116,13 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Placeholder for an image
+                /* TODO: Replace the placeholder with AsyncImage for each item
+                AsyncImage(
+                    model = item.imageUrl,
+                    contentDescription = null,
+                    modifier = some modifier
+                )
+                 */
                 Spacer(
                     modifier = Modifier
                         .size(100.dp)
@@ -141,7 +152,7 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Format price to currency
-                val formattedPrice = NumberFormat.getCurrencyInstance(Locale.US).format(item.price)
+                val formattedPrice = NumberFormat.getCurrencyInstance(Locale.US).format(item)
                 Text(
                     text = formattedPrice,
                     style = MaterialTheme.typography.titleMedium,

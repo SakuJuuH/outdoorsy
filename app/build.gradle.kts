@@ -49,10 +49,17 @@ android {
             if (localPropertiesFile.exists()) {
                 localProperties.load(localPropertiesFile.inputStream())
             }
+
             buildConfigField(
                 "String",
                 "OPENWEATHER_API_KEY",
                 "\"${localProperties["OPENWEATHER_API_KEY"]}\""
+            )
+
+            buildConfigField(
+                type = "String",
+                name = "EBAY_API_KEY",
+                value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
             )
         }
         debug {
@@ -66,6 +73,12 @@ android {
                 "String",
                 "OPENWEATHER_API_KEY",
                 "\"${localProperties["OPENWEATHER_API_KEY"]}\""
+            )
+
+            buildConfigField(
+                type = "String",
+                name = "EBAY_API_KEY",
+                value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
             )
         }
     }
@@ -130,4 +143,5 @@ dependencies {
     // Coil Dependencies
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.kt.coil.compose)
 }

@@ -1,33 +1,61 @@
 package com.example.outdoorsy.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.domain.model.ebay.EbayItem
+import com.example.outdoorsy.domain.model.ebay.Price
+import com.example.outdoorsy.domain.repository.EbayRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class ShoppingItem(
-    val id: Int,
-    val name: String,
-    val price: Double,
-    val description: String,
-    val category: String,
-    val imageUrl: String
-)
+@HiltViewModel
+class ShoppingViewModel @Inject constructor(private val ebayRepository: EbayRepository) :
+    ViewModel() {
 
-class ShoppingViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(ShoppingUiState())
 
-    // StateFlow for "Recommended" items
-    private val _recommendedItems = MutableStateFlow<List<ShoppingItem>>(emptyList())
-    val recommendedItems: StateFlow<List<ShoppingItem>> = _recommendedItems.asStateFlow()
-
-    // StateFlow for "All" items
-    private val _allItems = MutableStateFlow<List<ShoppingItem>>(emptyList())
-    val allItems: StateFlow<List<ShoppingItem>> = _allItems.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     init {
         fetchMockData()
+        testRepository()
+    }
+
+    private fun testRepository() {
+        val testQuery = listOf("hiking boots", "fleece jacket") // Use any query you want
+
+        Log.d("RepoTest", "--- STARTING REPOSITORY TEST with query: '$testQuery' ---")
+
+        _uiState.update { it.copy(isLoading = true, error = null) }
+
+        viewModelScope.launch {
+            try {
+                // 2. Run all queries in parallel
+                val results: List<List<EbayItem>> = testQuery.map { query ->
+                    async { ebayRepository.getItems(query) } // This throws an exception on failure
+                }.awaitAll() // Wait for all of them to finish
+
+                // 3. Update the state ONCE with the final, flattened list
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        items = results.flatten() // Combines all lists into one
+                    )
+                }
+                Log.d("RepoTest", "$results")
+                Log.d("RepoTest", "--- FINISHED REPOSITORY TEST ---")
+            } catch (e: Exception) {
+                // 4. Or update ONCE on failure
+                _uiState.update { it.copy(isLoading = false, error = e.message) }
+            }
+        }
     }
 
     private fun fetchMockData() {
@@ -115,13 +143,35 @@ class ShoppingViewModel : ViewModel() {
                 )
             )
 
-            // For demonstration, let's say the first 3 items are "recommended"
-            _recommendedItems.value = allMockItems.take(2)
-            _allItems.value = allMockItems
+            _uiState.update {
+                it.copy(
+                    items = allMockItems.map { item ->
+                        EbayItem(
+                            title = item.name,
+                            price = Price(
+                                value = item.price.toString(),
+                                currency = "Eur"
+                            ),
+                            imageUrl = item.imageUrl,
+                            link = "",
+                            categoryNames = emptyList()
+                        )
+                    }
+                )
+            }
         }
     }
 
-    fun onAddToCart(item: ShoppingItem) {
-        println("Added ${item.name} to cart.")
+    fun onAddToCart(item: EbayItem) {
+        println("Added ${item.title} to cart.")
     }
 }
+
+data class ShoppingItem(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val description: String,
+    val category: String,
+    val imageUrl: String
+)
