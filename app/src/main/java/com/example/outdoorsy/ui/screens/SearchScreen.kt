@@ -24,17 +24,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.outdoorsy.R
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.HistoryViewModel
+import com.example.outdoorsy.viewmodel.SearchViewModel
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = viewModel()) {
+fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchViewModel = viewModel()) {
     var query by rememberSaveable { mutableStateOf("") }
     val history by viewModel.recentSearches.collectAsState()
     SearchScreenContent(
@@ -143,12 +143,7 @@ private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit) 
         },
         trailingContent = {
             IconButton(onClick = onRemove) {
-                Icon(
-                    imageVector = Icons.Outlined.Clear,
-                    contentDescription = stringResource(
-                        id = R.string.search_screen_history_row_button
-                    )
-                )
+                Icon(imageVector = Icons.Outlined.Clear, contentDescription = stringResource(id = R.string.search_screen_history_row_button))
             }
         },
         modifier = Modifier

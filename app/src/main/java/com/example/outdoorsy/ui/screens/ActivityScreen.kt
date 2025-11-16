@@ -49,7 +49,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-        uiState.selectedActivity.isNotBlank()
+            uiState.selectedActivity.isNotBlank()
 
     Column(modifier = modifier) {
         Text(

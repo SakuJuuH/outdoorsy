@@ -22,12 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
@@ -35,11 +33,16 @@ import com.example.outdoorsy.viewmodel.ShoppingItem
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import java.text.NumberFormat
 import java.util.Locale
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.R
 
 @Composable
-fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = viewModel()) {
-    val recommendedItems by viewModel.recommendedItems.collectAsState()
-    val allItems by viewModel.allItems.collectAsState()
+fun ShoppingScreen(
+    modifier: Modifier = Modifier,
+    shoppingViewModel: ShoppingViewModel = viewModel()
+) {
+    val recommendedItems by shoppingViewModel.recommendedItems.collectAsState()
+    val allItems by shoppingViewModel.allItems.collectAsState()
 
     LazyColumn(
         modifier = modifier,
@@ -59,9 +62,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         // --- Recommended Items Section ---
         item {
             Text(
-                text = stringResource(
-                    id = R.string.shopping_screen_recommended_items_section_title
-                ),
+                text = stringResource(id = R.string.shopping_screen_recommended_items_section_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -72,7 +73,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         items(recommendedItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { viewModel.onAddToCart(item) }
+                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
             )
         }
 
@@ -91,7 +92,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         items(allItems) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { viewModel.onAddToCart(item) }
+                onAddToCartClicked = { shoppingViewModel.onAddToCart(item) }
             )
         }
     }

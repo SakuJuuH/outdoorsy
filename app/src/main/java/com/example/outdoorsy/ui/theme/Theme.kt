@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = forestGreen,
     secondary = pineGreen,
-    tertiary = accentGold
+    tertiary = accentGold,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -25,26 +25,26 @@ private val LightColorScheme = lightColorScheme(
     tertiary = accentGold,
 
     // Background colors
-    background = appBackground, // The main screen background
-    surface = cardBackground, // Color for smaller cards like WeatherDetailCard
+    background = appBackground,       // The main screen background
+    surface = cardBackground,    // Color for smaller cards like WeatherDetailCard
 
     // Container colors - These are crucial for WeatherScreen
     primaryContainer = forestGreen, // Sets the background for the large top WeatherCard
-    surfaceVariant = stoneGray, // Sets the background for the 5-Day Forecast card
+    surfaceVariant = stoneGray,   // Sets the background for the 5-Day Forecast card
 
     // --- TEXT & ICON COLORS ---
     // These define what color text/icons should be ON TOP OF the colors above.
 
-    onPrimary = Color.White, // Text on a primary color button
-    onSecondary = Color.White, // Text on a secondary color button
-    onTertiary = textPrimary, // Text on a tertiary color surface
+    onPrimary = Color.White,         // Text on a primary color button
+    onSecondary = Color.White,       // Text on a secondary color button
+    onTertiary = textPrimary,        // Text on a tertiary color surface
 
-    onBackground = textPrimary, // General text on the main screen background
-    onSurface = textPrimary, // General text on a card (surface)
+    onBackground = textPrimary,      // General text on the main screen background
+    onSurface = textPrimary,         // General text on a card (surface)
 
     // Crucial for WeatherScreen
     onPrimaryContainer = Color.White, // Text/Icons on the main WeatherCard
-    onSurfaceVariant = textPrimary // Text/Icons on the 5-Day Forecast card
+    onSurfaceVariant = textPrimary    // Text/Icons on the 5-Day Forecast card
 )
 
     /* Other default colors to override

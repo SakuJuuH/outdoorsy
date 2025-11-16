@@ -126,17 +126,13 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.WaterDrop,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_humidity
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_humidity),
                         value = "${locations[pagerState.currentPage].humidity}%",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Air,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_wind_speed
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_wind_speed),
                         value = "${locations[pagerState.currentPage].windSpeed} km/h",
                         modifier = Modifier.weight(1f)
                     )
@@ -147,17 +143,13 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.Visibility,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_visibility
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_visibility),
                         value = "${locations[pagerState.currentPage].visibility} mi",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Speed,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_pressure
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_pressure),
                         value = "${locations[pagerState.currentPage].pressure} in",
                         modifier = Modifier.weight(1f)
                     )
@@ -185,9 +177,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
             // 5-Day Forecast
             Text(
-                text = stringResource(
-                    id = R.string.weather_screen_weather_detail_five_day_forecast
-                ),
+                text = stringResource(id = R.string.weather_screen_weather_detail_five_day_forecast),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
