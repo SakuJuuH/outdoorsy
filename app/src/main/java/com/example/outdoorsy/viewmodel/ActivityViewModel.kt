@@ -3,7 +3,7 @@ package com.example.outdoorsy.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantRequestDto
-import com.example.outdoorsy.data.repository.ActivityRepositoryImpl
+import com.example.outdoorsy.data.repository.AssistantRepositoryImpl
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 @HiltViewModel
-class ActivityViewModel @Inject constructor(private val repository: ActivityRepositoryImpl) :
+class ActivityViewModel @Inject constructor(private val repository: AssistantRepositoryImpl) :
     ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(

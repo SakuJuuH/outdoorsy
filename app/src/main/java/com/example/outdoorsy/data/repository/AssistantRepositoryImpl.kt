@@ -5,7 +5,7 @@ import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantRequestDto
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantResponseDto
 import javax.inject.Inject
 
-class ActivityRepositoryImpl @Inject constructor(
+class AssistantRepositoryImpl @Inject constructor(
     private val assistantService: AiAssistantApiService
 ) : AiAssistantApiService {
     override suspend fun startAiSession(request: AiAssistantRequestDto): AiAssistantResponseDto =
