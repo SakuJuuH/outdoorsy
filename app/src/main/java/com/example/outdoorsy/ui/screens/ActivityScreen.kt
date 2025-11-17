@@ -10,13 +10,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -28,10 +36,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -127,6 +137,47 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         }
 
         // TODO: Add search output
+        RecommendationCard(
+            icon = Icons.Default.Checkroom,
+            title = "What to Wear",
+            items = listOf(
+                "Moisture-wicking running shirt",
+                "Running shorts or leggings",
+                "Proper running shoes",
+                "Light jacket for morning runs"
+            )
+        )
+
+        RecommendationCard(
+            icon = Icons.Default.Checkroom,
+            title = "What to Wear",
+            items = listOf(
+                "Moisture-wicking running shirt",
+                "Running shorts or leggings",
+                "Proper running shoes",
+                "Light jacket for morning runs"
+            )
+        )
+        RecommendationCard(
+            icon = Icons.Default.Checkroom,
+            title = "What to Wear",
+            items = listOf(
+                "Moisture-wicking running shirt",
+                "Running shorts or leggings",
+                "Proper running shoes",
+                "Light jacket for morning runs"
+            )
+        )
+        RecommendationCard(
+            icon = Icons.Default.Checkroom,
+            title = "What to Wear",
+            items = listOf(
+                "Moisture-wicking running shirt",
+                "Running shorts or leggings",
+                "Proper running shoes",
+                "Light jacket for morning runs"
+            )
+        )
     }
 }
 
@@ -294,6 +345,57 @@ fun TimePickerField(
                 showDialog = false
             }
             dialog.show()
+        }
+    }
+}
+
+@Composable
+fun RecommendationCard(
+    icon: ImageVector,
+    title: String,
+    items: List<String>,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            HorizontalDivider()
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items.forEach { item ->
+                    Row(verticalAlignment = Alignment.Top) {
+                        Text("•", style = MaterialTheme.typography.bodyMedium)
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = item,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            }
         }
     }
 }
