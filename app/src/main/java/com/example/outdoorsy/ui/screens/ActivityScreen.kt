@@ -1,14 +1,12 @@
 package com.example.outdoorsy.ui.screens
 
 import android.app.TimePickerDialog
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -167,6 +165,21 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
+        if (uiState.searchPerformed == false) {
+            item {
+                Text(
+                    text = "Something went wrong. Please try again",
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
+            }
+        }
+
+
+        // TODO: Replace with actual cards based on the prompt
         if (uiState.searchPerformed == true) {
             items(4) {
                 RecommendationCard(
@@ -260,7 +273,10 @@ fun EditableFilteringInput(
                         item {
                             Text(
                                 text = stringResource(id = R.string.activity_screen_no_matches),
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                                modifier = Modifier.padding(
+                                    horizontal = 16.dp,
+                                    vertical = 10.dp
+                                ),
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
