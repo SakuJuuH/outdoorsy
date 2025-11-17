@@ -2,10 +2,9 @@ package com.example.outdoorsy.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantRequestDto
-import com.example.outdoorsy.data.repository.AssistantRepositoryImpl
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
+import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -15,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 @HiltViewModel
-class ActivityViewModel @Inject constructor(private val repository: AssistantRepositoryImpl) :
+class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAssistant) :
     ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(
@@ -98,9 +97,8 @@ class ActivityViewModel @Inject constructor(private val repository: AssistantRep
             "Searching for $activity in $location from $startTime to $endTime in $date"
         )
         val prompt = WeatherPromptProvider.buildPrompt(activity, location, date, startTime, endTime)
-        val request = AiAssistantRequestDto(prompt)
 
-        val response = repository.startAiSession(request)
+        val response = getAiAssistant(prompt = prompt)
         val locationEntry = response.data?.entries?.firstOrNull()
 
         // TODO: Continue validation logic, improve prompt and update UI with data
