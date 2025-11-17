@@ -1,11 +1,14 @@
 package com.example.outdoorsy.ui.screens
 
 import android.app.TimePickerDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -23,6 +26,7 @@ import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +62,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-        uiState.selectedActivity.isNotBlank()
+            uiState.selectedActivity.isNotBlank()
 
     LazyColumn(modifier = modifier) {
         item {
@@ -120,8 +124,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
-        item {
-            if (uiState.timeRangeError != null) {
+        if (uiState.timeRangeError != null) {
+            item {
                 Text(
                     text = uiState.timeRangeError!!,
                     color = MaterialTheme.colorScheme.error,
@@ -129,7 +133,9 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-            } else {
+            }
+        } else {
+            item {
                 Spacer(modifier = Modifier.height(24.dp))
             }
         }
@@ -144,18 +150,36 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
-        // TODO: Add search output
-        items(4) { // Example: 4 cards
-            RecommendationCard(
-                icon = Icons.Default.Checkroom,
-                title = "What to Wear",
-                items = listOf(
-                    "Moisture-wicking running shirt",
-                    "Running shorts or leggings",
-                    "Proper running shoes",
-                    "Light jacket for morning runs"
+        if (uiState.isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(64.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        strokeWidth = 6.dp
+                    )
+                }
+            }
+        }
+
+        if (uiState.searchPerformed == true) {
+            items(4) {
+                RecommendationCard(
+                    icon = Icons.Default.Checkroom,
+                    title = "What to Wear",
+                    items = listOf(
+                        "Moisture-wicking running shirt",
+                        "Running shorts or leggings",
+                        "Proper running shoes",
+                        "Light jacket for morning runs"
+                    )
                 )
-            )
+            }
         }
 
         item {
