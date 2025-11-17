@@ -2,6 +2,7 @@ package com.example.outdoorsy.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
@@ -12,6 +13,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAssistant) :
@@ -85,7 +87,7 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
         }
     }
 
-    suspend fun performSearch() {
+    fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
         val date = LocalDate.now().toString()
@@ -98,24 +100,41 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
         )
         val prompt = WeatherPromptProvider.buildPrompt(activity, location, date, startTime, endTime)
 
-        val response = getAiAssistant(prompt = prompt)
-        val locationEntry = response.data?.entries?.firstOrNull()
+        viewModelScope.launch {
+            try {
+                _uiState.update { it.copy(isLoading = true) }
 
-        // TODO: Continue validation logic, improve prompt and update UI with data
-        if (locationEntry != null) {
-            val locationName = locationEntry.key
-            val weatherData = locationEntry.value
+                val response = getAiAssistant(prompt)
+                val locationEntry = response.data?.entries?.firstOrNull()
 
-            _uiState.update {
-                it.copy(
-                    searchPerformed = true
-                )
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    searchPerformed = false
-                )
+                if (locationEntry != null) {
+                    val locationName = locationEntry.key
+                    val weatherData = locationEntry.value
+
+                    Log.d("Weather Data", "$locationName: $weatherData")
+
+                    _uiState.update {
+                        it.copy(
+                            searchPerformed = true,
+                            isLoading = false,
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            searchPerformed = false,
+                            isLoading = false
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("ActivitySearch", "Error calling AI Assistant", e)
+                _uiState.update {
+                    it.copy(
+                        searchPerformed = false,
+                        isLoading = false,
+                    )
+                }
             }
         }
     }

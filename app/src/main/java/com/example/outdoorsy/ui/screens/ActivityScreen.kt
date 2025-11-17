@@ -119,7 +119,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         }
 
         Button(
-            onClick = { /* viewModel.performSearch() */ },
+            onClick = { viewModel.performSearch() },
             enabled = isSearchEnabled,
             modifier = Modifier.fillMaxWidth()
         ) {
