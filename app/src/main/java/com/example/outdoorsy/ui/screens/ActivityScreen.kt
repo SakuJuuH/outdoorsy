@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,9 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.viewmodel.ActivityViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import com.example.outdoorsy.ui.theme.pineGreen
+import androidx.compose.material3.ButtonDefaults
 
 @Composable
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
@@ -52,12 +56,27 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             uiState.selectedActivity.isNotBlank()
 
     Column(modifier = modifier) {
-        Text(
-            text = stringResource(id = R.string.activity_screen_title),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
-        )
+        // Title Section
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
+        ) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
+            Text(
+                text = stringResource(id = R.string.activity_screen_title),
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+            // WE COULD ADD LIKE A DESCRIPTION TO WHAT TO DO IN THIS PAGE?
+            /*Text(
+                text = stringResource(id = R.string.activity_screen_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )*/
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -86,7 +105,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TimePickerField(
-                label = stringResource(id = R.string.activity_screen_time_label),
+                label = stringResource(id = R.string.activity_screen_start_time_label),
                 prompt = stringResource(id = R.string.activity_screen_time_prompt),
                 selectedTime = uiState.selectedStartTime,
                 onTimeSelected = { newStartTime ->
@@ -96,7 +115,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             )
 
             TimePickerField(
-                label = stringResource(id = R.string.activity_screen_time_label),
+                label = stringResource(id = R.string.activity_screen_end_time_label),
                 prompt = stringResource(id = R.string.activity_screen_time_prompt),
                 selectedTime = uiState.selectedEndTime,
                 onTimeSelected = { newEndTime ->
@@ -121,7 +140,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         Button(
             onClick = { /* viewModel.performSearch() */ },
             enabled = isSearchEnabled,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = pineGreen)
         ) {
             Text(stringResource(id = R.string.activity_screen_search_button))
         }
@@ -162,7 +182,8 @@ fun EditableFilteringInput(
                 text = newValue
                 expanded = true
             },
-            label = { Text(prompt) },
+            placeholder = { Text(prompt) },
+            label = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -186,7 +207,12 @@ fun EditableFilteringInput(
                         if (expanded) focusRequester.requestFocus()
                     }
                 )
-            }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
+                )
         )
 
         if (expanded && (text.isNotBlank() || filteredOptions.isNotEmpty())) {
@@ -258,7 +284,8 @@ fun TimePickerField(
             value = formattedTime,
             onValueChange = {},
             readOnly = true,
-            label = { Text(prompt) },
+            label = null,
+            placeholder = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -276,7 +303,12 @@ fun TimePickerField(
                 )
             },
             shape = MaterialTheme.shapes.medium,
-            singleLine = true
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
+            )
         )
 
         if (showDialog) {

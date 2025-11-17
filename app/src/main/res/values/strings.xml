@@ -20,7 +20,8 @@
     <string name="activity_screen_location_prompt">Choose a location...</string>
     <string name="activity_screen_activity_label">Select Activity</string>
     <string name="activity_screen_activity_prompt">Choose an activity...</string>
-    <string name="activity_screen_time_label">Select Time</string>
+    <string name="activity_screen_start_time_label">Select Start Time</string>
+    <string name="activity_screen_end_time_label">Select End Time</string>
     <string name="activity_screen_time_prompt">Choose a time...</string>
     <string name="activity_screen_search_button">Search</string>
     <string name="activity_screen_no_matches">No matches found</string>
