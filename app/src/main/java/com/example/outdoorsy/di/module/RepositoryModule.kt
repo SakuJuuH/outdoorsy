@@ -1,4 +1,4 @@
-package com.example.outdoorsy.di
+package com.example.outdoorsy.di.module
 
 import com.example.outdoorsy.data.repository.EbayRepositoryImpl
 import com.example.outdoorsy.data.repository.ForecastRepositoryImpl

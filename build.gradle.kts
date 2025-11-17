@@ -18,7 +18,16 @@ subprojects {
         ignoreFailures.set(false)
         filter {
             exclude("**/generated/**")
+            exclude("**/build/**")
             include("**/*.kt")
         }
+    }
+}
+
+ktlint {
+    filter {
+        exclude("**/generated/**")
+        exclude("**/build/**")
+        include("**/*.kt")
     }
 }

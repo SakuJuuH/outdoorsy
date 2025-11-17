@@ -1,4 +1,4 @@
-package com.example.outdoorsy.di
+package com.example.outdoorsy.di.module
 
 import android.content.Context
 import androidx.datastore.core.DataStore
