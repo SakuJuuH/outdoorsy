@@ -11,5 +11,6 @@ data class ActivityUiState(
     val selectedEndTime: LocalTime = LocalTime.now().plusHours(1),
     val timeRangeError: String? = null,
     // true = search successful, false = search error, null = search not performed
-    val searchPerformed: Boolean? = null
+    val searchPerformed: Boolean? = null,
+    val isLoading: Boolean = false
 )
