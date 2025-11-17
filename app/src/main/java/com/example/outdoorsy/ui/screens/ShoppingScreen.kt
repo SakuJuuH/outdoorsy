@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
@@ -34,6 +33,7 @@ import com.example.outdoorsy.viewmodel.ShoppingItem
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import java.text.NumberFormat
 import java.util.Locale
+import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
@@ -49,15 +49,22 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Main Page Title
+        // Title section
         item {
-            Text(
-                text = stringResource(id = R.string.shopping_screen_title),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
+            ) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
+                Text(
+                    text = stringResource(id = R.string.shopping_screen_title),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+            }
         }
 
         // --- Recommended Items Section ---
