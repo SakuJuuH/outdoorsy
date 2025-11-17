@@ -1,10 +1,13 @@
-package com.example.outdoorsy.di
+package com.example.outdoorsy.di.module
 
 import com.example.outdoorsy.data.remote.AiAssistantApiService
 import com.example.outdoorsy.data.remote.EbayApiService
 import com.example.outdoorsy.data.remote.EbayAuthService
 import com.example.outdoorsy.data.remote.ForecastApiService
 import com.example.outdoorsy.data.remote.WeatherApiService
+import com.example.outdoorsy.di.EbayApi
+import com.example.outdoorsy.di.EbayAuth
+import com.example.outdoorsy.di.OpenWeather
 import com.example.outdoorsy.di.interceptor.EbayAccessAuthInterceptor
 import com.example.outdoorsy.di.interceptor.EbayAuthInterceptor
 import com.example.outdoorsy.di.interceptor.OpenWeatherInterceptor
