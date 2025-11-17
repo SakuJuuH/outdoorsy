@@ -6,6 +6,7 @@ import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.repository.AssistantRepositoryImpl
 import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
 import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
+import com.example.outdoorsy.domain.repository.AssistantRepository
 import com.example.outdoorsy.domain.repository.ForecastRepository
 import com.example.outdoorsy.domain.repository.WeatherRepository
 import com.example.outdoorsy.utils.BASE_URL
@@ -66,4 +67,9 @@ object NetworkModule {
     @Singleton
     fun provideForecastRepository(forecastApiService: ForecastApiService): ForecastRepository =
         ForecastRepositoryImpl(forecastApiService)
+
+    @Provides
+    @Singleton
+    fun provideAssistantRepository(aiAssistantApiService: AiAssistantApiService): AssistantRepository =
+        AssistantRepositoryImpl(aiAssistantApiService)
 }
