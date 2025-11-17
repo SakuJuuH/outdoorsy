@@ -13,22 +13,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = forestGreen,
-    secondary = pineGreen,
-    tertiary = accentGold,
+    // --- MAIN BRAND & ACCENT COLORS ---
+    // In dark themes, primary colors are often slightly lighter/less saturated
+    // to have good contrast on dark backgrounds.
+    primary = pineGreen,        // Using the lighter pineGreen as the main interactive color.
+    secondary = forestGreen,    // The darker forestGreen works well for less prominent actions.
+    tertiary = accentGold,      // Gold remains a vibrant accent.
+
+    // --- BACKGROUND & SURFACE COLORS ---
+    // These are the most important for a dark theme. We avoid pure black.
+    background = appBackgroundDark,       // A very dark green, creating a softer dark background.
+    surface = forestGreen,      // Dark green for cards, making them distinct from the background.
+
+    // --- CONTAINER COLORS ---
+    // For larger, branded sections.
+    primaryContainer = Color(0xFF1b4332), // The darkest green for the main WeatherCard background.
+    surfaceVariant = Color(0xFF2d6a4f),   // A slightly lighter dark green for the Forecast card.
+
+    // --- TEXT & ICON COLORS ---
+    // Text colors are inverted to be light.
+    onPrimary = Color.White,            // White text on primary buttons (pineGreen).
+    onSecondary = Color.White,          // White text on secondary buttons (forestGreen).
+    onTertiary = textPrimary,           // Dark text on the bright gold accent.
+
+    onBackground = offWhite,            // Near-white text on the dark green background.
+    onSurface = offWhite,               // Near-white text on dark green cards.
+
+    onPrimaryContainer = Color.White,   // White text/icons on the main WeatherCard.
+    onSurfaceVariant = offWhite         // Near-white text on the forecast card.
 )
 
 private val LightColorScheme = lightColorScheme(
-    // Main brand colors, used for buttons, icons, etc.
+    // --- MAIN BRAND & ACCENT COLORS ---
     primary = forestGreen,
     secondary = pineGreen,
     tertiary = accentGold,
 
-    // Background colors
-    background = appBackground,       // The main screen background
+    // --- BACKGROUND & SURFACE COLORS ---
+    background = appBackgroundLight,       // The main screen background
     surface = cardBackground,    // Color for smaller cards like WeatherDetailCard
 
-    // Container colors - These are crucial for WeatherScreen
+    // --- CONTAINER COLORS ---  These are crucial for WeatherScreen
     primaryContainer = forestGreen, // Sets the background for the large top WeatherCard
     surfaceVariant = stoneGray,   // Sets the background for the 5-Day Forecast card
 
@@ -46,15 +71,6 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = Color.White, // Text/Icons on the main WeatherCard
     onSurfaceVariant = textPrimary    // Text/Icons on the 5-Day Forecast card
 )
-
-    /* Other default colors to override
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    onPrimary = darkGrey1,
-
-     */
 
 @Composable
 fun WeatherAppTheme(
