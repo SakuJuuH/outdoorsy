@@ -37,10 +37,12 @@ import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
+import com.example.outdoorsy.viewmodel.HistoryViewModel
 
 @Composable
-fun HistoryScreen(modifier: Modifier = Modifier) {
+fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
     val historyItems = ActivityHistoryData.historyItems
 
     Column(
