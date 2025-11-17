@@ -102,7 +102,12 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
 
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(isLoading = true) }
+                _uiState.update {
+                    it.copy(
+                        searchPerformed = null,
+                        isLoading = true
+                    )
+                }
 
                 val response = getAiAssistant(prompt)
                 val locationEntry = response.data?.entries?.firstOrNull()
@@ -116,7 +121,7 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
                     _uiState.update {
                         it.copy(
                             searchPerformed = true,
-                            isLoading = false,
+                            isLoading = false
                         )
                     }
                 } else {
@@ -132,7 +137,7 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
                 _uiState.update {
                     it.copy(
                         searchPerformed = false,
-                        isLoading = false,
+                        isLoading = false
                     )
                 }
             }
