@@ -198,7 +198,7 @@ fun ForecastCard(forecast: List<DailyForecast>, modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
             modifier = Modifier
@@ -305,7 +305,7 @@ fun SearchBar(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 50.dp)
-            .shadow(elevation = 6.dp, shape = MaterialTheme.shapes.medium)
+            .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
             .background(
                 color = MaterialTheme.colorScheme.surface,
                 shape = MaterialTheme.shapes.medium
@@ -346,7 +346,7 @@ fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
             modifier = Modifier
@@ -427,7 +427,7 @@ fun WeatherDetailCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Row(
             modifier = Modifier
