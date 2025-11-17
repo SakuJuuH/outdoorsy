@@ -1,7 +1,7 @@
-package com.example.outdoorsy
+package com.example.outdoorsy.repository
 
-import com.example.outdoorsy.data.remote.WeatherApiService
-import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
+import com.example.outdoorsy.data.remote.ForecastApiService
+import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
 import com.example.outdoorsy.di.interceptor.OpenWeatherInterceptor
 import com.example.outdoorsy.utils.OWM_BASE_URL
 import com.google.gson.Gson
@@ -15,9 +15,9 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class WeatherRepositoryTest {
+class ForecastRepositoryTest {
     private lateinit var gson: Gson
-    private lateinit var repository: WeatherRepositoryImpl
+    private lateinit var repository: ForecastRepositoryImpl
 
     @Before
     fun setUp() {
@@ -34,8 +34,8 @@ class WeatherRepositoryTest {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val weatherService = retrofit.create(WeatherApiService::class.java)
-        repository = WeatherRepositoryImpl(weatherService)
+        val forecastService = retrofit.create(ForecastApiService::class.java)
+        repository = ForecastRepositoryImpl(forecastService)
 
         gson = GsonBuilder()
             .setPrettyPrinting()
@@ -43,21 +43,29 @@ class WeatherRepositoryTest {
     }
 
     @Test
-    fun `test getCurrentWeatherByCity`() = runTest {
-        val result = repository.getCurrentWeatherByCity("Helsinki", "metric", "fi")
+    fun `test getForecastByCity`() = runTest {
+        val result = repository.getForecastByCity(
+            "Helsinki",
+            "metric",
+            "fi"
+        )
+
         println("Success: ${gson.toJson(result)}")
-        assertTrue("City name should not be empty", result.name.isNotEmpty())
+        assertTrue("Count should be greater than 0", result.count > 0)
+        assertTrue("List should not be empty", result.listOfForecastItems.isNotEmpty())
     }
 
     @Test
-    fun `test getCurrentWeatherByCoordinates`() = runTest {
-        val result = repository.getCurrentWeatherByCoordinates(
+    fun `test getForecastByCoordinates`() = runTest {
+        val result = repository.getForecastByCoordinates(
             60.192059,
             24.94583,
             "metric",
             "fi"
         )
+
         println("Success: ${gson.toJson(result)}")
-        assertTrue("City name should not be empty", result.name.isNotEmpty())
+        assertTrue("Count should be greater than 0", result.count > 0)
+        assertTrue("List should not be empty", result.listOfForecastItems.isNotEmpty())
     }
 }
