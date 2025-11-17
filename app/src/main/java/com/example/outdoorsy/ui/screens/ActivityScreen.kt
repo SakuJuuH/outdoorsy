@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -61,123 +60,107 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
         uiState.selectedActivity.isNotBlank()
 
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(id = R.string.activity_screen_title),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        EditableFilteringInput(
-            options = uiState.locations,
-            label = stringResource(id = R.string.activity_screen_location_label),
-            prompt = stringResource(id = R.string.activity_screen_location_prompt),
-            selectedText = uiState.selectedLocation,
-            onValueSelected = viewModel::updateLocation
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        EditableFilteringInput(
-            options = uiState.activities,
-            label = stringResource(id = R.string.activity_screen_activity_label),
-            prompt = stringResource(id = R.string.activity_screen_activity_prompt),
-            selectedText = uiState.selectedActivity,
-            onValueSelected = viewModel::updateActivity
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            TimePickerField(
-                label = stringResource(id = R.string.activity_screen_time_label),
-                prompt = stringResource(id = R.string.activity_screen_time_prompt),
-                selectedTime = uiState.selectedStartTime,
-                onTimeSelected = { newStartTime ->
-                    viewModel.updateStartTime(newStartTime, uiState.selectedEndTime)
-                },
-                modifier = Modifier.weight(1f)
-            )
-
-            TimePickerField(
-                label = stringResource(id = R.string.activity_screen_time_label),
-                prompt = stringResource(id = R.string.activity_screen_time_prompt),
-                selectedTime = uiState.selectedEndTime,
-                onTimeSelected = { newEndTime ->
-                    viewModel.updateEndTime(newEndTime, uiState.selectedStartTime)
-                },
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        if (uiState.timeRangeError != null) {
+    LazyColumn(modifier = modifier) {
+        item {
             Text(
-                text = uiState.timeRangeError!!,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 8.dp)
+                text = stringResource(id = R.string.activity_screen_title),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(8.dp))
-        } else {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
-        Button(
-            onClick = { viewModel.performSearch() },
-            enabled = isSearchEnabled,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(id = R.string.activity_screen_search_button))
+        item {
+            EditableFilteringInput(
+                options = uiState.locations,
+                label = stringResource(id = R.string.activity_screen_location_label),
+                prompt = stringResource(id = R.string.activity_screen_location_prompt),
+                selectedText = uiState.selectedLocation,
+                onValueSelected = viewModel::updateLocation
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            EditableFilteringInput(
+                options = uiState.activities,
+                label = stringResource(id = R.string.activity_screen_activity_label),
+                prompt = stringResource(id = R.string.activity_screen_activity_prompt),
+                selectedText = uiState.selectedActivity,
+                onValueSelected = viewModel::updateActivity
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                TimePickerField(
+                    label = stringResource(id = R.string.activity_screen_time_label),
+                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
+                    selectedTime = uiState.selectedStartTime,
+                    onTimeSelected = { newStartTime ->
+                        viewModel.updateStartTime(newStartTime, uiState.selectedEndTime)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                TimePickerField(
+                    label = stringResource(id = R.string.activity_screen_time_label),
+                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
+                    selectedTime = uiState.selectedEndTime,
+                    onTimeSelected = { newEndTime ->
+                        viewModel.updateEndTime(newEndTime, uiState.selectedStartTime)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        item {
+            if (uiState.timeRangeError != null) {
+                Text(
+                    text = uiState.timeRangeError!!,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            } else {
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+        }
+
+        item {
+            Button(
+                onClick = { viewModel.performSearch() },
+                enabled = isSearchEnabled,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(id = R.string.activity_screen_search_button))
+            }
         }
 
         // TODO: Add search output
-        RecommendationCard(
-            icon = Icons.Default.Checkroom,
-            title = "What to Wear",
-            items = listOf(
-                "Moisture-wicking running shirt",
-                "Running shorts or leggings",
-                "Proper running shoes",
-                "Light jacket for morning runs"
+        items(4) { // Example: 4 cards
+            RecommendationCard(
+                icon = Icons.Default.Checkroom,
+                title = "What to Wear",
+                items = listOf(
+                    "Moisture-wicking running shirt",
+                    "Running shorts or leggings",
+                    "Proper running shoes",
+                    "Light jacket for morning runs"
+                )
             )
-        )
+        }
 
-        RecommendationCard(
-            icon = Icons.Default.Checkroom,
-            title = "What to Wear",
-            items = listOf(
-                "Moisture-wicking running shirt",
-                "Running shorts or leggings",
-                "Proper running shoes",
-                "Light jacket for morning runs"
-            )
-        )
-        RecommendationCard(
-            icon = Icons.Default.Checkroom,
-            title = "What to Wear",
-            items = listOf(
-                "Moisture-wicking running shirt",
-                "Running shorts or leggings",
-                "Proper running shoes",
-                "Light jacket for morning runs"
-            )
-        )
-        RecommendationCard(
-            icon = Icons.Default.Checkroom,
-            title = "What to Wear",
-            items = listOf(
-                "Moisture-wicking running shirt",
-                "Running shorts or leggings",
-                "Proper running shoes",
-                "Light jacket for morning runs"
-            )
-        )
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
     }
 }
 
@@ -359,7 +342,7 @@ fun RecommendationCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 12.dp),
+            .padding(top = 16.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
