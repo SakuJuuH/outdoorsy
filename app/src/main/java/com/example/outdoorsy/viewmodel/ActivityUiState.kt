@@ -1,5 +1,6 @@
 package com.example.outdoorsy.viewmodel
 
+import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import java.time.LocalTime
 
 data class ActivityUiState(
@@ -12,5 +13,6 @@ data class ActivityUiState(
     val timeRangeError: String? = null,
     // true = search successful, false = search error, null = search not performed
     val searchPerformed: Boolean? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val aiAnswer: AiAssistantAnswerDto? = null
 )
