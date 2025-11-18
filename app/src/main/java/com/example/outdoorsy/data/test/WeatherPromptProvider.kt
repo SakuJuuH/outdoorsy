@@ -8,7 +8,9 @@ object WeatherPromptProvider {
         startTime: String,
         endTime: String
     ): String = """
-        You are an assistant providing weather-based activity recommendations. The user has selected:
+        You are an assistant providing weather-based activity tips and recommendations.
+        You must take into account the chosen activity, location, date, start and end times.
+        The user has selected the following parameters:
 
         - Activity: $activity
         - Location: $location
@@ -16,12 +18,12 @@ object WeatherPromptProvider {
         - Start time: $startTime
         - End time: $endTime
 
-        You already have access to the weather data for this location and time window. Based on that, provide:
+        Based on the given information, do the following:
 
-        1. A short summary of the weather conditions (without repeating temperature, humidity, or wind speed).
-        2. Activity-specific recommendations, including tips on what to wear and how to prepare.
-
-        Return the output in the following structured JSON format:
+        1. Fetch the weather data for the location, taking into account the specified date, start time and end time.
+        2. Fill and return an answer in the following JSON format, completed with the requested information.
+        
+        Do not include any extra commentary, formatting or extended information beyond the JSON.
 
         {
           "location": "$location",
@@ -29,13 +31,11 @@ object WeatherPromptProvider {
           "start_time": "$startTime",
           "end_time": "$endTime",
           "activity": "$activity",
-          "weather_summary": "...",
-          "recommendations": {
-            "clothing": "...",
-            "tips": "..."
-          }
+          "suitability_score": "A string of how suitable the activity is according to the weather. Value must be 'Very Good', 'Good', 'Fair', 'Bad', 'Very Bad'",
+          "suitability_info": "An array of string with 2-4 items explaining why the suitability_score was chosen",
+          "clothing_tips": "An array of strings with 2-4 clothing tips for the specific weather",
+          "clothing_items": "An array of strings with just the clothing items recommended in the clothing_tips",
+          "weather_tips": "An array of string with 2-4 weather tips regarding the temperature, wind, humidity, etc"
         }
-
-        Do not include any extra commentary or formatting outside the JSON block.
     """.trimIndent()
 }
