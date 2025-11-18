@@ -53,7 +53,7 @@
     <string name="shopping_screen_title">Weather Gear Shop</string>
     <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
     <string name="shopping_screen_all_items_section_title">All Items</string>
-    <string name="shopping_screen_add_to_cart_button">Add to Cart</string>
+    <string name="shopping_screen_view_listing_button">View Item</string>
 
     <!-- ui - screens - WeatherScreen -->
 
