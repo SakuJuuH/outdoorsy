@@ -137,12 +137,3 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
         }
     }
 }
-
-// TODO: Add a proper DTO for the LLM answer based on the prompt
-// fun parseAnswerJson(answer: String): RecommendationDto {
-//    val jsonStart = answer.indexOf('{')
-//    val jsonEnd = answer.lastIndexOf('}')
-//    val jsonBlock = answer.substring(jsonStart, jsonEnd + 1)
-//
-//    return Gson().fromJson(jsonBlock, RecommendationDto::class.java)
-// }
