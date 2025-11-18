@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +37,8 @@ import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import com.example.outdoorsy.ui.theme.spacing
 import coil.compose.AsyncImage
+import android.net.Uri
+
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
     viewModel.uiState.collectAsState()
@@ -137,15 +141,15 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         items(items) { item ->
             ProductCard(
                 item = item,
-                onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
-
     }
 }
 
 @Composable
-fun ProductCard(item: EbayItem, onAddToCartClicked: () -> Unit, modifier: Modifier = Modifier) {
+fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -197,15 +201,17 @@ fun ProductCard(item: EbayItem, onAddToCartClicked: () -> Unit, modifier: Modifi
                     color = MaterialTheme.colorScheme.primary
                 )
                 CustomButton(
-                    onClick = onAddToCartClicked,
-                    text = stringResource(id = R.string.shopping_screen_add_to_cart_button),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+                        context.startActivity(intent)
+                              },
+                    text = stringResource(id = R.string.shopping_screen_view_listing_button),
                     type = ButtonType.PRIMARY
                 )
             }
         }
     }
 }
-
 
 @Preview(showBackground = true, widthDp = 380)
 @Composable
