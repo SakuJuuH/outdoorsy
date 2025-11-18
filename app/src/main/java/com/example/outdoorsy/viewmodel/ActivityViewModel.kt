@@ -3,9 +3,11 @@ package com.example.outdoorsy.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import java.time.LocalTime
@@ -87,6 +89,7 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
         }
     }
 
+    // TODO: Remove Log statements
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
@@ -110,28 +113,18 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
                 }
 
                 val response = getAiAssistant(prompt)
-                val locationEntry = response.data?.entries?.firstOrNull()
+                Log.d("Response", "$response")
+                val aiAnswer = Gson().fromJson(response.answer, AiAssistantAnswerDto::class.java)
 
-                if (locationEntry != null) {
-                    val locationName = locationEntry.key
-                    val weatherData = locationEntry.value
-
-                    Log.d("Weather Data", "$locationName: $weatherData")
-
-                    _uiState.update {
-                        it.copy(
-                            searchPerformed = true,
-                            isLoading = false
-                        )
-                    }
-                } else {
-                    _uiState.update {
-                        it.copy(
-                            searchPerformed = false,
-                            isLoading = false
-                        )
-                    }
+                _uiState.update {
+                    it.copy(
+                        searchPerformed = true,
+                        isLoading = false,
+                        aiAnswer = aiAnswer
+                    )
                 }
+
+                Log.d("UI State", uiState.value.aiAnswer.toString())
             } catch (e: Exception) {
                 Log.e("ActivitySearch", "Error calling AI Assistant", e)
                 _uiState.update {
