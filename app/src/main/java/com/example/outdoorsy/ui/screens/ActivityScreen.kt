@@ -22,6 +22,9 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Checkroom
+import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.TipsAndUpdates
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -180,21 +183,36 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
-        // TODO: Replace with actual cards based on the prompt
-        if (uiState.searchPerformed == true) {
-            items(4) {
+        if (uiState.searchPerformed == true && uiState.aiAnswer != null) {
+            val answer = uiState.aiAnswer!!
+
+            // TODO: Improve the aesthetics of the suitability score and the other cards
+            item {
                 RecommendationCard(
-                    icon = Icons.Default.Checkroom,
-                    title = "What to Wear",
-                    items = listOf(
-                        "Moisture-wicking running shirt",
-                        "Running shorts or leggings",
-                        "Proper running shoes",
-                        "Light jacket for morning runs"
-                    )
+                    icon = Icons.Default.Info,
+                    title = "Suitability",
+                    items = listOfNotNull(answer.suitabilityScore) +
+                            answer.suitabilityInfo
+                )
+            }
+
+            item {
+                RecommendationCard(
+                    icon = Icons.Default.TipsAndUpdates,
+                    title = "Clothing Tips",
+                    items = answer.clothingTips
+                )
+            }
+
+            item {
+                RecommendationCard(
+                    icon = Icons.Default.Cloud,
+                    title = "Weather Tips",
+                    items = answer.weatherTips
                 )
             }
         }
+
 
         item {
             Spacer(modifier = Modifier.height(16.dp))
