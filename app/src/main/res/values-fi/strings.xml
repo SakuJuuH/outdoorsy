@@ -4,7 +4,7 @@
 
     <string name="nav_search">Hae</string>
     <string name="nav_weather">Sää</string>
-    <string name="nav_activity">Aktiivisuus/Aktiviteetti</string>
+    <string name="nav_activity">Aktiviteetti</string>
     <string name="nav_shopping">Shoppaile</string>
     <string name="nav_settings">Asetukset</string>
     <string name="nav_history">Historia</string>
@@ -58,5 +58,8 @@
     <string name="weather_screen_search_bar_hint">Hae kaupunkia tai sijaintia</string>
     <string name="weather_screen_search_bar_icon_description">Hae</string>
     <string name="activity_screen_start_time_label">"Valitse aloitus aika "</string>
+    <string name="weather_screen_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
+    <string name="weather_screen_gps_icon_description">Nykyinen sijainti</string>
+    <string name="weather_screen_remove_location_description">Poista sijainti</string>
 
 </resources>

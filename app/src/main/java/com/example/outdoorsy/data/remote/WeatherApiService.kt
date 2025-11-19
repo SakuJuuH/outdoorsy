@@ -1,5 +1,6 @@
 package com.example.outdoorsy.data.remote
 
+import com.example.outdoorsy.data.remote.dto.geocoding.GeocodingDto
 import com.example.outdoorsy.data.remote.dto.weather.WeatherResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -19,4 +20,17 @@ interface WeatherApiService {
         @Query("units") units: String = "metric",
         @Query("lang") language: String = "en"
     ): WeatherResponseDto
+
+    @GET("geo/1.0/direct")
+    suspend fun getCoordinatesByCity(
+        @Query("q") city: String,
+        @Query("limit") limit: Int = 3
+    ): List<GeocodingDto>
+
+    @GET("geo/1.0/reverse")
+    suspend fun getCityByCoordinates(
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double,
+        @Query("limit") limit: Int = 3
+    ): List<GeocodingDto>
 }

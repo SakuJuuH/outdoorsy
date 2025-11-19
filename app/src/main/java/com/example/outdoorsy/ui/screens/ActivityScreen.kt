@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -41,19 +42,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import com.example.outdoorsy.ui.theme.pineGreen
 import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.viewmodel.ActivityViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import com.example.outdoorsy.ui.theme.pineGreen
-import androidx.compose.material3.ButtonDefaults
 
 @Composable
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-            uiState.selectedActivity.isNotBlank()
+        uiState.selectedActivity.isNotBlank()
 
     Column(modifier = modifier) {
         // Title Section
@@ -211,8 +211,8 @@ fun EditableFilteringInput(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                disabledContainerColor = MaterialTheme.colorScheme.surface,
-                )
+                disabledContainerColor = MaterialTheme.colorScheme.surface
+            )
         )
 
         if (expanded && (text.isNotBlank() || filteredOptions.isNotEmpty())) {
@@ -307,7 +307,7 @@ fun TimePickerField(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surface,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                disabledContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface
             )
         )
 

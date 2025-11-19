@@ -1,8 +1,10 @@
 package com.example.outdoorsy.ui.screens
 
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,20 +27,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.outdoorsy.R
-import androidx.compose.ui.res.stringResource
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
-import com.example.outdoorsy.viewmodel.ShoppingViewModel
 import com.example.outdoorsy.ui.theme.spacing
-import coil.compose.AsyncImage
-import android.net.Uri
+import com.example.outdoorsy.viewmodel.ShoppingViewModel
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
@@ -47,7 +49,6 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
     val isLoading = uiState.value.isLoading
     val error = uiState.value.error
     val items = uiState.value.items
-
 
     LazyColumn(
         modifier = modifier,
@@ -85,15 +86,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-        /*
-        // Display "Recommended" items in a vertical list
-        items(uiStat) { item ->
-            ProductCard(
-                item = item,
-                onAddToCartClicked = { viewModel.onAddToCart(item) }
-            )
-        }
-         */
+
         // --- All Items Section ---
         item {
             // Add a spacer for visual separation before the next section
@@ -104,25 +97,19 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                 fontWeight = FontWeight.Bold
             )
         }
-        /*
-        // Display "All Items" in a vertical list
-        items(allItems) { item ->
-            ProductCard(
-                item = item,
-                onAddToCartClicked = { viewModel.onAddToCart(item) }
-            )
-        }
-        */
 
         // Handle loading state
         if (isLoading) {
             item {
-                // You can replace this with a CircularProgressIndicator
-                Text(
-                    text = "Loading items...",
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Box(
+                    modifier = Modifier
+                        .fillParentMaxWidth()
+                        .padding(vertical = 32.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
             }
         }
 
@@ -140,7 +127,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         // 4. Display the items from the API
         items(items) { item ->
             ProductCard(
-                item = item,
+                item = item
             )
         }
     }
@@ -195,7 +182,13 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${item.price.value} EUR",
+                    text = "${
+                        when (item.price.currency) {
+                            "USD" -> "$"
+                            "GBP" -> "£"
+                            else -> ""
+                        }
+                    }${item.price.value}${if (item.price.currency == "EUR") "€" else ""}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary
@@ -204,7 +197,7 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                     onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
                         context.startActivity(intent)
-                              },
+                    },
                     text = stringResource(id = R.string.shopping_screen_view_listing_button),
                     type = ButtonType.PRIMARY
                 )

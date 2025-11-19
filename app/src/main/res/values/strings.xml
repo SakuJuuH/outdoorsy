@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    
+
     <!-- Navigation Items -->
     <string name="nav_search">Search</string>
     <string name="nav_weather">Weather</string>
@@ -67,6 +67,9 @@
     <string name="weather_screen_weather_detail_five_day_forecast">5-Day Forecast</string>
     <string name="weather_screen_search_bar_hint">Search for a city or location...</string>
     <string name="weather_screen_search_bar_icon_description">Search</string>
+    <string name="weather_screen_search_bar_location_icon_description">Use Current Location</string>
+    <string name="weather_screen_gps_icon_description">Current Location</string>
+    <string name="weather_screen_remove_location_description">Remove location</string>
 
 
 </resources>

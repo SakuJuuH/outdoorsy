@@ -11,10 +11,10 @@ class GetForecast @Inject constructor(private val repository: ForecastRepository
         city: String? = null,
         units: String,
         language: String
-    ): ForecastResponse = if (lat != null && lon != null) {
-        repository.getForecastByCoordinates(lat, lon, units, language)
-    } else if (city != null) {
+    ): ForecastResponse = if (city != null) {
         repository.getForecastByCity(city, units, language)
+    } else if (lat != null && lon != null) {
+        repository.getForecastByCoordinates(lat, lon, units, language)
     } else {
         throw IllegalArgumentException("No coordinates or city provided")
     }

@@ -53,7 +53,9 @@ class ShoppingViewModel @Inject constructor(private val ebayRepository: EbayRepo
             } catch (e: Exception) {
                 // 4. Or update ONCE on failure
                 Log.e("ShoppingViewModel", "Error fetching items", e)
-                _uiState.update { it.copy(isLoading = false, error = "Failed to load items. Please try again.") }
+                _uiState.update {
+                    it.copy(isLoading = false, error = "Failed to load items. Please try again.")
+                }
             }
         }
     }

@@ -81,9 +81,10 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
             subtitle =
-                LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar(
-                    Char::uppercase
-                ) ?: "",
+            LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar {
+                it.uppercase()
+            }
+                ?: "",
             onClick = {
                 selectedLanguage = language
                 showLanguageDialog = true
