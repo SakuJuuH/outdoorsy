@@ -200,17 +200,17 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
             item {
                 RecommendationCard(
-                    icon = Icons.Default.Checkroom,
-                    title = "Clothing Tips",
-                    items = answer.clothingTips
+                    icon = Icons.Default.Cloud,
+                    title = "Weather Tips",
+                    items = answer.weatherTips
                 )
             }
 
             item {
                 RecommendationCard(
-                    icon = Icons.Default.Cloud,
-                    title = "Weather Tips",
-                    items = answer.weatherTips
+                    icon = Icons.Default.Checkroom,
+                    title = "Clothing Tips",
+                    items = answer.clothingTips
                 )
             }
         }
