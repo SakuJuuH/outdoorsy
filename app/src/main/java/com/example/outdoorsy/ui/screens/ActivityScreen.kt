@@ -450,7 +450,7 @@ fun RecommendationCard(
             HorizontalDivider()
             Spacer(modifier = Modifier.height(12.dp))
 
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 items.forEach { item ->
                     Row(verticalAlignment = Alignment.Top) {
                         Text("•", style = MaterialTheme.typography.bodyMedium)
