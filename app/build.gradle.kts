@@ -120,6 +120,7 @@ dependencies {
     androidTestImplementation(libs.truth)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
     // Room Dependencies
     implementation(libs.androidx.room.runtime)

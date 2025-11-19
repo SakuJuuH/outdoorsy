@@ -4,7 +4,7 @@
 
     <string name="nav_search">Hae</string>
     <string name="nav_weather">Sää</string>
-    <string name="nav_activity">Aktiviteetti</string>
+    <string name="nav_activity">Aktiivisuus/Aktiviteetti</string>
     <string name="nav_shopping">Shoppaile</string>
     <string name="nav_settings">Asetukset</string>
     <string name="nav_history">Historia</string>
@@ -15,12 +15,12 @@
 
     <string name="activity_screen_title">Aktiviteetti suunnittelija</string>
     <string name="activity_screen_activity_label">Valitse aktiviteetti</string>
-    <string name="activity_screen_activity_prompt">Valitse aktiviteetti…</string>
-    <string name="activity_screen_time_label">Valitse aika</string>
-    <string name="activity_screen_time_prompt">Valitse aika…</string>
+    <string name="activity_screen_activity_prompt">Valitse aktiviteetti...</string>
+    <string name="activity_screen_end_time_label">Valitse lopetus aika</string>
+    <string name="activity_screen_time_prompt">Valitse aika...</string>
     <string name="activity_screen_search_button">Hae</string>
     <string name="activity_screen_location_label">Valitse sijainti</string>
-    <string name="activity_screen_location_prompt">Valitse sijainti…</string>
+    <string name="activity_screen_location_prompt">Valitse sijainti...</string>
 
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
@@ -45,11 +45,11 @@
     <string name="shopping_screen_title">Säävarusteiden kauppa</string>
     <string name="shopping_screen_recommended_items_section_title">Suositellaan nykyiseen säähän</string>
     <string name="shopping_screen_all_items_section_title">Kaikki tuotteet</string>
-    <string name="shopping_screen_add_to_cart_button">Lisää ostoskoriin</string>
 
     <string name="weather_screen_weather_detail_humidity">Kosteus</string>
     <string name="weather_screen_weather_detail_wind_speed">Tuulen nopeus</string>
     <string name="weather_screen_weather_detail_visibility">Näkyvyys</string>
+    <string name="shopping_screen_view_listing_button">Katso tuote</string>
     <string name="weather_screen_weather_detail_title">Säätiedot</string>
     <string name="weather_screen_weather_detail_pressure">Paine</string>
     <string name="weather_screen_weather_detail_sunrise">Auringonnousu</string>
@@ -57,5 +57,6 @@
     <string name="weather_screen_weather_detail_five_day_forecast">5 päivän ennuste</string>
     <string name="weather_screen_search_bar_hint">Hae kaupunkia tai sijaintia</string>
     <string name="weather_screen_search_bar_icon_description">Hae</string>
+    <string name="activity_screen_start_time_label">"Valitse aloitus aika "</string>
 
 </resources>

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
+import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
 import com.example.outdoorsy.viewmodel.SettingsViewModel
@@ -56,14 +58,20 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
-        Text(
-            text = stringResource(id = R.string.settings_screen_title),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.padding(vertical = 8.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
+        ) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
+            Text(
+                text = stringResource(id = R.string.settings_screen_title),
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+        }
 
         SettingsSectionHeader(
             title = stringResource(id = R.string.settings_screen_section_header_general)
@@ -73,9 +81,9 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
             subtitle =
-            LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar(
-                Char::uppercase
-            ) ?: "",
+                LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar(
+                    Char::uppercase
+                ) ?: "",
             onClick = {
                 selectedLanguage = language
                 showLanguageDialog = true

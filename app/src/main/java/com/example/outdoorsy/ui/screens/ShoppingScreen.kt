@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,43 +22,56 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
+import androidx.compose.ui.res.stringResource
+import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
-import com.example.outdoorsy.viewmodel.ShoppingItem
 import com.example.outdoorsy.viewmodel.ShoppingViewModel
-import java.text.NumberFormat
-import java.util.Locale
+import com.example.outdoorsy.ui.theme.spacing
+import coil.compose.AsyncImage
+import android.net.Uri
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
     viewModel.uiState.collectAsState()
 
-    /* Todo: Uncomment these variables and use these for the UI
+    val uiState = viewModel.uiState.collectAsState()
     val isLoading = uiState.value.isLoading
     val error = uiState.value.error
     val items = uiState.value.items
-     */
+
 
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Main Page Title
+        // Title section
         item {
-            Text(
-                text = stringResource(id = R.string.shopping_screen_title),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = MaterialTheme.spacing(4),
+                        vertical = MaterialTheme.spacing(3)
+                    )
+            ) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
+                Text(
+                    text = stringResource(id = R.string.shopping_screen_title),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+            }
         }
 
         // --- Recommended Items Section ---
@@ -97,13 +112,44 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                 onAddToCartClicked = { viewModel.onAddToCart(item) }
             )
         }
+        */
 
-         */
+        // Handle loading state
+        if (isLoading) {
+            item {
+                // You can replace this with a CircularProgressIndicator
+                Text(
+                    text = "Loading items...",
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+
+        // 3. Handle Error State
+        if (error != null) {
+            item {
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+
+        // 4. Display the items from the API
+        items(items) { item ->
+            ProductCard(
+                item = item,
+            )
+        }
     }
 }
 
 @Composable
-fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Modifier = Modifier) {
+fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -115,33 +161,30 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Placeholder for an image
-                /* TODO: Replace the placeholder with AsyncImage for each item
                 AsyncImage(
                     model = item.imageUrl,
-                    contentDescription = null,
-                    modifier = some modifier
-                )
-                 */
-                Spacer(
+                    contentDescription = item.title,
                     modifier = Modifier
                         .size(100.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                    contentScale = ContentScale.Crop
                 )
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = item.name,
+                        text = item.title,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2
                     )
-                    Text(
-                        text = item.category,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = item.description, style = MaterialTheme.typography.bodyMedium)
+                    // You can display category if available
+                    if (item.categoryNames.isNotEmpty()) {
+                        Text(
+                            text = item.categoryNames.first(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
 
@@ -151,17 +194,18 @@ fun ProductCard(item: ShoppingItem, onAddToCartClicked: () -> Unit, modifier: Mo
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Format price to currency
-                val formattedPrice = NumberFormat.getCurrencyInstance(Locale.US).format(item)
                 Text(
-                    text = formattedPrice,
+                    text = "${item.price.value} EUR",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary
                 )
                 CustomButton(
-                    onClick = onAddToCartClicked,
-                    text = stringResource(id = R.string.shopping_screen_add_to_cart_button),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+                        context.startActivity(intent)
+                              },
+                    text = stringResource(id = R.string.shopping_screen_view_listing_button),
                     type = ButtonType.PRIMARY
                 )
             }

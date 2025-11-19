@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,12 +30,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,10 +47,9 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.viewmodel.DailyForecast
 import com.example.outdoorsy.viewmodel.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.icons.filled.NightsStay
 import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
+import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier = Modifier) {
@@ -58,6 +62,8 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
         modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
+        Spacer(modifier = Modifier.height(20.dp))
+
         // Search Bar
         SearchBar(
             query = searchQuery,
@@ -71,7 +77,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
         // Weather Carousel (HorizontalPager)
         if (locations.isNotEmpty()) {
-            androidx.compose.foundation.pager.HorizontalPager(
+            HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxWidth()
             ) { page ->
@@ -82,7 +88,6 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
             }
 
             // Page Indicators
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,17 +128,13 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.WaterDrop,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_humidity
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_humidity),
                         value = "${locations[pagerState.currentPage].humidity}%",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Air,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_wind_speed
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_wind_speed),
                         value = "${locations[pagerState.currentPage].windSpeed} km/h",
                         modifier = Modifier.weight(1f)
                     )
@@ -144,17 +145,13 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                 ) {
                     WeatherDetailCard(
                         icon = Icons.Default.Visibility,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_visibility
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_visibility),
                         value = "${locations[pagerState.currentPage].visibility} mi",
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
                         icon = Icons.Default.Speed,
-                        label = stringResource(
-                            id = R.string.weather_screen_weather_detail_pressure
-                        ),
+                        label = stringResource(id = R.string.weather_screen_weather_detail_pressure),
                         value = "${locations[pagerState.currentPage].pressure} in",
                         modifier = Modifier.weight(1f)
                     )
@@ -170,7 +167,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
                         modifier = Modifier.weight(1f)
                     )
                     WeatherDetailCard(
-                        icon = Icons.Default.NightsStay,
+                        icon = Icons.Default.WbSunny,
                         label = stringResource(id = R.string.weather_screen_weather_detail_sunset),
                         value = locations[pagerState.currentPage].sunset,
                         modifier = Modifier.weight(1f)
@@ -182,9 +179,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = viewModel(), modifier: Modifier 
 
             // 5-Day Forecast
             Text(
-                text = stringResource(
-                    id = R.string.weather_screen_weather_detail_five_day_forecast
-                ),
+                text = stringResource(id = R.string.weather_screen_weather_detail_five_day_forecast),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
@@ -201,14 +196,14 @@ fun ForecastCard(forecast: List<DailyForecast>, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .padding(16.dp)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             forecast.forEach { day ->
@@ -220,24 +215,53 @@ fun ForecastCard(forecast: List<DailyForecast>, modifier: Modifier = Modifier) {
 
 @Composable
 fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier) {
-    Row(
+    ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+            .padding(vertical = 4.dp)    ) {
+        val (dayText, conditionRow, highTempText, lowTempText) = createRefs()
+
+        val startGuideline = createGuidelineFromStart(0.3f)
+
+        // 3. Day Text
         Text(
             text = dailyForecast.day,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.constrainAs(dayText) {
+                start.linkTo(parent.start, margin = 16.dp)
+                centerVerticallyTo(parent)
+            }
         )
 
+        // 4. Temperatures
+        Text(
+            text = "${dailyForecast.high}°",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.constrainAs(highTempText) {
+                end.linkTo(parent.end, margin = 16.dp)
+                centerVerticallyTo(parent)
+            }
+        )
+        Text(
+            text = "${dailyForecast.low}°",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            modifier = Modifier.constrainAs(lowTempText) {
+                end.linkTo(highTempText.start, margin = 16.dp)
+                centerVerticallyTo(parent)
+            }
+        )
+
+        // 5. Condition Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.constrainAs(conditionRow) {
+                start.linkTo(startGuideline)
+                centerVerticallyTo(parent)
+            }
         ) {
             if (dailyForecast.icon.isNotBlank()) {
                 AsyncImage(
@@ -258,24 +282,8 @@ fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier)
             Text(
                 text = dailyForecast.condition,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = "${dailyForecast.low}°",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-            )
-            Text(
-                text = "${dailyForecast.high}°",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1
             )
         }
     }
@@ -292,10 +300,17 @@ fun SearchBar(
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
-        label = { Text(stringResource(id = R.string.weather_screen_search_bar_hint)) },
+        //placeholder used to be label (default in Material3)
+        placeholder = { Text(stringResource(id = R.string.weather_screen_search_bar_hint)) },
         modifier = modifier
-            .onFocusChanged { onFocusChange(it.isFocused) }
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 50.dp)
+            .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = MaterialTheme.shapes.medium
+            )
+            .onFocusChanged { onFocusChange(it.isFocused) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -305,8 +320,20 @@ fun SearchBar(
             )
         },
         singleLine = true,
-        shape = MaterialTheme.shapes.medium,
-        keyboardActions = KeyboardActions(
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.Transparent,
+            focusedContainerColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedLeadingIconColor = MaterialTheme.colorScheme.primary,
+            unfocusedLeadingIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+        ),
+        keyboardActions = androidx.compose.foundation.text.KeyboardActions(
             onDone = { onSearch(query) }
         )
     )
@@ -319,7 +346,7 @@ fun WeatherCard(weatherData: WeatherData, modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Column(
             modifier = Modifier
@@ -400,7 +427,7 @@ fun WeatherDetailCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Row(
             modifier = Modifier
