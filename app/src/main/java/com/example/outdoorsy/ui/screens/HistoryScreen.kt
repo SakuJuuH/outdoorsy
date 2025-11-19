@@ -28,20 +28,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.example.outdoorsy.R
 import com.example.outdoorsy.data.model.ActivityHistoryItem
 import com.example.outdoorsy.data.model.ConditionRating
 import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.example.outdoorsy.R
 import com.example.outdoorsy.viewmodel.HistoryViewModel
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
@@ -200,12 +200,8 @@ private fun ActivityHistoryCard(item: ActivityHistoryItem) {
     }
 }
 
-
 @Composable
-private fun ConditionRatingPill(
-    condition: ConditionRating,
-    modifier: Modifier = Modifier
-) {
+private fun ConditionRatingPill(condition: ConditionRating, modifier: Modifier = Modifier) {
     val backgroundColor = when (condition) {
         ConditionRating.EXCELLENT -> Color(0xFF4CAF50) // Green
         ConditionRating.VERY_GOOD -> Color(0xFF8BC34A) // Light Green
@@ -255,4 +251,3 @@ private fun ActivityHistoryCardPreview() {
         )
     }
 }
-

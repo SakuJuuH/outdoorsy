@@ -11,10 +11,10 @@ class GetCurrentWeather @Inject constructor(private val repository: WeatherRepos
         city: String? = null,
         units: String,
         language: String
-    ): WeatherResponse = if (lat != null && lon != null) {
-        repository.getCurrentWeatherByCoordinates(lat, lon, units, language)
-    } else if (city != null) {
+    ): WeatherResponse = if (city != null) {
         repository.getCurrentWeatherByCity(city, units, language)
+    } else if (lat != null && lon != null) {
+        repository.getCurrentWeatherByCoordinates(lat, lon, units, language)
     } else {
         throw IllegalArgumentException("No coordinates or city provided")
     }
