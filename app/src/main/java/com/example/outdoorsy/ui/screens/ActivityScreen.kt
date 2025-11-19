@@ -1,6 +1,7 @@
 package com.example.outdoorsy.ui.screens
 
 import android.app.TimePickerDialog
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +25,6 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.TipsAndUpdates
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -46,12 +46,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
@@ -171,6 +173,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         if (uiState.searchPerformed == false) {
             item {
+                Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = "Something went wrong. Please try again",
                     color = MaterialTheme.colorScheme.error,
@@ -186,19 +189,18 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         if (uiState.searchPerformed == true && uiState.aiAnswer != null) {
             val answer = uiState.aiAnswer!!
 
-            // TODO: Improve the aesthetics of the suitability score and the other cards
             item {
                 RecommendationCard(
                     icon = Icons.Default.Info,
                     title = "Suitability",
-                    items = listOfNotNull(answer.suitabilityScore) +
-                            answer.suitabilityInfo
+                    suitability = answer.suitabilityScore,
+                    items = answer.suitabilityInfo
                 )
             }
 
             item {
                 RecommendationCard(
-                    icon = Icons.Default.TipsAndUpdates,
+                    icon = Icons.Default.Checkroom,
                     title = "Clothing Tips",
                     items = answer.clothingTips
                 )
@@ -212,7 +214,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 )
             }
         }
-
 
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -393,10 +394,11 @@ fun TimePickerField(
 
 @Composable
 fun RecommendationCard(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
-    items: List<String>,
-    modifier: Modifier = Modifier
+    suitability: String? = null,
+    items: List<String>
 ) {
     Card(
         modifier = modifier
@@ -420,11 +422,33 @@ fun RecommendationCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
+                if (suitability != null) {
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    val (bgColor, textColor) = when (suitability.trim().lowercase()) {
+                        "very bad"  -> Color(0xFFD32F2F) to Color.White
+                        "bad"       -> Color(0xFFF44336) to Color.White
+                        "fair"      -> Color(0xFFFFB300) to Color.Black
+                        "good"      -> Color(0xFF4CAF50) to Color.White
+                        "very good" -> Color(0xFF2E7D32) to Color.White
+                        else        -> Color(0xFF9E9E9E) to Color.White
+                    }
+
+                    Text(
+                        text = suitability,
+                        color = textColor,
+                        modifier = modifier
+                            .background(bgColor, shape = RoundedCornerShape(percent = 50))
+                            .padding(horizontal = 12.dp),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items.forEach { item ->
