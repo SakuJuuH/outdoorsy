@@ -6,7 +6,8 @@ object WeatherPromptProvider {
         location: String,
         date: String,
         startTime: String,
-        endTime: String
+        endTime: String,
+        forecast: String
     ): String = """
         You are an assistant providing weather-based activity tips and recommendations.
         You must take into account the chosen activity, location, date, start and end times.
@@ -17,10 +18,12 @@ object WeatherPromptProvider {
         - Date: $date
         - Start time: $startTime
         - End time: $endTime
+        
+        Here is the weather forecast for the city: $forecast
 
         Based on the given information, do the following:
 
-        1. Fetch the weather data for the location, taking into account the specified date, start time and end time.
+        1. Analyze the weather forecast for the location, taking into account the specified activity, date, start time and end time.
         2. Fill and return an answer in the following JSON format, completed with the requested information.
         
         Do not include any extra commentary, formatting or extended information beyond the JSON.
