@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.ads.mobile.sdk)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
@@ -145,4 +146,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.kt.coil.compose)
+
+    // Location Dependencies
+    implementation(libs.play.services.location)
+    implementation(libs.accompanist.permissions)
 }
