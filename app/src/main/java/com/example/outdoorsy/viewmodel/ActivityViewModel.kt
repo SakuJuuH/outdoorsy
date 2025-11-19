@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
+import com.example.outdoorsy.domain.model.ForecastResponse
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
+import com.example.outdoorsy.domain.usecase.GetForecast
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
@@ -18,7 +20,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAssistant) :
+class ActivityViewModel @Inject constructor(
+    private val getAiAssistant: GetAiAssistant,
+    private val getForecast: GetForecast
+) :
     ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(
@@ -97,13 +102,27 @@ class ActivityViewModel @Inject constructor(private val getAiAssistant: GetAiAss
         val startTime = _uiState.value.selectedStartTime.toString()
         val endTime = _uiState.value.selectedEndTime.toString()
 
-        Log.d(
-            "ActivitySearch",
-            "Searching for $activity in $location from $startTime to $endTime in $date"
-        )
-        val prompt = WeatherPromptProvider.buildPrompt(activity, location, date, startTime, endTime)
-
         viewModelScope.launch {
+            var forecast: ForecastResponse? = null
+            try {
+                forecast = getForecast(
+                    city = location,
+                    units = "metric",
+                    language = "en"
+                )
+            } catch (e: Exception) {
+                Log.e("Forecast", "Error fetching forecast", e)
+            }
+
+            val prompt = WeatherPromptProvider.buildPrompt(
+                activity,
+                location,
+                date,
+                startTime,
+                endTime,
+                forecast.toString()
+            )
+
             try {
                 _uiState.update {
                     it.copy(
