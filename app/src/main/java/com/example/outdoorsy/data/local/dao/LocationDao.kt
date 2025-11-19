@@ -15,11 +15,14 @@ interface LocationDao {
     fun getAll(): Flow<List<Location>>
 
     @Query("SELECT * FROM location WHERE name = :name")
-    fun getByName(name: String): Flow<Location>
+    fun getByName(name: String): Flow<Location?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertLocation(location: Location)
 
     @Delete
     fun deleteLocation(location: Location)
+
+    @Query("DELETE FROM location WHERE name = :locationName")
+    fun deleteByName(locationName: String)
 }

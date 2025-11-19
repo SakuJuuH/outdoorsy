@@ -9,7 +9,7 @@ import com.example.outdoorsy.data.local.entity.Location
 
 @Database(
     entities = [Activity::class, Location::class],
-    version = 1,
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {

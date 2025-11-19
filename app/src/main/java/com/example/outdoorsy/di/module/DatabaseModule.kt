@@ -23,7 +23,7 @@ object DatabaseModule {
         AppDatabase::class.java,
         "outdoorsy_db"
     )
-        .fallbackToDestructiveMigration(false)
+        .fallbackToDestructiveMigration(true)
         .build()
 
     @Provides
