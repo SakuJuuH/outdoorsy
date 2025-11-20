@@ -32,6 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.data.model.ActivityHistoryItem
@@ -54,6 +56,7 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
                 .fillMaxWidth()
                 .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
         ) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
             Text(
                 text = stringResource(id = R.string.history_screen_title),
                 style = MaterialTheme.typography.headlineLarge,
@@ -72,7 +75,7 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                horizontal = MaterialTheme.spacing(4),
+                horizontal = MaterialTheme.spacing(1),
                 vertical = MaterialTheme.spacing(2)
             ),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing(2))
@@ -87,109 +90,112 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
 @Composable
 private fun ActivityHistoryCard(item: ActivityHistoryItem) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(110.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
-        Row(
+        ConstraintLayout(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing(3)),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
         ) {
-            // Left side: Icon and Activity Info
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Activity Icon
-                Icon(
-                    imageVector = item.activityIcon,
-                    contentDescription = item.activityName,
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            val (activityIcon, detailsColumn, ratingPill) = createRefs()
 
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing(3)))
-
-                // Activity Details
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = item.activityName,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
-
-                    // Location
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.LocationOn,
-                            contentDescription = "Location",
-                            modifier = Modifier.size(14.dp),
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = item.location,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing(2)))
-                        Icon(
-                            imageVector = Icons.Filled.Schedule,
-                            contentDescription = "Time",
-                            modifier = Modifier.size(14.dp),
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = item.timeRange,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
+            // Pin the Activity Icon to the start
+            Icon(
+                imageVector = item.activityIcon,
+                contentDescription = item.activityName,
+                modifier = Modifier
+                    .constrainAs(activityIcon) {
+                        start.linkTo(parent.start)
+                        centerVerticallyTo(parent)
                     }
+                    .size(32.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
 
-                    Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
-
-                    // Date
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.CalendarToday,
-                            contentDescription = "Date",
-                            modifier = Modifier.size(14.dp),
-                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = item.date,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                        )
-                    }
-                }
-            }
-
-            // Right side: Condition Rating
+            // Pin the Condition Rating Pill to the end
             ConditionRatingPill(
                 condition = item.condition,
-                modifier = Modifier.padding(start = MaterialTheme.spacing(2))
+                modifier = Modifier.constrainAs(ratingPill) {
+                    end.linkTo(parent.end)
+                    centerVerticallyTo(parent)
+                }
             )
+
+            // Pin the Details Column between the icon and the pill
+            Column(
+                modifier = Modifier.constrainAs(detailsColumn) {
+                    start.linkTo(activityIcon.end, margin = 24.dp)
+                    end.linkTo(ratingPill.start, margin = 16.dp)
+                    centerVerticallyTo(parent)
+                    width = Dimension.fillToConstraints
+                }
+            ) {
+                Text(
+                    text = item.activityName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1 // Prevent wrapping
+                )
+
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+
+                // Location Info
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = "Location",
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = item.location,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        maxLines = 1
+                    )
+                }
+
+                // Time Info
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Schedule,
+                        contentDescription = "Time",
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = item.timeRange,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        maxLines = 1
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.CalendarToday,
+                        contentDescription = "Date",
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = item.date,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+            }
         }
     }
 }

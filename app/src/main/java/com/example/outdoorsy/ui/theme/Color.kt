@@ -2,14 +2,6 @@ package com.example.outdoorsy.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
 // --- Theme: Forest Explorer ---
 
 // Primary & Accent Colors
@@ -38,4 +30,7 @@ val stoneGray = Color(0xFFE0E0E0)
 val textPrimary = Color(0xFF1b4332)
 
 // A softer green for secondary text and captions.
-val appBackground = Color(0xFFC5D3C5)
+val appBackgroundLight = Color(0xFFC5D3C5)
+
+// A darker green for the main background
+val appBackgroundDark = Color(0xFFA3B5A3)

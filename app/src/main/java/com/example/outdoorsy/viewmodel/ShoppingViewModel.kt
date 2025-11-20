@@ -1,11 +1,65 @@
 package com.example.outdoorsy.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.domain.model.ebay.EbayItem
+import com.example.outdoorsy.domain.model.ebay.Price
+import com.example.outdoorsy.domain.repository.EbayRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+@HiltViewModel
+class ShoppingViewModel @Inject constructor(private val ebayRepository: EbayRepository) :
+    ViewModel() {
+    private val _uiState = MutableStateFlow(ShoppingUiState())
+    val uiState = _uiState.asStateFlow()
+
+    init {
+        fetchShoppingItems()
+    }
+
+    fun fetchShoppingItems() {
+        // Define the searches you want to perform.
+        val queries = listOf("hiking boots", "camping tent", "waterproof jacket", "backpack")
+
+        Log.d("ShoppingViewModel", "Fetching items for queries: $queries")
+
+        // 1. Set the loading state and clear old errors/items
+        _uiState.update { it.copy(isLoading = true, error = null, items = emptyList()) }
+
+        viewModelScope.launch {
+            try {
+                // 2. Run all queries in parallel for efficiency
+                val results: List<EbayItem> = queries.map { query ->
+                    async { ebayRepository.getItems(query) }
+                }.awaitAll().flatten() // single list
+
+                Log.d("ShoppingViewModel", "Successfully fetched ${results.size} items.")
+
+                // 3. Update the state ONCE with the final list
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        items = results
+                    )
+                }
+            } catch (e: Exception) {
+                // 4. Or update ONCE on failure
+                Log.e("ShoppingViewModel", "Error fetching items", e)
+                _uiState.update {
+                    it.copy(isLoading = false, error = "Failed to load items. Please try again.")
+                }
+            }
+        }
+    }
+}
 
 data class ShoppingItem(
     val id: Int,
@@ -15,113 +69,3 @@ data class ShoppingItem(
     val category: String,
     val imageUrl: String
 )
-
-class ShoppingViewModel : ViewModel() {
-
-    // StateFlow for "Recommended" items
-    private val _recommendedItems = MutableStateFlow<List<ShoppingItem>>(emptyList())
-    val recommendedItems: StateFlow<List<ShoppingItem>> = _recommendedItems.asStateFlow()
-
-    // StateFlow for "All" items
-    private val _allItems = MutableStateFlow<List<ShoppingItem>>(emptyList())
-    val allItems: StateFlow<List<ShoppingItem>> = _allItems.asStateFlow()
-
-    init {
-        fetchMockData()
-    }
-
-    private fun fetchMockData() {
-        viewModelScope.launch {
-            val allMockItems = listOf(
-                ShoppingItem(
-                    1,
-                    "Waterproof Hiking Boots",
-                    129.99,
-                    "Keep your feet dry on any trail.",
-                    "Footwear",
-                    ""
-                ),
-                ShoppingItem(
-                    2,
-                    "Insulated Down Jacket",
-                    199.50,
-                    "Lightweight but warm for chilly evenings.",
-                    "Apparel",
-                    ""
-                ),
-                ShoppingItem(
-                    3,
-                    "Solar-Powered Lantern",
-                    39.95,
-                    "Eco-friendly lighting for your campsite.",
-                    "Accessories",
-                    ""
-                ),
-                ShoppingItem(
-                    4,
-                    "3-Person Camping Tent",
-                    249.00,
-                    "Easy-setup tent, perfect for weekend trips.",
-                    "Equipment",
-                    ""
-                ),
-                ShoppingItem(
-                    5,
-                    "Portable Water Filter",
-                    25.00,
-                    "Clean drinking water wherever you go.",
-                    "Essentials",
-                    ""
-                ),
-                ShoppingItem(
-                    6,
-                    "All-Weather Backpack",
-                    89.99,
-                    "Durable and spacious for all your gear.",
-                    "Bags",
-                    ""
-                ),
-                ShoppingItem(
-                    7,
-                    "Merino Wool Socks",
-                    22.00,
-                    "Comfortable and moisture-wicking.",
-                    "Apparel",
-                    ""
-                ),
-                ShoppingItem(
-                    8,
-                    "Headlamp",
-                    45.50,
-                    "Hands-free lighting for night hikes.",
-                    "Accessories",
-                    ""
-                ),
-                ShoppingItem(
-                    9,
-                    "Camping Cookset",
-                    75.00,
-                    "All-in-one set for campfire meals.",
-                    "Equipment",
-                    ""
-                ),
-                ShoppingItem(
-                    10,
-                    "Trekking Poles",
-                    65.00,
-                    "Reduce strain on your knees during hikes.",
-                    "Essentials",
-                    ""
-                )
-            )
-
-            // For demonstration, let's say the first 3 items are "recommended"
-            _recommendedItems.value = allMockItems.take(2)
-            _allItems.value = allMockItems
-        }
-    }
-
-    fun onAddToCart(item: ShoppingItem) {
-        println("Added ${item.name} to cart.")
-    }
-}
