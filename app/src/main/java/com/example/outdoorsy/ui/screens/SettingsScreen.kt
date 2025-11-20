@@ -24,10 +24,12 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,15 +46,23 @@ import com.example.outdoorsy.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
-    val language = viewModel.language.collectAsState().value
-    val unit = viewModel.temperatureUnit.collectAsState().value
-    val isDarkMode = viewModel.isDarkMode.collectAsState().value
+    val language by viewModel.language.collectAsState()
+    val unit by viewModel.temperatureUnit.collectAsState()
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
 
-    var selectedLanguage by remember { mutableStateOf(language) }
-    var selectedUnit by remember { mutableStateOf(unit) }
+    var selectedLanguage by rememberSaveable { mutableStateOf(language) }
+    var selectedUnit by rememberSaveable { mutableStateOf(unit) }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(language) {
+        selectedLanguage = language
+    }
+
+    LaunchedEffect(unit) {
+        selectedUnit = unit
+    }
 
     Column(
         modifier = modifier
@@ -77,6 +87,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             title = stringResource(id = R.string.settings_screen_section_header_general)
         )
 
+        // Language
         SettingsItem(
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
@@ -105,6 +116,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             title = stringResource(id = R.string.settings_screen_section_header_units)
         )
 
+        // Temperature Unit
         SettingsItem(
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),

@@ -3,27 +3,28 @@ package com.example.outdoorsy.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
-import com.example.outdoorsy.utils.Language
 import com.example.outdoorsy.utils.LocaleHelper
-import com.example.outdoorsy.utils.TemperatureSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
     ViewModel() {
 
-    val temperatureUnit = settingsRepository.getTemperatureUnit()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TemperatureSystem.METRIC)
+    init {
+        loadSettings()
+    }
 
-    val isDarkMode = settingsRepository.getDarkMode()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    private val _temperatureUnit = MutableStateFlow("")
+    private val _language = MutableStateFlow("")
+    private val _isDarkMode = MutableStateFlow(false)
 
-    val language = settingsRepository.getLanguage()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Language.ENGLISH)
+    val temperatureUnit = _temperatureUnit.asStateFlow()
+    val language = _language.asStateFlow()
+    val isDarkMode = _isDarkMode.asStateFlow()
 
     fun setTemperatureUnit(unit: String) {
         viewModelScope.launch {
@@ -41,6 +42,24 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
         viewModelScope.launch {
             settingsRepository.saveLanguage(language)
             LocaleHelper.setLocale(languageCode = language)
+        }
+    }
+
+    fun loadSettings() {
+        viewModelScope.launch {
+            settingsRepository.getTemperatureUnit().collect { unit ->
+                _temperatureUnit.value = unit
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.getDarkMode().collect { isDarkMode ->
+                _isDarkMode.value = isDarkMode
+            }
+        }
+        viewModelScope.launch {
+            settingsRepository.getLanguage().collect { language ->
+                _language.value = language
+            }
         }
     }
 }
