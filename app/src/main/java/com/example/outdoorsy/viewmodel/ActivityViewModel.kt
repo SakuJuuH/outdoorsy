@@ -7,7 +7,7 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.data.test.ActivitiesData
-import com.example.outdoorsy.data.test.WeatherPromptProvider
+import com.example.outdoorsy.utils.WeatherPromptProvider
 import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast

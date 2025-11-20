@@ -1,4 +1,4 @@
-package com.example.outdoorsy.data.test
+package com.example.outdoorsy.utils
 
 object WeatherPromptProvider {
     fun buildPrompt(
