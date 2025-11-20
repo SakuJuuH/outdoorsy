@@ -32,11 +32,6 @@
     <string name="activity_screen_clothing_tips">Clothing Tips</string>
     <string name="activity_screen_hide_options">Hide options</string>
     <string name="activity_screen_show_options">Show options</string>
-    <string name="activity_screen_very_bad">Very Bad</string>
-    <string name="activity_screen_bad">Bad</string>
-    <string name="activity_screen_fair">Fair</string>
-    <string name="activity_screen_good">Good</string>
-    <string name="activity_screen_very_good">Very Good</string>
 
     <!-- ui - screens - HistoryScreen -->
     <string name="history_screen_title">Activity History</string>

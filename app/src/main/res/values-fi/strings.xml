@@ -29,11 +29,6 @@
     <string name="activity_screen_clothing_tips">Clothing Tips</string>
     <string name="activity_screen_hide_options">Hide options</string>
     <string name="activity_screen_show_options">Show options</string>
-    <string name="activity_screen_very_bad">Very Bad</string>
-    <string name="activity_screen_bad">Bad</string>
-    <string name="activity_screen_fair">Fair</string>
-    <string name="activity_screen_good">Good</string>
-    <string name="activity_screen_very_good">Very Good</string>
 
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
