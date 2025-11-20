@@ -6,36 +6,46 @@ object WeatherPromptProvider {
         location: String,
         date: String,
         startTime: String,
-        endTime: String
+        endTime: String,
+        forecast: String,
+        unit: String,
+        language: String
     ): String = """
-        You are an assistant providing weather-based activity recommendations. The user has selected:
+        You are an assistant providing weather-based activity tips and recommendations.
+        You must take into account the chosen activity, location, date, start and end times.
+        The user has selected the following parameters:
 
         - Activity: $activity
         - Location: $location
         - Date: $date
         - Start time: $startTime
         - End time: $endTime
+        
+        Here is the weather forecast for the city: $forecast
+        Here is the unit system that you must use in the answer: $unit. If metric, use Celsius
+        The answer must be generated in the following language: $language 
 
-        You already have access to the weather data for this location and time window. Based on that, provide:
+        Based on the given information, do the following:
 
-        1. A short summary of the weather conditions (without repeating temperature, humidity, or wind speed).
-        2. Activity-specific recommendations, including tips on what to wear and how to prepare.
-
-        Return the output in the following structured JSON format:
+        1. Analyze the weather forecast for the location, taking into account the specified activity, date, start time and end time.
+        2. Fill and return an answer in the following JSON format, completed with the requested information.
+        
+        Do not include any extra commentary, formatting or extended information beyond the JSON.
 
         {
+          "unit": "$unit",
+          "language": "$language",
           "location": "$location",
           "date": "$date",
           "start_time": "$startTime",
           "end_time": "$endTime",
           "activity": "$activity",
-          "weather_summary": "...",
-          "recommendations": {
-            "clothing": "...",
-            "tips": "..."
-          }
+          "suitability_label": "A string of how suitable the activity is according to the weather. Value must be 'Very Good', 'Good', 'Fair', 'Bad', 'Very Bad'.Be sure to translate the chosen value into the selected language: $language",
+          "suitability_score" "An integer from 5 to 1 which matches the suitability_label where 5 is 'Very Good' and 1 is 'Very Bad' (or the equivalent when translated)",
+          "suitability_info": "An array of string with 2-4 items explaining why the suitability_score was chosen",
+          "clothing_tips": "An array of strings with 2-4 clothing tips for the specific weather",
+          "clothing_items": "An array of strings with just the clothing items recommended in the clothing_tips",
+          "weather_tips": "An array of string with 2-4 weather tips regarding the temperature, wind, humidity, etc"
         }
-
-        Do not include any extra commentary or formatting outside the JSON block.
     """.trimIndent()
 }
