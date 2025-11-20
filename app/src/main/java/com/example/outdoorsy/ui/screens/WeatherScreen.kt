@@ -60,6 +60,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -149,7 +151,8 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(64.dp),
+                    .padding(64.dp)
+                    .semantics { contentDescription = "Loading weather data" }, // Add content description for accessibility
                 color = MaterialTheme.colorScheme.primary
             )
         }
@@ -348,6 +351,11 @@ fun ForecastDayItem(dailyForecast: DailyForecast, modifier: Modifier = Modifier)
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .semantics {
+                contentDescription =
+                    "${dailyForecast.day}, ${dailyForecast.condition}, " +
+                            "high ${dailyForecast.high} degrees, low ${dailyForecast.low} degrees"  // Add content description for accessibility
+            }
     ) {
         val (dayText, conditionRow, highTempText, lowTempText) = createRefs()
 
@@ -616,7 +624,9 @@ fun WeatherDetailCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.semantics {
+            contentDescription = "$label, $value" // Add content description for accessibility
+        },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),

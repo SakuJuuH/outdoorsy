@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 // Primary & Accent Colors
 
 // A deep, trustworthy green for primary buttons and highlights.
-val forestGreen = Color(0xFF2d6a4f)
+val forestGreen = Color(0xFF22513D) // adjust darker to pass WCAG AAA check
 
 // A slightly lighter green for secondary elements.
 val pineGreen = Color(0xFF40916c)
@@ -27,7 +27,7 @@ val cardBackground = Color(0xFFFFFFFF)
 val stoneGray = Color(0xFFE0E0E0)
 
 // A very dark green for primary text, easier on the eyes than black.
-val textPrimary = Color(0xFF1b4332)
+val textPrimary = Color(0xFF0C2219) // adjust darker to pass WCAG AAA check
 
 // A softer green for secondary text and captions.
 val appBackgroundLight = Color(0xFFC5D3C5)

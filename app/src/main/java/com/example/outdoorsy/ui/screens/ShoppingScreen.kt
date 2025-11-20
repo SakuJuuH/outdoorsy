@@ -28,6 +28,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -107,7 +111,9 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                         .padding(vertical = 32.dp)
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .semantics { contentDescription = "Loading products" } // more descriptive for accessibility
                     )
                 }
             }
@@ -138,7 +144,12 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {
+            role = Role.Button
+            contentDescription = "Product: ${item.title}, Price: ${item.price.value} ${item.price.currency}" // more descriptive for accessibility
+        },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -150,7 +161,7 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
             ) {
                 AsyncImage(
                     model = item.imageUrl,
-                    contentDescription = item.title,
+                    contentDescription = "Product image for ${item.title}", // add more descriptive content
                     modifier = Modifier
                         .size(100.dp)
                         .clip(RoundedCornerShape(8.dp))
@@ -191,7 +202,11 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                     }${item.price.value}${if (item.price.currency == "EUR") "€" else ""}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.semantics {
+                        contentDescription = "Price: ${item.price.value} ${item.price.currency}" // more descriptive for accessibility
+                    }
+
                 )
                 CustomButton(
                     onClick = {
@@ -199,7 +214,8 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                         context.startActivity(intent)
                     },
                     text = stringResource(id = R.string.shopping_screen_view_listing_button),
-                    type = ButtonType.PRIMARY
+                    type = ButtonType.PRIMARY,
+                    modifier = Modifier.height(48.dp) // minimum touch target size
                 )
             }
         }

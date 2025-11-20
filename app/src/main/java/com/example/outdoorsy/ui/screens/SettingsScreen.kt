@@ -33,6 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -132,7 +137,12 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                                 .clickable {
                                     selectedLanguage = code
                                 }
-                                .padding(vertical = 12.dp),
+                                .padding(vertical = 12.dp)
+                                .height(48.dp) // Ensure minimum touch target size
+                                .semantics(mergeDescendants = true) {
+                                    role = Role.RadioButton
+                                    contentDescription = "${locale.displayLanguage}, ${if (code == selectedLanguage) "selected" else "not selected"}" // Accessibility description
+                                },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
@@ -205,7 +215,9 @@ private fun SettingsSectionHeader(title: String) {
         style = MaterialTheme.typography.titleMedium,
         fontWeight = FontWeight.Bold,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .semantics { heading() }
     )
 }
 
@@ -215,7 +227,11 @@ private fun SettingsItem(icon: ImageVector, title: String, subtitle: String, onC
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .semantics {
+                role = Role.Button
+                contentDescription = "$title, $subtitle" // Accessibility description
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -254,7 +270,11 @@ private fun SettingsItemWithSwitch(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .semantics(mergeDescendants = true) {
+                role = Role.Switch
+                contentDescription = "$title, $subtitle, ${if (checked) "enabled" else "disabled"}" // Accessibility description
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

@@ -25,6 +25,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
@@ -83,7 +88,9 @@ private fun SearchScreenContent(
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
                 IconButton(onClick = onSubmit) {
-                    Icon(imageVector = Icons.Outlined.History, contentDescription = "Submit search")
+                    Icon(
+                        imageVector = Icons.Outlined.History,
+                        contentDescription = stringResource(id = R.string.search_screen_content_label)) // more descriptive content description can be added
                 }
             },
             shape = MaterialTheme.shapes.medium
@@ -93,7 +100,8 @@ private fun SearchScreenContent(
             Text(
                 text = stringResource(id = R.string.search_screen_content_suggestions),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.semantics { heading() } // Marking as a heading for accessibility
             )
 
             LazyColumn(
@@ -104,7 +112,11 @@ private fun SearchScreenContent(
                     HistoryRow(
                         text = item,
                         onClick = { onHistoryClick(item) },
-                        onRemove = {}
+                        onRemove = {},
+                        modifier = Modifier.semantics {
+                            role = Role.Button
+                            contentDescription = "Suggestion: $item, tap to select" // improve accessibility
+                        }
                     )
                 }
             }
@@ -114,7 +126,8 @@ private fun SearchScreenContent(
             Text(
                 text = stringResource(id = R.string.search_screen_content_recent),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.semantics { heading() } // Marking as a heading for accessibility
             )
 
             LazyColumn(
@@ -135,7 +148,7 @@ private fun SearchScreenContent(
 }
 
 @Composable
-private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit) {
+private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit, modifier: Modifier = Modifier) {
     androidx.compose.material3.ListItem(
         headlineContent = { Text(text) },
         leadingContent = {
@@ -147,13 +160,17 @@ private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit) 
                     imageVector = Icons.Outlined.Clear,
                     contentDescription = stringResource(
                         id = R.string.search_screen_history_row_button
-                    )
+                    ) + " $text" // Include item name
                 )
             }
         },
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
+            .semantics {
+                role = Role.Button
+                contentDescription = "Search for $text" // improve accessibility
+            }
     )
 }
 
