@@ -10,7 +10,7 @@ data class ActivityUiState(
     val selectedActivity: String = "",
     val selectedStartTime: LocalTime = LocalTime.now(),
     val selectedEndTime: LocalTime = LocalTime.now().plusHours(1),
-    val timeRangeError: String? = null,
+    val timeRangeErrorId: Int? = null,
     // true = search successful, false = search error, null = search not performed
     val searchPerformed: Boolean? = null,
     val isLoading: Boolean = false,
