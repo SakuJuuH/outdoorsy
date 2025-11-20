@@ -3,6 +3,7 @@ package com.example.outdoorsy.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.data.test.ActivitiesData
@@ -57,41 +58,38 @@ class ActivityViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedStartTime = newTime,
-                timeRangeError = null
+                timeRangeErrorId = null
             )
         }
 
         if (endTime.isBefore(newTime)) {
-            val errorMessage = "End time was automatically adjusted."
             val adjustedEndTime = newTime.plusHours(1)
 
             _uiState.update {
                 it.copy(
                     selectedEndTime = adjustedEndTime,
-                    timeRangeError = errorMessage
+                    timeRangeErrorId = R.string.activity_screen_time_error_adjusted
                 )
             }
         } else {
             _uiState.update {
-                it.copy(timeRangeError = null)
+                it.copy(timeRangeErrorId = null)
             }
         }
     }
 
     fun updateEndTime(newTime: LocalTime, startTime: LocalTime) {
         if (newTime.isBefore(startTime)) {
-            val errorMessage = "End time must be after start time."
-
             _uiState.update {
                 it.copy(
-                    timeRangeError = errorMessage
+                    timeRangeErrorId = R.string.activity_screen_time_error_invalid
                 )
             }
         } else {
             _uiState.update {
                 it.copy(
                     selectedEndTime = newTime,
-                    timeRangeError = null
+                    timeRangeErrorId = null
                 )
             }
         }
