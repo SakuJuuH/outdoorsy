@@ -7,7 +7,9 @@ object WeatherPromptProvider {
         date: String,
         startTime: String,
         endTime: String,
-        forecast: String
+        forecast: String,
+        unit: String,
+        language: String
     ): String = """
         You are an assistant providing weather-based activity tips and recommendations.
         You must take into account the chosen activity, location, date, start and end times.
@@ -20,6 +22,8 @@ object WeatherPromptProvider {
         - End time: $endTime
         
         Here is the weather forecast for the city: $forecast
+        Here is the unit system that you must use in the answer: $unit. If metric, use Celsius
+        The answer must be generated in the following language: $language 
 
         Based on the given information, do the following:
 
@@ -29,6 +33,8 @@ object WeatherPromptProvider {
         Do not include any extra commentary, formatting or extended information beyond the JSON.
 
         {
+          "unit": "$unit",
+          "language": "$language",
           "location": "$location",
           "date": "$date",
           "start_time": "$startTime",
