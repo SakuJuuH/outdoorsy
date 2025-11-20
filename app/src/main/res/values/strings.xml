@@ -24,6 +24,19 @@
     <string name="activity_screen_time_prompt">Choose a time...</string>
     <string name="activity_screen_search_button">Search</string>
     <string name="activity_screen_no_matches">No matches found</string>
+    <string name="activity_screen_time_error_adjusted">End time was automatically adjusted.</string>
+    <string name="activity_screen_time_error_invalid">End time must be after start time.</string>
+    <string name="activity_screen_generic_error">Something went wrong. Please try again</string>
+    <string name="activity_screen_suitability">Suitability</string>
+    <string name="activity_screen_weather_tips">Weather Tips</string>
+    <string name="activity_screen_clothing_tips">Clothing Tips</string>
+    <string name="activity_screen_hide_options">Hide options</string>
+    <string name="activity_screen_show_options">Show options</string>
+    <string name="activity_screen_very_bad">Very Bad</string>
+    <string name="activity_screen_bad">Bad</string>
+    <string name="activity_screen_fair">Fair</string>
+    <string name="activity_screen_good">Good</string>
+    <string name="activity_screen_very_good">Very Good</string>
 
     <!-- ui - screens - HistoryScreen -->
     <string name="history_screen_title">Activity History</string>
