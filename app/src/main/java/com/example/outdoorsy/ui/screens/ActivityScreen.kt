@@ -128,10 +128,10 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
-        if (uiState.timeRangeError != null) {
+        if (uiState.timeRangeErrorId != null) {
             item {
                 Text(
-                    text = uiState.timeRangeError!!,
+                    text = stringResource(uiState.timeRangeErrorId!!),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp)
@@ -175,7 +175,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = "Something went wrong. Please try again",
+                    text = stringResource(R.string.activity_screen_generic_error),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
@@ -192,8 +192,9 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Info,
-                    title = "Suitability",
-                    suitability = answer.suitabilityScore,
+                    title = stringResource(R.string.activity_screen_suitability),
+                    suitabilityLabel = answer.suitabilityLabel,
+                    suitabilityScore = answer.suitabilityScore,
                     items = answer.suitabilityInfo
                 )
             }
@@ -201,7 +202,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Cloud,
-                    title = "Weather Tips",
+                    title = stringResource(R.string.activity_screen_weather_tips),
                     items = answer.weatherTips
                 )
             }
@@ -209,7 +210,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Checkroom,
-                    title = "Clothing Tips",
+                    title = stringResource(R.string.activity_screen_clothing_tips),
                     items = answer.clothingTips
                 )
             }
@@ -271,7 +272,9 @@ fun EditableFilteringInput(
                     } else {
                         Icons.Default.ArrowDropDown
                     },
-                    contentDescription = if (expanded) "Hide options" else "Show options",
+                    contentDescription = if (expanded)
+                        stringResource(R.string.activity_screen_hide_options) else
+                            stringResource(R.string.activity_screen_show_options),
                     modifier = Modifier.clickable {
                         expanded = !expanded
                         if (expanded) focusRequester.requestFocus()
@@ -397,7 +400,8 @@ fun RecommendationCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     title: String,
-    suitability: String? = null,
+    suitabilityLabel: String? = null,
+    suitabilityScore: Int? = null,
     items: List<String>
 ) {
     Card(
@@ -422,20 +426,20 @@ fun RecommendationCard(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
-                if (suitability != null) {
+                if (suitabilityLabel != null && suitabilityScore != null) {
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    val (bgColor, textColor) = when (suitability.trim().lowercase()) {
-                        "very bad"  -> Color(0xFFD32F2F) to Color.White
-                        "bad"       -> Color(0xFFF44336) to Color.White
-                        "fair"      -> Color(0xFFFFB300) to Color.Black
-                        "good"      -> Color(0xFF4CAF50) to Color.White
-                        "very good" -> Color(0xFF2E7D32) to Color.White
-                        else        -> Color(0xFF9E9E9E) to Color.White
+                    val (bgColor, textColor) = when (suitabilityScore) {
+                        1 -> Color(0xFFD32F2F) to Color.White
+                        2 -> Color(0xFFF44336) to Color.White
+                        3 -> Color(0xFFFFB300) to Color.Black
+                        4 -> Color(0xFF4CAF50) to Color.White
+                        5 -> Color(0xFF2E7D32) to Color.White
+                        else -> Color(0xFF9E9E9E) to Color.White
                     }
 
                     Text(
-                        text = suitability,
+                        text = suitabilityLabel,
                         color = textColor,
                         modifier = modifier
                             .background(bgColor, shape = RoundedCornerShape(percent = 50))
