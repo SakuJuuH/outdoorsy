@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.weather
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -72,9 +72,9 @@ import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.outdoorsy.R
-import com.example.outdoorsy.ui.model.DailyForecast
-import com.example.outdoorsy.ui.model.WeatherData
-import com.example.outdoorsy.viewmodel.WeatherViewModel
+import com.example.outdoorsy.ui.weather.model.DailyForecast
+import com.example.outdoorsy.ui.weather.model.WeatherData
+import com.example.outdoorsy.utils.TemperatureSystem
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -316,7 +316,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                             ),
                             value = "${currentWeatherData.windSpeed} ${
                                 when (currentWeatherData.unit) {
-                                    "metric" -> "m/s"
+                                    TemperatureSystem.METRIC.code -> "m/s"
                                     else -> "mph"
                                 }
                             }",
@@ -623,7 +623,7 @@ fun WeatherCard(
                 Text(
                     text = "${weatherData.temp}${
                         when (weatherData.unit) {
-                            "metric" -> "°C"
+                            TemperatureSystem.METRIC.code -> "°C"
                             else -> "°F"
                         }
                     }",

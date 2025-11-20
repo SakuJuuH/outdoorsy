@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.main
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -10,13 +10,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.outdoorsy.ui.activity.ActivityScreen
+import com.example.outdoorsy.ui.activity.ActivityViewModel
 import com.example.outdoorsy.ui.components.AppBottomNavBar
+import com.example.outdoorsy.ui.history.HistoryScreen
+import com.example.outdoorsy.ui.history.HistoryViewModel
 import com.example.outdoorsy.ui.navigation.Screen
-import com.example.outdoorsy.viewmodel.ActivityViewModel
-import com.example.outdoorsy.viewmodel.HistoryViewModel
-import com.example.outdoorsy.viewmodel.SettingsViewModel
-import com.example.outdoorsy.viewmodel.ShoppingViewModel
-import com.example.outdoorsy.viewmodel.WeatherViewModel
+import com.example.outdoorsy.ui.settings.SettingsScreen
+import com.example.outdoorsy.ui.settings.SettingsViewModel
+import com.example.outdoorsy.ui.shopping.ShoppingScreen
+import com.example.outdoorsy.ui.shopping.ShoppingViewModel
+import com.example.outdoorsy.ui.weather.WeatherScreen
+import com.example.outdoorsy.ui.weather.WeatherViewModel
 
 @Composable
 fun AppContainer(mainNavController: NavHostController) {

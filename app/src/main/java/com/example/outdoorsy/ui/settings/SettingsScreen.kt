@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.spacing
+import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
-import com.example.outdoorsy.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
@@ -91,11 +91,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsItem(
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
-            subtitle =
-            LocaleHelper.supportedLanguages[selectedLanguage]?.displayLanguage?.replaceFirstChar {
-                it.uppercase()
-            }
-                ?: "",
+            subtitle = LocaleHelper.getLanguageName(selectedLanguage),
             onClick = {
                 selectedLanguage = language
                 showLanguageDialog = true
@@ -120,7 +116,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsItem(
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),
-            subtitle = TemperatureSystem.DISPLAY_NAMES[selectedUnit] ?: "",
+            subtitle = TemperatureSystem.fromCode(selectedUnit).displayName,
             onClick = {
                 selectedUnit = unit
                 showUnitDialog = true
@@ -137,24 +133,25 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             title = { Text(stringResource(id = R.string.settings_screen_language_dialog_title)) },
             text = {
                 Column {
-                    LocaleHelper.supportedLanguages.forEach { (code, locale) ->
+                    AppLanguage.entries.forEach { appLang ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    selectedLanguage = code
+                                    selectedLanguage = appLang.code
                                 }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = code == selectedLanguage,
+                                selected = appLang.code == selectedLanguage,
                                 onClick = {
+                                    selectedLanguage = appLang.code
                                 }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                locale.displayLanguage.replaceFirstChar(Char::uppercase)
+                                LocaleHelper.getLanguageName(appLang.code)
                             )
                         }
                     }
@@ -180,20 +177,20 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             title = { Text(stringResource(id = R.string.settings_screen_unit_dialog_title)) },
             text = {
                 Column {
-                    TemperatureSystem.DISPLAY_NAMES.forEach { (unit, name) ->
+                    TemperatureSystem.entries.forEach { sys ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { selectedUnit = unit }
+                                .clickable { selectedUnit = sys.code }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = unit == selectedUnit,
-                                onClick = {}
+                                selected = sys.code == selectedUnit,
+                                onClick = { selectedUnit = sys.code }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(name)
+                            Text(sys.displayName)
                         }
                     }
                 }

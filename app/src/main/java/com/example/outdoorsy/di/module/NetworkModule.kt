@@ -19,12 +19,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -134,6 +134,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAssistantRepository(aiAssistantApiService: AiAssistantApiService): AssistantRepository =
-        AssistantRepositoryImpl(aiAssistantApiService)
+    fun provideAssistantRepository(
+        aiAssistantApiService: AiAssistantApiService
+    ): AssistantRepository = AssistantRepositoryImpl(aiAssistantApiService)
 }

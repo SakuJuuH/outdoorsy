@@ -1,4 +1,4 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.activity
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,10 +7,10 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.data.test.ActivitiesData
-import com.example.outdoorsy.utils.WeatherPromptProvider
 import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
+import com.example.outdoorsy.utils.WeatherPromptProvider
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
@@ -27,8 +27,7 @@ class ActivityViewModel @Inject constructor(
     private val getAiAssistant: GetAiAssistant,
     private val getForecast: GetForecast,
     private val settingsRepository: SettingsRepository
-) :
-    ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(
             // TODO: Replace location placeholder values with proper database queries

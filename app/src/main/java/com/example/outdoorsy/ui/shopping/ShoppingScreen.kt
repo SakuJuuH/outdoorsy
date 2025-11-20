@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.shopping
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -39,7 +39,6 @@ import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.ShoppingViewModel
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {

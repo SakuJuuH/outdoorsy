@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.search
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,9 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.data.test.ActivitiesData
+import com.example.outdoorsy.ui.history.HistoryViewModel
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.HistoryViewModel
 
 @Composable
 fun SearchScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = viewModel()) {
@@ -136,7 +137,7 @@ private fun SearchScreenContent(
 
 @Composable
 private fun HistoryRow(text: String, onClick: () -> Unit, onRemove: () -> Unit) {
-    androidx.compose.material3.ListItem(
+    ListItem(
         headlineContent = { Text(text) },
         leadingContent = {
             Icon(imageVector = Icons.Outlined.History, contentDescription = null)

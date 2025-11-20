@@ -1,15 +1,17 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.weather
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
-import com.example.outdoorsy.domain.model.Location as LocationModel
+import com.example.outdoorsy.domain.model.Location
 import com.example.outdoorsy.domain.repository.LocationRepository
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
-import com.example.outdoorsy.ui.mappers.toUiModel
-import com.example.outdoorsy.ui.model.WeatherData
+import com.example.outdoorsy.ui.weather.mappers.toUiModel
+import com.example.outdoorsy.ui.weather.model.WeatherData
+import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.TemperatureSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -44,9 +46,13 @@ class WeatherViewModel @Inject constructor(
             units,
             language
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CurrentSettings("metric", "en"))
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        CurrentSettings(TemperatureSystem.METRIC.code, AppLanguage.ENGLISH.code)
+    )
 
-    private val lastGpsLocation = MutableStateFlow<LocationModel?>(null)
+    private val lastGpsLocation = MutableStateFlow<Location?>(null)
     private val gpsWeather = MutableStateFlow<WeatherData?>(null)
     private val savedWeather = MutableStateFlow<List<WeatherData?>>(emptyList())
 
@@ -93,7 +99,7 @@ class WeatherViewModel @Inject constructor(
 
     fun loadCurrentLocationWeather() {
         viewModelScope.launch {
-            val location: LocationModel? = locationRepository.getCurrentLocation()
+            val location: Location? = locationRepository.getCurrentLocation()
             if (location == null) {
                 gpsWeather.value = null
                 return@launch
@@ -150,10 +156,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getWeatherData(
-        location: LocationModel,
-        settings: CurrentSettings
-    ): WeatherData {
+    private suspend fun getWeatherData(location: Location, settings: CurrentSettings): WeatherData {
         val current = getCurrentWeather(
             city = location.name,
             lat = location.latitude,

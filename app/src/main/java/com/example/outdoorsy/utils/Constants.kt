@@ -3,17 +3,20 @@ package com.example.outdoorsy.utils
 const val OWM_BASE_URL = "https://api.openweathermap.org/"
 const val EBAY_BASE_URL = "https://api.ebay.com"
 
-object TemperatureSystem {
-    const val METRIC = "metric"
-    const val IMPERIAL = "imperial"
+enum class TemperatureSystem(val code: String, val displayName: String) {
+    METRIC("metric", "Metric (°C)"),
+    IMPERIAL("imperial", "Imperial (°F)");
 
-    val DISPLAY_NAMES = mapOf(
-        METRIC to "Metric (°C)",
-        IMPERIAL to "Imperial (°F)"
-    )
+    companion object {
+        fun fromCode(code: String): TemperatureSystem = entries.find { it.code == code } ?: METRIC
+    }
 }
 
-object Language {
-    const val ENGLISH = "en"
-    const val FINNISH = "fi"
+enum class AppLanguage(val code: String) {
+    ENGLISH("en"),
+    FINNISH("fi");
+
+    companion object {
+        fun fromCode(code: String): AppLanguage = entries.find { it.code == code } ?: ENGLISH
+    }
 }

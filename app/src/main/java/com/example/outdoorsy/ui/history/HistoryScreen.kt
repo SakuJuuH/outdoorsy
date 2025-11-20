@@ -1,8 +1,9 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.history
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,7 +42,6 @@ import com.example.outdoorsy.data.model.ConditionRating
 import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.HistoryViewModel
 
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
@@ -74,7 +74,7 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
         // Activity List
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+            contentPadding = PaddingValues(
                 horizontal = MaterialTheme.spacing(1),
                 vertical = MaterialTheme.spacing(2)
             ),

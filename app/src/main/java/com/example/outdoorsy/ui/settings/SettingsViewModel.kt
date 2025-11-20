@@ -1,4 +1,4 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
