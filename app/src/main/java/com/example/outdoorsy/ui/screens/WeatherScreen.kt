@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -36,6 +39,7 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,18 +50,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,15 +75,21 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.model.DailyForecast
 import com.example.outdoorsy.ui.model.WeatherData
 import com.example.outdoorsy.viewmodel.WeatherViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = hiltViewModel()) {
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val showRecentSearches by viewModel.showRecentSearches.collectAsState()
+    val recentSearches by viewModel.recentSearches.collectAsState()
     val locations by viewModel.weatherList.collectAsState()
 
     val isLoading by viewModel.isLoading.collectAsState()
     val pagerState = rememberPagerState(pageCount = { locations.size })
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val context = LocalContext.current
 
@@ -96,9 +106,22 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
     }
 
     LaunchedEffect(Unit) {
+        viewModel.clearFocusEvent.collectLatest {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+        }
+    }
+
+    LaunchedEffect(locations) {
         viewModel.locationAddedEvent.collect { newLocationName ->
             val newIndex = locations.indexOfFirst { weatherData ->
                 weatherData?.location.equals(newLocationName, ignoreCase = true)
+            }
+
+            if (newIndex != -1) {
+                scope.launch {
+                    pagerState.animateScrollToPage(newIndex)
+                }
             }
         }
     }
@@ -109,15 +132,21 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
+        val focusManager = LocalFocusManager.current
+
         // Search Bar
         SearchBar(
             query = searchQuery,
             onQueryChange = { viewModel.updateSearchQuery(it) },
-            onFocusChange = { viewModel.setShowRecentSearches(it) },
+            onFocusChange = { isFocused ->
+                if (isFocused) {
+                    viewModel.setShowRecentSearches(true)
+                }
+            },
             onSearch = {
                 viewModel.searchAndAddLocation(it.trim())
-                viewModel.addRecentSearch(it.trim())
                 viewModel.updateSearchQuery("")
+                viewModel.setShowRecentSearches(false)
             },
             onLocationClick = {
                 val hasFine = ActivityCompat.checkSelfPermission(
@@ -140,18 +169,55 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                     viewModel.loadCurrentLocationWeather()
                 }
             },
+            shape = RoundedCornerShape(
+                16.dp
+            ),
             modifier = Modifier.fillMaxWidth()
         )
+        AnimatedVisibility(showRecentSearches && recentSearches.isNotEmpty()) {
+            Card(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                shape = RoundedCornerShape(
+                    16.dp
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Column {
+                    recentSearches.forEach { location ->
+                        Text(
+                            text = location,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    viewModel.updateSearchQuery("")
+                                    viewModel.searchAndAddLocation(location)
+                                    viewModel.setShowRecentSearches(false)
+                                }
+                                .padding(16.dp)
+                        )
+                        if (location != recentSearches.last()) {
+                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+                        }
+                    }
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
         if (isLoading) {
-            CircularProgressIndicator(
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
                     .padding(64.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            }
         }
 
         // Weather Carousel (HorizontalPager)
@@ -327,7 +393,7 @@ fun ForecastCard(forecast: List<DailyForecast>, modifier: Modifier = Modifier) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
             modifier = Modifier
@@ -434,15 +500,17 @@ fun SearchBar(
     onFocusChange: (Boolean) -> Unit,
     onSearch: (String) -> Unit,
     onLocationClick: () -> Unit,
-    modifier: Modifier = Modifier
+    shape: Shape,
+    modifier: Modifier = Modifier,
+    focusManager: FocusManager = LocalFocusManager.current
 ) {
-    val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
     OutlinedTextField(
         value = query,
         onValueChange = onQueryChange,
         placeholder = { Text(stringResource(id = R.string.weather_screen_search_bar_hint)) },
+        shape = shape,
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 50.dp)
@@ -451,7 +519,6 @@ fun SearchBar(
                 color = MaterialTheme.colorScheme.surface,
                 shape = MaterialTheme.shapes.medium
             )
-            .focusRequester(focusRequester)
             .onFocusChanged { focusState ->
                 onFocusChange(focusState.isFocused)
                 if (focusState.isFocused) {
@@ -493,8 +560,9 @@ fun SearchBar(
         ),
         keyboardActions = KeyboardActions(
             onDone = {
-                onSearch(query)
-                keyboardController?.hide()
+                if (query.isNotBlank()) {
+                    onSearch(query)
+                }
             }
         )
     )
@@ -511,7 +579,7 @@ fun WeatherCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(
             modifier = Modifier
@@ -620,7 +688,7 @@ fun WeatherDetailCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Row(
             modifier = Modifier

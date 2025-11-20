@@ -1,7 +1,6 @@
 package com.example.outdoorsy.ui.screens
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.outdoorsy.R
@@ -195,7 +195,7 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                 )
                 CustomButton(
                     onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+                        val intent = Intent(Intent.ACTION_VIEW, item.link.toUri())
                         context.startActivity(intent)
                     },
                     text = stringResource(id = R.string.shopping_screen_view_listing_button),
