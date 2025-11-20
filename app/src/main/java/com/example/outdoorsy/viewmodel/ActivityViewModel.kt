@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
+import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.data.test.ActivitiesData
 import com.example.outdoorsy.data.test.WeatherPromptProvider
 import com.example.outdoorsy.domain.model.ForecastResponse
@@ -16,13 +17,15 @@ import java.time.LocalTime
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ActivityViewModel @Inject constructor(
     private val getAiAssistant: GetAiAssistant,
-    private val getForecast: GetForecast
+    private val getForecast: GetForecast,
+    private val settingsRepository: SettingsRepository
 ) :
     ViewModel() {
     private val _uiState = MutableStateFlow(
@@ -120,7 +123,9 @@ class ActivityViewModel @Inject constructor(
                 date,
                 startTime,
                 endTime,
-                forecast.toString()
+                forecast.toString(),
+                settingsRepository.getTemperatureUnit().first(),
+                settingsRepository.getLanguage().first()
             )
 
             try {
