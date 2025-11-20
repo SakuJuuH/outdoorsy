@@ -1,10 +1,9 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.shopping
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.domain.model.ebay.EbayItem
-import com.example.outdoorsy.domain.model.ebay.Price
 import com.example.outdoorsy.domain.repository.EbayRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

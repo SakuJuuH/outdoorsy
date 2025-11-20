@@ -5,6 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.TemperatureSystem
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -17,10 +20,11 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         val LANGUAGE = stringPreferencesKey("language")
         val DARK_MODE = booleanPreferencesKey("dark_mode")
         val TEMPERATURE_UNIT = stringPreferencesKey("temperature_unit")
+        val RECENT_SEARCHES = stringSetPreferencesKey("recent_searches")
     }
 
     fun getLanguage(): Flow<String> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.LANGUAGE] ?: "en"
+        preferences[PreferenceKeys.LANGUAGE] ?: AppLanguage.ENGLISH.code
     }
 
     suspend fun saveLanguage(language: String) {
@@ -40,12 +44,30 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
     }
 
     fun getTemperatureUnit(): Flow<String> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.TEMPERATURE_UNIT] ?: "metric"
+        preferences[PreferenceKeys.TEMPERATURE_UNIT] ?: TemperatureSystem.METRIC.code
     }
 
     suspend fun saveTemperatureUnit(unit: String) {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.TEMPERATURE_UNIT] = unit
+        }
+    }
+
+    fun getRecentSearches(): Flow<List<String>> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.RECENT_SEARCHES]?.toList() ?: emptyList()
+    }
+
+    suspend fun addRecentSearch(location: String) {
+        dataStore.edit { preferences ->
+            val currentSearches =
+                preferences[PreferenceKeys.RECENT_SEARCHES]?.toMutableList() ?: mutableListOf()
+
+            val normalizedLocation = location.trim().replaceFirstChar { it.uppercase() }
+
+            currentSearches.remove(normalizedLocation)
+            currentSearches.add(0, normalizedLocation)
+
+            preferences[PreferenceKeys.RECENT_SEARCHES] = currentSearches.take(5).toSet()
         }
     }
 }

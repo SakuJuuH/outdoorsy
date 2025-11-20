@@ -12,9 +12,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.example.outdoorsy.ui.main.MainViewModel
 import com.example.outdoorsy.ui.navigation.AppNavHost
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
-import com.example.outdoorsy.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

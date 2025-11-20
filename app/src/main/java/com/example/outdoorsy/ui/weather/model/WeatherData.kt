@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.model
+package com.example.outdoorsy.ui.weather.model
 
 data class WeatherData(
     val location: String,

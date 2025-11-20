@@ -1,15 +1,17 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.weather
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
-import com.example.outdoorsy.domain.model.Location as LocationModel
+import com.example.outdoorsy.domain.model.Location
 import com.example.outdoorsy.domain.repository.LocationRepository
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
-import com.example.outdoorsy.ui.mappers.toUiModel
-import com.example.outdoorsy.ui.model.WeatherData
+import com.example.outdoorsy.ui.weather.mappers.toUiModel
+import com.example.outdoorsy.ui.weather.model.WeatherData
+import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.TemperatureSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +36,6 @@ class WeatherViewModel @Inject constructor(
 ) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     private val _showRecentSearches = MutableStateFlow(false)
-    private val _recentSearches = MutableStateFlow<List<String>>(emptyList())
     private val _isLoading = MutableStateFlow(false)
 
     private val settingsFlow = combine(
@@ -45,17 +46,23 @@ class WeatherViewModel @Inject constructor(
             units,
             language
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CurrentSettings("metric", "en"))
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        CurrentSettings(TemperatureSystem.METRIC.code, AppLanguage.ENGLISH.code)
+    )
 
-    private val lastGpsLocation = MutableStateFlow<LocationModel?>(null)
+    private val lastGpsLocation = MutableStateFlow<Location?>(null)
     private val gpsWeather = MutableStateFlow<WeatherData?>(null)
     private val savedWeather = MutableStateFlow<List<WeatherData?>>(emptyList())
 
     private val _locationAddedEvent = MutableSharedFlow<String>()
+    private val _clearFocusEvent = MutableSharedFlow<Unit>()
 
     val searchQuery: StateFlow<String> = _searchQuery
     val showRecentSearches: StateFlow<Boolean> = _showRecentSearches
-    val recentSearches: StateFlow<List<String>> = _recentSearches
+    val recentSearches: StateFlow<List<String>> = settingsRepository.getRecentSearches()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val isLoading: StateFlow<Boolean> = _isLoading
     val weatherList: StateFlow<List<WeatherData?>> = combine(
         gpsWeather,
@@ -83,21 +90,21 @@ class WeatherViewModel @Inject constructor(
     )
 
     val locationAddedEvent = _locationAddedEvent.asSharedFlow()
+    val clearFocusEvent = _clearFocusEvent.asSharedFlow()
 
     init {
         getAllSavedLocations()
         loadCurrentLocationWeather()
-        loadRecentSearches()
     }
 
     fun loadCurrentLocationWeather() {
         viewModelScope.launch {
-            val location: LocationModel? = locationRepository.getCurrentLocation()
-            lastGpsLocation.value = location
+            val location: Location? = locationRepository.getCurrentLocation()
             if (location == null) {
                 gpsWeather.value = null
                 return@launch
             }
+            lastGpsLocation.value = location
             settingsFlow.collectLatest { settings ->
                 _isLoading.value = true
                 Log.d(
@@ -149,10 +156,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getWeatherData(
-        location: LocationModel,
-        settings: CurrentSettings
-    ): WeatherData {
+    private suspend fun getWeatherData(location: Location, settings: CurrentSettings): WeatherData {
         val current = getCurrentWeather(
             city = location.name,
             lat = location.latitude,
@@ -171,10 +175,6 @@ class WeatherViewModel @Inject constructor(
         return current.toUiModel(forecast.listOfForecastItems, settings.unit)
     }
 
-    private fun loadRecentSearches() {
-        _recentSearches.value = listOf("Paris", "Berlin", "Barcelona", "Amsterdam", "Rome")
-    }
-
     fun updateSearchQuery(query: String) {
         _searchQuery.value = query
     }
@@ -186,11 +186,19 @@ class WeatherViewModel @Inject constructor(
     fun searchAndAddLocation(city: String) {
         if (city.isBlank()) return
 
+        val sanitizedCity = city.trim()
+            .split("\\s+".toRegex())
+            .joinToString(" ") { word ->
+                word.lowercase().replaceFirstChar { it.uppercase() }
+            }
+
         viewModelScope.launch(Dispatchers.IO) {
+            _clearFocusEvent.emit(Unit)
+
             _isLoading.value = true
 
             try {
-                val foundLocation = locationRepository.getCoordinatesByLocation(city)
+                val foundLocation = locationRepository.getCoordinatesByLocation(sanitizedCity)
 
                 val currentGpsLocationName = gpsWeather.value?.location
 
@@ -199,13 +207,14 @@ class WeatherViewModel @Inject constructor(
                         "WeatherViewModel",
                         "GPS location already exists: $currentGpsLocationName"
                     )
-                    _locationAddedEvent.emit(foundLocation?.name ?: city)
+                    _locationAddedEvent.emit(foundLocation?.name ?: sanitizedCity)
                     return@launch
                 }
                 if (foundLocation != null) {
                     locationRepository.saveLocation(foundLocation)
+                    settingsRepository.addRecentSearch(foundLocation.name ?: sanitizedCity)
                 }
-                _locationAddedEvent.emit(foundLocation?.name ?: city)
+                _locationAddedEvent.emit(foundLocation?.name ?: sanitizedCity)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -223,13 +232,6 @@ class WeatherViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
-    }
-
-    fun addRecentSearch(location: String) {
-        val current = _recentSearches.value.toMutableList()
-        current.remove(location)
-        current.add(0, location)
-        _recentSearches.value = current.take(5)
     }
 
     private data class CurrentSettings(val unit: String, val lang: String)

@@ -1,4 +1,4 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.shopping
 
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 

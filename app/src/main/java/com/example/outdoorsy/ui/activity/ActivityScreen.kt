@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.screens
+package com.example.outdoorsy.ui.activity
 
 import android.app.TimePickerDialog
 import androidx.compose.foundation.background
@@ -60,8 +60,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.pineGreen
-import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.viewmodel.ActivityViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -70,7 +68,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-            uiState.selectedActivity.isNotBlank()
+        uiState.selectedActivity.isNotBlank()
 
     LazyColumn(modifier = modifier) {
         item {
@@ -278,9 +276,11 @@ fun EditableFilteringInput(
                     } else {
                         Icons.Default.ArrowDropDown
                     },
-                    contentDescription = if (expanded)
-                        stringResource(R.string.activity_screen_hide_options) else
-                        stringResource(R.string.activity_screen_show_options),
+                    contentDescription = if (expanded) {
+                        stringResource(R.string.activity_screen_hide_options)
+                    } else {
+                        stringResource(R.string.activity_screen_show_options)
+                    },
                     modifier = Modifier.clickable {
                         expanded = !expanded
                         if (expanded) focusRequester.requestFocus()

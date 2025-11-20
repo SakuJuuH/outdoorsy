@@ -1,9 +1,9 @@
-package com.example.outdoorsy.ui.mappers
+package com.example.outdoorsy.ui.weather.mappers
 
 import com.example.outdoorsy.domain.model.weather.ForecastItem
 import com.example.outdoorsy.domain.model.weather.WeatherResponse
-import com.example.outdoorsy.ui.model.DailyForecast
-import com.example.outdoorsy.ui.model.WeatherData
+import com.example.outdoorsy.ui.weather.model.DailyForecast
+import com.example.outdoorsy.ui.weather.model.WeatherData
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

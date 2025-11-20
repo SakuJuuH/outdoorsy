@@ -1,4 +1,4 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.history
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

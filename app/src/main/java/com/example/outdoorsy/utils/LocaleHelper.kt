@@ -6,18 +6,20 @@ import java.util.Locale
 
 object LocaleHelper {
 
-    val supportedLanguages = mapOf<String, Locale>(
-        "en" to Locale.ENGLISH,
-        "fi" to Locale.of("fi")
-    )
+    fun getLanguageName(code: String): String {
+        val locale = if (code == AppLanguage.FINNISH.code) Locale.of("fi") else Locale.ENGLISH
+        return locale.displayLanguage.replaceFirstChar { it.uppercase() }
+    }
 
     fun setLocale(languageCode: String) {
         val currentLocales = AppCompatDelegate.getApplicationLocales()
-        val currentTag = if (!currentLocales.isEmpty) currentLocales[0]?.language else "en"
+        val currentTag =
+            if (!currentLocales.isEmpty) currentLocales[0]?.language else AppLanguage.ENGLISH.code
 
         if (currentTag == languageCode) return
 
-        val locale = supportedLanguages[languageCode] ?: Locale.getDefault()
+        val locale =
+            if (languageCode == AppLanguage.FINNISH.code) Locale.of("fi") else Locale.ENGLISH
         val localeList = LocaleListCompat.create(locale)
         AppCompatDelegate.setApplicationLocales(localeList)
     }

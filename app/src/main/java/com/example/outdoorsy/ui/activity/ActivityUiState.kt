@@ -1,4 +1,4 @@
-package com.example.outdoorsy.viewmodel
+package com.example.outdoorsy.ui.activity
 
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import java.time.LocalTime
