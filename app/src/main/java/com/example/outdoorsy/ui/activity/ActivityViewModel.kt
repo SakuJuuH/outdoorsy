@@ -7,12 +7,15 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.data.test.ActivitiesData
+import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.model.weather.ForecastResponse
+import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.utils.WeatherPromptProvider
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -21,12 +24,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 
 @HiltViewModel
 class ActivityViewModel @Inject constructor(
     private val getAiAssistant: GetAiAssistant,
     private val getForecast: GetForecast,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val activityLogRepository: ActivityLogRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         ActivityUiState(
@@ -98,9 +104,9 @@ class ActivityViewModel @Inject constructor(
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
-        val date = LocalDate.now().toString()
-        val startTime = _uiState.value.selectedStartTime.toString()
-        val endTime = _uiState.value.selectedEndTime.toString()
+        val date = LocalDate.now()
+        val startTime = _uiState.value.selectedStartTime
+        val endTime = _uiState.value.selectedEndTime
 
         viewModelScope.launch {
             var forecast: ForecastResponse? = null
@@ -117,9 +123,9 @@ class ActivityViewModel @Inject constructor(
             val prompt = WeatherPromptProvider.buildPrompt(
                 activity,
                 location,
-                date,
-                startTime,
-                endTime,
+                date.toString(),
+                startTime.toString(),
+                endTime.toString(),
                 forecast.toString(),
                 settingsRepository.getTemperatureUnit().first(),
                 settingsRepository.getLanguage().first()
@@ -136,6 +142,18 @@ class ActivityViewModel @Inject constructor(
                 val response = getAiAssistant(prompt)
                 Log.d("Response", "$response")
                 val aiAnswer = Gson().fromJson(response.answer, AiAssistantAnswerDto::class.java)
+
+                val activityLog = ActivityLog(
+                    location = location,
+                    activityId = 0, // TODO: Implement Activity table connection
+                    startDateTime = LocalDateTime.of(date, startTime),
+                    endDateTime = LocalDateTime.of(date, endTime),
+                    suitabilityLabel = aiAnswer.suitabilityLabel,
+                    suitabilityScore = aiAnswer.suitabilityScore
+                )
+                withContext(Dispatchers.IO) {
+                    activityLogRepository.saveActivityLog(activityLog)
+                }
 
                 _uiState.update {
                     it.copy(
