@@ -1,8 +1,10 @@
 package com.example.outdoorsy.di.module
 
+import com.example.outdoorsy.data.repository.ActivityLogRepositoryImpl
 import com.example.outdoorsy.data.repository.EbayRepositoryImpl
 import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
 import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
+import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.EbayRepository
 import com.example.outdoorsy.domain.repository.ForecastRepository
 import com.example.outdoorsy.domain.repository.WeatherRepository
@@ -26,4 +28,7 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindEbayRepository(impl: EbayRepositoryImpl): EbayRepository
+
+    @Binds
+    abstract fun bindActivityLogRepository(impl: ActivityLogRepositoryImpl): ActivityLogRepository
 }
