@@ -1,6 +1,6 @@
 package com.example.outdoorsy.domain.model
 
-import com.example.outdoorsy.data.local.entity.ActivityLog as ActivityLogEntity
+import com.example.outdoorsy.data.local.entity.ActivityLogEntity
 import java.time.LocalDateTime
 
 data class ActivityLog(

@@ -5,17 +5,17 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.outdoorsy.data.local.entity.ActivityLog
+import com.example.outdoorsy.data.local.entity.ActivityLogEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ActivityLogDao {
     @Query("SELECT * FROM activity_log")
-    fun getAll(): Flow<List<ActivityLog>>
+    fun getAll(): Flow<List<ActivityLogEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertActivityLog(activityLog: ActivityLog)
+    fun insertActivityLog(activityLog: ActivityLogEntity)
 
     @Delete
-    fun deleteActivityLog(activityLog: ActivityLog)
+    fun deleteActivityLog(activityLog: ActivityLogEntity)
 }

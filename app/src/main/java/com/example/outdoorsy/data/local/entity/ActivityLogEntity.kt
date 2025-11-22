@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
-import com.example.outdoorsy.domain.model.ActivityLog as ActivityLogModel
+import com.example.outdoorsy.domain.model.ActivityLog
 
 @Entity(
     tableName = "activity_log",
@@ -19,7 +19,7 @@ import com.example.outdoorsy.domain.model.ActivityLog as ActivityLogModel
     ],
     indices = [Index(value = ["activityId"])]
 )
-data class ActivityLog(
+data class ActivityLogEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val location: String,
@@ -29,7 +29,7 @@ data class ActivityLog(
     val suitabilityLabel: String,
     val suitabilityScore: Int
 ) {
-    fun toDomain(): ActivityLogModel = ActivityLogModel(
+    fun toDomain(): ActivityLog= ActivityLog(
         location = location,
         activityId = activityId,
         startDateTime = startDateTime,
