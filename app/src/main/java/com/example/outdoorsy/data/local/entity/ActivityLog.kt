@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.time.LocalDateTime
+import com.example.outdoorsy.domain.model.ActivityLog as ActivityLogModel
 
 @Entity(
     tableName = "activity_log",
@@ -27,4 +28,13 @@ data class ActivityLog(
     val endDateTime: LocalDateTime,
     val suitabilityLabel: String,
     val suitabilityScore: Int
-)
+) {
+    fun toDomain(): ActivityLogModel = ActivityLogModel(
+        location = location,
+        activityId = activityId,
+        startDateTime = startDateTime,
+        endDateTime = endDateTime,
+        suitabilityLabel = suitabilityLabel,
+        suitabilityScore = suitabilityScore
+    )
+}
