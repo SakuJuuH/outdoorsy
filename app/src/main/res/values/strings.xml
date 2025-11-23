@@ -50,6 +50,7 @@
     <string name="settings_screen_language_title">Language</string>
     <string name="settings_screen_dark_mode_title">Dark Mode</string>
     <string name="settings_screen_dark_mode_sub_title">Adjust app theme</string>
+    <string name="settings_screen_currency">Choose currency</string>
     <string name="settings_screen_section_header_units">Units</string>
     <string name="settings_screen_unit_item_title">Unit System</string>
     <string name="settings_screen_language_dialog_title">Select Language</string>
@@ -78,6 +79,5 @@
     <string name="weather_screen_search_bar_location_icon_description">Use Current Location</string>
     <string name="weather_screen_gps_icon_description">Current Location</string>
     <string name="weather_screen_remove_location_description">Remove location</string>
-
 
 </resources>

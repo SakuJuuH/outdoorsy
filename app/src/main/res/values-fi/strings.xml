@@ -22,14 +22,14 @@
     <string name="activity_screen_search_button">Hae</string>
     <string name="activity_screen_location_label">Valitse sijainti</string>
     <string name="activity_screen_location_prompt">Valitse sijainti...</string>
-    <string name="activity_screen_time_error_adjusted">End time was automatically adjusted.</string>
-    <string name="activity_screen_time_error_invalid">End time must be after start time.</string>
-    <string name="activity_screen_generic_error">Something went wrong. Please try again</string>
+    <string name="activity_screen_time_error_adjusted">Päättymisaika säädettiin automaattisesti.</string>
+    <string name="activity_screen_time_error_invalid">Päättymisajan on oltava alkamisajan jälkeen.</string>
+    <string name="activity_screen_generic_error">Jotain meni pieleen. Yritä uudelleen.</string>
     <string name="activity_screen_suitability">Suitability</string>
-    <string name="activity_screen_weather_tips">Weather Tips</string>
-    <string name="activity_screen_clothing_tips">Clothing Tips</string>
-    <string name="activity_screen_hide_options">Hide options</string>
-    <string name="activity_screen_show_options">Show options</string>
+    <string name="activity_screen_weather_tips">Säävinkkejä</string>
+    <string name="activity_screen_clothing_tips">Pukeutumis vinkkejä</string>
+    <string name="activity_screen_hide_options">Piilota vaihtoehdot</string>
+    <string name="activity_screen_show_options">Näytä vaihtoehdot</string>
 
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
@@ -46,6 +46,7 @@
     <string name="settings_screen_dark_mode_title">Tumma tila</string>
     <string name="activity_screen_no_matches">Osumia ei löytynyt</string>
     <string name="settings_screen_dark_mode_sub_title">Säädä sovelluksen teemaa</string>
+    <string name="settings_screen_currency">Valitse valuutta</string>
     <string name="settings_screen_section_header_units">Yksiköt</string>
     <string name="settings_screen_unit_item_title">Yksikköjärjestelmä</string>
     <string name="settings_screen_dialog_confirm_button">OK</string>
@@ -54,11 +55,11 @@
     <string name="shopping_screen_title">Säävarusteiden kauppa</string>
     <string name="shopping_screen_recommended_items_section_title">Suositellaan nykyiseen säähän</string>
     <string name="shopping_screen_all_items_section_title">Kaikki tuotteet</string>
-    <string name="shopping_screen_add_to_cart_button">Lisää ostoskoriin</string>
 
     <string name="weather_screen_weather_detail_humidity">Kosteus</string>
     <string name="weather_screen_weather_detail_wind_speed">Tuulen nopeus</string>
     <string name="weather_screen_weather_detail_visibility">Näkyvyys</string>
+    <string name="shopping_screen_view_listing_button">Katso tuote</string>
     <string name="weather_screen_weather_detail_title">Säätiedot</string>
     <string name="weather_screen_weather_detail_pressure">Paine</string>
     <string name="weather_screen_weather_detail_sunrise">Auringonnousu</string>
@@ -66,5 +67,8 @@
     <string name="weather_screen_weather_detail_five_day_forecast">5 päivän ennuste</string>
     <string name="weather_screen_search_bar_hint">Hae kaupunkia tai sijaintia</string>
     <string name="weather_screen_search_bar_icon_description">Hae</string>
+    <string name="weather_screen_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
+    <string name="weather_screen_gps_icon_description">Nykyinen sijainti</string>
+    <string name="weather_screen_remove_location_description">Poista sijainti</string>
 
 </resources>
