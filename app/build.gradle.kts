@@ -111,6 +111,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.engage.core)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
