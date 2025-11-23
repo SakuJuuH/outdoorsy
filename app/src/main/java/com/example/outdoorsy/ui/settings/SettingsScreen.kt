@@ -43,18 +43,24 @@ import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
+import androidx.compose.material.icons.filled.AttachMoney
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
     val language by viewModel.language.collectAsState()
     val unit by viewModel.temperatureUnit.collectAsState()
     val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val currency = viewModel.currency.collectAsState().value
 
     var selectedLanguage by rememberSaveable { mutableStateOf(language) }
     var selectedUnit by rememberSaveable { mutableStateOf(unit) }
+    var selectedCurrency by remember { mutableStateOf(currency) }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
+    var showCurrencyDialog by remember { mutableStateOf(false) }
+
+    val supportedCurrencies = listOf("USD", "EUR", "GBP")
 
     LaunchedEffect(language) {
         selectedLanguage = language
@@ -111,6 +117,15 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsSectionHeader(
             title = stringResource(id = R.string.settings_screen_section_header_units)
         )
+
+        SettingsItem(
+            icon = Icons.Default.AttachMoney,
+            title = stringResource(id = R.string.settings_screen_currency),
+            // Display the currently selected currency
+            subtitle = currency,
+            onClick = { showCurrencyDialog = true }
+        )
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
         // Temperature Unit
         SettingsItem(
@@ -205,7 +220,52 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             }
         )
     }
+
+    if (showCurrencyDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                // If the user dismisses, don't save any changes
+                showCurrencyDialog = false
+            },
+            title = { Text(stringResource(id = R.string.settings_screen_select_currency)) },
+            text = {
+                Column {
+                    supportedCurrencies.forEach { currencyCode ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    viewModel.setCurrency(currencyCode)
+                                    showCurrencyDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (currencyCode == currency),
+                                onClick = {
+                                    viewModel.setCurrency(currencyCode)
+                                    showCurrencyDialog = false
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(currencyCode)
+                        }
+                    }
+                }
+            },
+            // Since clicking an option immediately saves and closes,
+            // we don't need explicit confirm/dismiss button but for now we'll add one if the user doesn't want to change the currency
+            //
+            confirmButton = {
+                TextButton(onClick = { showCurrencyDialog = false }) {
+                    Text(stringResource(id = R.string.settings_screen_dialog_dismiss_button))
+                }
+            }
+        )
+    }
 }
+
 
 @Composable
 private fun SettingsSectionHeader(title: String) {
