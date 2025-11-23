@@ -62,6 +62,7 @@ import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.pineGreen
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
@@ -72,14 +73,22 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
     LazyColumn(modifier = modifier) {
         item {
-            Text(
-                text = stringResource(id = R.string.activity_screen_title),
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
+            ) {
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
+                Text(
+                    text = stringResource(id = R.string.activity_screen_title),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
+            }
         }
+
 
         item {
             EditableFilteringInput(
