@@ -1,4 +1,5 @@
 package com.example.outdoorsy.domain.repository
 
-class CurrencyRepository {
+interface CurrencyRepository {
+    suspend fun getConversionRate(baseCurrency: String, targetCurrency: String): Double?
 }

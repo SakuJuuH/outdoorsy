@@ -1,4 +1,15 @@
 package com.example.outdoorsy.data.remote
 
-class CurrencyApiService {
+import com.example.outdoorsy.data.remote.dto.currency.CurrencyResponseDto
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface CurrencyApiService {
+
+    @GET("v3/latest")
+    suspend fun getLatestRates(
+        @Query("apikey") apiKey: String,
+        @Query("base_currency") baseCurrency: String,
+        @Query("currencies") targetCurrencies: String
+    ): CurrencyResponseDto
 }
