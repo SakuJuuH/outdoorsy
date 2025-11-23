@@ -48,6 +48,7 @@
     <string name="settings_screen_dark_mode_sub_title">Säädä sovelluksen teemaa</string>
     <string name="settings_screen_currency">Valuutta</string>
     <string name="settings_screen_select_currency">Valitse valuutta</string>
+    <string name="settings_screen_dialog_dismiss_button">Hylkää</string>
     <string name="settings_screen_section_header_units">Yksiköt</string>
     <string name="settings_screen_unit_item_title">Yksikköjärjestelmä</string>
     <string name="settings_screen_dialog_confirm_button">OK</string>

@@ -52,7 +52,7 @@
     <string name="settings_screen_dark_mode_sub_title">Adjust app theme</string>
     <string name="settings_screen_currency">Currency</string>
     <string name="settings_screen_select_currency">Select currency</string>
-
+    <string name="settings_screen_dialog_dismiss_button">Dismiss</string>
     <string name="settings_screen_section_header_units">Units</string>
     <string name="settings_screen_unit_item_title">Unit System</string>
     <string name="settings_screen_language_dialog_title">Select Language</string>
