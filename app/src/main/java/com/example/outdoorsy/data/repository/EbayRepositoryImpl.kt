@@ -9,8 +9,8 @@ import com.example.outdoorsy.di.EbayAuth
 import com.example.outdoorsy.di.EbayTokenHolder
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.domain.repository.EbayRepository
-import javax.inject.Inject
 import dagger.Lazy
+import javax.inject.Inject
 
 class EbayRepositoryImpl @Inject constructor(
     @param:EbayApi private val apiService: Lazy<EbayApiService>,

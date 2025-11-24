@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import com.example.outdoorsy.data.repository.SettingsRepository.PreferenceKeys.CURRENCY_KEY
 import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.TemperatureSystem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,8 +22,7 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         val DARK_MODE = booleanPreferencesKey("dark_mode")
         val TEMPERATURE_UNIT = stringPreferencesKey("temperature_unit")
         val RECENT_SEARCHES = stringSetPreferencesKey("recent_searches")
-
-        val CURRENCY_KEY = stringPreferencesKey("currency_key")
+        val CURRENCY_CODE = stringPreferencesKey("currency_code")
     }
 
     fun getLanguage(): Flow<String> = dataStore.data.map { preferences ->
@@ -76,13 +75,11 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
 
     suspend fun saveCurrency(currency: String) {
         dataStore.edit { preferences ->
-            preferences[CURRENCY_KEY] = currency
+            preferences[PreferenceKeys.CURRENCY_CODE] = currency
         }
     }
 
-    fun getCurrency(): Flow<String> {
-        return dataStore.data.map { preferences ->
-            preferences[CURRENCY_KEY] ?: "UGP"
-        }
+    fun getCurrency(): Flow<String> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.CURRENCY_CODE] ?: Currencies.GBP.code
     }
 }

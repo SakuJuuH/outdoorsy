@@ -6,27 +6,33 @@ import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.utils.LocaleHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
     ViewModel() {
 
-    init {
-        loadSettings()
-    }
-
-    private val _temperatureUnit = MutableStateFlow("")
-    private val _language = MutableStateFlow("")
-    private val _isDarkMode = MutableStateFlow(false)
-    private val _currency = MutableStateFlow("")
-
-    val temperatureUnit = _temperatureUnit.asStateFlow()
-    val language = _language.asStateFlow()
-    val isDarkMode = _isDarkMode.asStateFlow()
-    val currency = _currency.asStateFlow()
+    val uiState: StateFlow<SettingsUiState> = combine(
+        settingsRepository.getTemperatureUnit(),
+        settingsRepository.getDarkMode(),
+        settingsRepository.getLanguage(),
+        settingsRepository.getCurrency()
+    ) { temperatureUnit, isDarkMode, language, currency ->
+        SettingsUiState(
+            temperatureUnit = temperatureUnit,
+            isDarkMode = isDarkMode,
+            language = language,
+            currency = currency
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        initialValue = SettingsUiState()
+    )
 
     fun setTemperatureUnit(unit: String) {
         viewModelScope.launch {
@@ -44,30 +50,6 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
         viewModelScope.launch {
             settingsRepository.saveLanguage(language)
             LocaleHelper.setLocale(languageCode = language)
-        }
-    }
-
-    fun loadSettings() {
-        viewModelScope.launch {
-            settingsRepository.getTemperatureUnit().collect { unit ->
-                _temperatureUnit.value = unit
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.getDarkMode().collect { isDarkMode ->
-                _isDarkMode.value = isDarkMode
-            }
-        }
-        viewModelScope.launch {
-            settingsRepository.getLanguage().collect { language ->
-                _language.value = language
-            }
-        }
-
-        viewModelScope.launch {
-            settingsRepository.getCurrency().collect { currency ->
-                _currency.value = currency
-            }
         }
     }
 

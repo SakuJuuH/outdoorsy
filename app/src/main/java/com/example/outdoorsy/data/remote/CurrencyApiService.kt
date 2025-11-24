@@ -8,7 +8,6 @@ interface CurrencyApiService {
 
     @GET("v3/latest")
     suspend fun getLatestRates(
-        @Query("apikey") apiKey: String,
         @Query("base_currency") baseCurrency: String,
         @Query("currencies") targetCurrencies: String
     ): CurrencyResponseDto

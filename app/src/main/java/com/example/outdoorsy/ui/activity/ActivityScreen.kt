@@ -60,9 +60,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.pineGreen
+import com.example.outdoorsy.ui.theme.spacing
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
@@ -76,7 +76,10 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = MaterialTheme.spacing(4), vertical = MaterialTheme.spacing(3))
+                    .padding(
+                        horizontal = MaterialTheme.spacing(4),
+                        vertical = MaterialTheme.spacing(3)
+                    )
             ) {
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
                 Text(
@@ -88,7 +91,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
             }
         }
-
 
         item {
             EditableFilteringInput(

@@ -9,6 +9,8 @@ import com.example.outdoorsy.domain.model.ebay.Price
 import com.example.outdoorsy.domain.repository.CurrencyRepository
 import com.example.outdoorsy.domain.repository.EbayRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.text.DecimalFormat
+import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -20,8 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
-import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -50,7 +50,10 @@ class ShoppingViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .debounce(300)
                 .collectLatest { targetCurrency ->
-                    Log.d("ShoppingViewModel", "Currency changed to $targetCurrency. Re-converting prices.")
+                    Log.d(
+                        "ShoppingViewModel",
+                        "Currency changed to $targetCurrency. Re-converting prices."
+                    )
                     if (originalEbayItems.isNotEmpty()) {
                         val convertedItems = convertItemPrices(originalEbayItems, targetCurrency)
                         _uiState.update { it.copy(items = convertedItems) }
@@ -71,7 +74,10 @@ class ShoppingViewModel @Inject constructor(
                     async { ebayRepository.getItems(query) }
                 }.awaitAll().flatten()
 
-                Log.d("ShoppingViewModel", "Successfully fetched ${originalEbayItems.size} original eBay items.")
+                Log.d(
+                    "ShoppingViewModel",
+                    "Successfully fetched ${originalEbayItems.size} original eBay items."
+                )
 
                 // Now get the current currency and perform the *first* conversion
                 val targetCurrency = settingsRepository.getCurrency().first()
@@ -90,7 +96,10 @@ class ShoppingViewModel @Inject constructor(
         }
     }
 
-    private suspend fun convertItemPrices(items: List<EbayItem>, targetCurrency: String): List<EbayItem> {
+    private suspend fun convertItemPrices(
+        items: List<EbayItem>,
+        targetCurrency: String
+    ): List<EbayItem> {
         if (items.isEmpty()) return emptyList()
         val baseCurrency = items.first().price.currency
         val conversionRate = currencyRepository.getConversionRate(baseCurrency, targetCurrency)
@@ -100,7 +109,10 @@ class ShoppingViewModel @Inject constructor(
             return items.map { it.copy(price = it.price.copy(currency = baseCurrency)) }
         }
 
-        Log.d("ShoppingViewModel", "Applying conversion rate of $conversionRate from $baseCurrency to $targetCurrency")
+        Log.d(
+            "ShoppingViewModel",
+            "Applying conversion rate of $conversionRate from $baseCurrency to $targetCurrency"
+        )
 
         // Create the formatter instance. This is correct.
         val priceFormat = DecimalFormat("#,##0.00")
