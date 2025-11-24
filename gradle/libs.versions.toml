@@ -2,6 +2,7 @@
 accompanistPermissions = "0.37.3"
 agp = "8.13.1"
 coilCompose = "2.7.0"
+constraintlayoutCompose = "1.1.1"
 converterGson = "3.0.0"
 datastorePreferences = "1.1.7"
 hiltAndroid = "2.57.2"
@@ -35,6 +36,7 @@ engageCore = "1.5.10"
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsCore" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }

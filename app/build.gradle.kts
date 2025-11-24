@@ -61,6 +61,12 @@ android {
                 name = "EBAY_API_KEY",
                 value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
             )
+
+            buildConfigField(
+                "String",
+                "CURRENCY_API_KEY",
+                "\"${localProperties["CURRENCY_API_KEY"]}\""
+            )
         }
         debug {
             val localProperties = Properties()
@@ -79,6 +85,12 @@ android {
                 type = "String",
                 name = "EBAY_API_KEY",
                 value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
+            )
+
+            buildConfigField(
+                "String",
+                "CURRENCY_API_KEY",
+                "\"${localProperties["CURRENCY_API_KEY"]}\""
             )
         }
     }
@@ -122,7 +134,7 @@ dependencies {
     androidTestImplementation(libs.truth)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation(libs.androidx.constraintlayout.compose)
 
     // Room Dependencies
     implementation(libs.androidx.room.runtime)
