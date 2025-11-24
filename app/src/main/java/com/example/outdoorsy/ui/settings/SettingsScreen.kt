@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
@@ -24,7 +25,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,34 +41,21 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
-import androidx.compose.material.icons.filled.AttachMoney
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
-    val language by viewModel.language.collectAsState()
-    val unit by viewModel.temperatureUnit.collectAsState()
-    val isDarkMode by viewModel.isDarkMode.collectAsState()
-    val currency = viewModel.currency.collectAsState().value
+    val uiState by viewModel.uiState.collectAsState()
 
-    var selectedLanguage by rememberSaveable { mutableStateOf(language) }
-    var selectedUnit by rememberSaveable { mutableStateOf(unit) }
-    var selectedCurrency by remember { mutableStateOf(currency) }
+    var selectedLanguage by rememberSaveable { mutableStateOf(uiState.language) }
+    var selectedUnit by rememberSaveable { mutableStateOf(uiState.temperatureUnit) }
+    var selectedCurrency by remember { mutableStateOf(uiState.currency) }
 
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
     var showCurrencyDialog by remember { mutableStateOf(false) }
-
-    val supportedCurrencies = listOf("USD", "EUR", "GBP")
-
-    LaunchedEffect(language) {
-        selectedLanguage = language
-    }
-
-    LaunchedEffect(unit) {
-        selectedUnit = unit
-    }
 
     Column(
         modifier = modifier
@@ -97,9 +84,9 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsItem(
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
-            subtitle = LocaleHelper.getLanguageName(selectedLanguage),
+            subtitle = LocaleHelper.getLanguageName(uiState.language),
             onClick = {
-                selectedLanguage = language
+                selectedLanguage = uiState.language
                 showLanguageDialog = true
             }
         )
@@ -108,7 +95,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.DarkMode,
             title = stringResource(id = R.string.settings_screen_dark_mode_title),
             subtitle = stringResource(id = R.string.settings_screen_dark_mode_sub_title),
-            checked = isDarkMode,
+            checked = uiState.isDarkMode,
             onCheckedChange = { viewModel.setIsDarkMode(it) }
         )
 
@@ -122,18 +109,20 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.AttachMoney,
             title = stringResource(id = R.string.settings_screen_currency),
             // Display the currently selected currency
-            subtitle = currency,
-            onClick = { showCurrencyDialog = true }
+            subtitle = Currencies.fromCode(uiState.currency).displayName,
+            onClick = {
+                selectedCurrency = uiState.currency
+                showCurrencyDialog = true
+            }
         )
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 
         // Temperature Unit
         SettingsItem(
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),
-            subtitle = TemperatureSystem.fromCode(selectedUnit).displayName,
+            subtitle = TemperatureSystem.fromCode(uiState.temperatureUnit).displayName,
             onClick = {
-                selectedUnit = unit
+                selectedUnit = uiState.temperatureUnit
                 showUnitDialog = true
             }
         )
@@ -142,7 +131,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     if (showLanguageDialog) {
         AlertDialog(
             onDismissRequest = {
-                selectedLanguage = language
+                selectedLanguage = uiState.language
                 showLanguageDialog = false
             },
             title = { Text(stringResource(id = R.string.settings_screen_language_dialog_title)) },
@@ -186,7 +175,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     if (showUnitDialog) {
         AlertDialog(
             onDismissRequest = {
-                selectedUnit = unit
+                selectedUnit = uiState.temperatureUnit
                 showUnitDialog = false
             },
             title = { Text(stringResource(id = R.string.settings_screen_unit_dialog_title)) },
@@ -224,48 +213,45 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     if (showCurrencyDialog) {
         AlertDialog(
             onDismissRequest = {
-                // If the user dismisses, don't save any changes
+                selectedCurrency = uiState.currency
                 showCurrencyDialog = false
             },
             title = { Text(stringResource(id = R.string.settings_screen_select_currency)) },
             text = {
                 Column {
-                    supportedCurrencies.forEach { currencyCode ->
+                    Currencies.entries.forEach { currency ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.setCurrency(currencyCode)
-                                    showCurrencyDialog = false
+                                    selectedCurrency = currency.code
                                 }
                                 .padding(vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = (currencyCode == currency),
+                                selected = currency.code == selectedCurrency,
                                 onClick = {
-                                    viewModel.setCurrency(currencyCode)
-                                    showCurrencyDialog = false
+                                    selectedCurrency = currency.code
                                 }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(currencyCode)
+                            Text(currency.displayName)
                         }
                     }
                 }
             },
-            // Since clicking an option immediately saves and closes,
-            // we don't need explicit confirm/dismiss button but for now we'll add one if the user doesn't want to change the currency
-            //
             confirmButton = {
-                TextButton(onClick = { showCurrencyDialog = false }) {
-                    Text(stringResource(id = R.string.settings_screen_dialog_dismiss_button))
+                TextButton(onClick = {
+                    viewModel.setCurrency(selectedCurrency)
+                    showCurrencyDialog = false
+                }) {
+                    Text(stringResource(id = R.string.settings_screen_dialog_confirm_button))
                 }
             }
         )
     }
 }
-
 
 @Composable
 private fun SettingsSectionHeader(title: String) {

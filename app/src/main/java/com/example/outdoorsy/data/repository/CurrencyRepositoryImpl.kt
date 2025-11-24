@@ -6,9 +6,6 @@ import com.example.outdoorsy.domain.repository.CurrencyRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// IMPORTANT: Replace with your actual API Key from currencyapi.com
-private const val CURRENCY_API_KEY = "cur_live_KWm2zNtQci6fYOu5B5jIlbd60pvhlkwO4rPJiea9"
-
 @Singleton
 class CurrencyRepositoryImpl @Inject constructor(
     private val currencyApiService: CurrencyApiService
@@ -18,7 +15,6 @@ class CurrencyRepositoryImpl @Inject constructor(
 
         return try {
             val response = currencyApiService.getLatestRates(
-                apiKey = CURRENCY_API_KEY,
                 baseCurrency = baseCurrency,
                 targetCurrencies = targetCurrency
             )
