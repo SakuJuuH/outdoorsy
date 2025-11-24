@@ -21,10 +21,12 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
     private val _temperatureUnit = MutableStateFlow("")
     private val _language = MutableStateFlow("")
     private val _isDarkMode = MutableStateFlow(false)
+    private val _currency = MutableStateFlow("")
 
     val temperatureUnit = _temperatureUnit.asStateFlow()
     val language = _language.asStateFlow()
     val isDarkMode = _isDarkMode.asStateFlow()
+    val currency = _currency.asStateFlow()
 
     fun setTemperatureUnit(unit: String) {
         viewModelScope.launch {
@@ -60,6 +62,18 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
             settingsRepository.getLanguage().collect { language ->
                 _language.value = language
             }
+        }
+
+        viewModelScope.launch {
+            settingsRepository.getCurrency().collect { currency ->
+                _currency.value = currency
+            }
+        }
+    }
+
+    fun setCurrency(currency: String) {
+        viewModelScope.launch {
+            settingsRepository.saveCurrency(currency)
         }
     }
 }

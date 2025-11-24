@@ -13,3 +13,7 @@ annotation class EbayApi
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class OpenWeather
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class CurrencyApi
