@@ -14,6 +14,9 @@ interface ActivityDao {
     @Query("SELECT * FROM activity")
     fun getAll(): Flow<List<ActivityEntity>>
 
+    @Query("SELECT * FROM activity WHERE id = :id")
+    fun getById(id: Int): Flow<ActivityEntity>
+
     @Query("SELECT * FROM activity WHERE name = :name")
     fun getByName(name: String): Flow<ActivityEntity>
 
