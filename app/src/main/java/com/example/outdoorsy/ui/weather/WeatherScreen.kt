@@ -42,6 +42,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -127,73 +128,82 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
         // Material 3 Search Bar
         DockedSearchBar(
-            query = searchQuery,
-            onQueryChange = { viewModel.updateSearchQuery(it) },
-            onSearch = { query ->
-                if (query.trim().isNotBlank()) {
-                    viewModel.searchAndAddLocation(query.trim())
-                    viewModel.updateSearchQuery("")
-                    searchBarActive = false
-                    viewModel.setShowRecentSearches(false)
-                }
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = searchQuery,
+                    onQueryChange = { viewModel.updateSearchQuery(it) },
+                    onSearch = { query ->
+                        if (query.trim().isNotBlank()) {
+                            viewModel.searchAndAddLocation(query.trim())
+                            viewModel.updateSearchQuery("")
+                            searchBarActive = false
+                            viewModel.setShowRecentSearches(false)
+                        }
+                    },
+                    expanded = searchBarActive,
+                    onExpandedChange = {
+                        searchBarActive = it
+                        viewModel.setShowRecentSearches(it)
+                    },
+                    placeholder = {
+                        Text(stringResource(id = R.string.weather_screen_search_bar_hint))
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = stringResource(
+                                id = R.string.weather_screen_search_bar_icon_description
+                            )
+                        )
+                    },
+                    trailingIcon = {
+                        if (searchBarActive && searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Clear search"
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = {
+                                val hasFine = ActivityCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                                val hasCoarse = ActivityCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+
+                                if (!hasFine && !hasCoarse) {
+                                    locationPermissionLauncher.launch(
+                                        arrayOf(
+                                            Manifest.permission.ACCESS_FINE_LOCATION,
+                                            Manifest.permission.ACCESS_COARSE_LOCATION
+                                        )
+                                    )
+                                } else {
+                                    viewModel.loadCurrentLocationWeather()
+                                }
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.MyLocation,
+                                    contentDescription = stringResource(
+                                        R.string.weather_screen_search_bar_location_icon_description
+                                    ),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+                )
             },
-            active = searchBarActive,
-            onActiveChange = {
+            expanded = searchBarActive,
+            onExpandedChange = {
                 searchBarActive = it
                 viewModel.setShowRecentSearches(it)
             },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = {
-                Text(stringResource(id = R.string.weather_screen_search_bar_hint))
-            },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = stringResource(
-                        id = R.string.weather_screen_search_bar_icon_description
-                    )
-                )
-            },
-            trailingIcon = {
-                if (searchBarActive && searchQuery.isNotEmpty()) {
-                    IconButton(onClick = { viewModel.updateSearchQuery("") }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Clear search"
-                        )
-                    }
-                } else {
-                    IconButton(onClick = {
-                        val hasFine = ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED
-                        val hasCoarse = ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED
-
-                        if (!hasFine && !hasCoarse) {
-                            locationPermissionLauncher.launch(
-                                arrayOf(
-                                    Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                )
-                            )
-                        } else {
-                            viewModel.loadCurrentLocationWeather()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.MyLocation,
-                            contentDescription = stringResource(
-                                R.string.weather_screen_search_bar_location_icon_description
-                            ),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-            }
+            modifier = Modifier.fillMaxWidth()
         ) {
             // Content shown when search bar is active
             if (recentSearches.isNotEmpty()) {
@@ -244,6 +254,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                 }
             }
         }
+
 
         Spacer(modifier = Modifier.height(24.dp))
 
