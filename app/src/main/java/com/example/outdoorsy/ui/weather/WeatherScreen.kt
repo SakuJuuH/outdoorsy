@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -120,126 +121,160 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
         }
     }
 
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-    ) {
-        Spacer(modifier = Modifier.height(20.dp))
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
 
-        // Material 3 Search Bar
-        DockedSearchBar(
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = searchQuery,
-                    onQueryChange = { viewModel.updateSearchQuery(it) },
-                    onSearch = { query ->
-                        if (query.trim().isNotBlank()) {
-                            viewModel.searchAndAddLocation(query.trim())
-                            viewModel.updateSearchQuery("")
-                            searchBarActive = false
-                            viewModel.setShowRecentSearches(false)
-                        }
-                    },
-                    expanded = searchBarActive,
-                    onExpandedChange = {
-                        searchBarActive = it
-                        viewModel.setShowRecentSearches(it)
-                    },
-                    placeholder = {
-                        Text(stringResource(id = R.string.weather_screen_search_bar_hint))
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = stringResource(
-                                id = R.string.weather_screen_search_bar_icon_description
+            // Material 3 Search Bar
+            DockedSearchBar(
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchQuery,
+                        onQueryChange = { viewModel.updateSearchQuery(it) },
+                        onSearch = { query ->
+                            if (query.trim().isNotBlank()) {
+                                viewModel.searchAndAddLocation(query.trim())
+                                viewModel.updateSearchQuery("")
+                                searchBarActive = false
+                                viewModel.setShowRecentSearches(false)
+                            }
+                        },
+                        expanded = searchBarActive,
+                        onExpandedChange = {
+                            searchBarActive = it
+                            viewModel.setShowRecentSearches(it)
+                        },
+                        placeholder = {
+                            Text(stringResource(id = R.string.weather_screen_search_bar_hint))
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = stringResource(
+                                    id = R.string.weather_screen_search_bar_icon_description
+                                )
                             )
-                        )
-                    },
-                    trailingIcon = {
-                        if (searchBarActive && searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.updateSearchQuery("") }) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Clear search"
-                                )
-                            }
-                        } else {
-                            IconButton(onClick = {
-                                val hasFine = ActivityCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                                ) == PackageManager.PERMISSION_GRANTED
-                                val hasCoarse = ActivityCompat.checkSelfPermission(
-                                    context,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) == PackageManager.PERMISSION_GRANTED
-
-                                if (!hasFine && !hasCoarse) {
-                                    locationPermissionLauncher.launch(
-                                        arrayOf(
-                                            Manifest.permission.ACCESS_FINE_LOCATION,
-                                            Manifest.permission.ACCESS_COARSE_LOCATION
-                                        )
+                        },
+                        trailingIcon = {
+                            if (searchBarActive && searchQuery.isNotEmpty()) {
+                                IconButton(onClick = { viewModel.updateSearchQuery("") }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Clear search"
                                     )
-                                } else {
-                                    viewModel.loadCurrentLocationWeather()
                                 }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.MyLocation,
-                                    contentDescription = stringResource(
-                                        R.string.weather_screen_search_bar_location_icon_description
-                                    ),
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
+                            } else {
+                                IconButton(onClick = {
+                                    val hasFine = ActivityCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                    ) == PackageManager.PERMISSION_GRANTED
+                                    val hasCoarse = ActivityCompat.checkSelfPermission(
+                                        context,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                    ) == PackageManager.PERMISSION_GRANTED
+
+                                    if (!hasFine && !hasCoarse) {
+                                        locationPermissionLauncher.launch(
+                                            arrayOf(
+                                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                                Manifest.permission.ACCESS_COARSE_LOCATION
+                                            )
+                                        )
+                                    } else {
+                                        viewModel.loadCurrentLocationWeather()
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.MyLocation,
+                                        contentDescription = stringResource(
+                                            R.string.weather_screen_search_bar_location_icon_description
+                                        ),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
+                        }
+                    )
+                },
+                expanded = searchBarActive,
+                onExpandedChange = {
+                    searchBarActive = it
+                    viewModel.setShowRecentSearches(it)
+                    if (!it) {
+                        keyboardController?.hide()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Content shown when search bar is active
+                if (recentSearches.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.search_screen_content_recent),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+
+                        recentSearches.forEach { location ->
+                            ListItem(
+                                headlineContent = { Text(location) },
+                                leadingContent = {
+                                    Icon(
+                                        imageVector = Icons.Default.History,
+                                        contentDescription = null
+                                    )
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        viewModel.updateSearchQuery("")
+                                        viewModel.searchAndAddLocation(location)
+                                        searchBarActive = false
+                                        viewModel.setShowRecentSearches(false)
+                                    }
+                            )
                         }
                     }
-                )
-            },
-            expanded = searchBarActive,
-            onExpandedChange = {
-                searchBarActive = it
-                viewModel.setShowRecentSearches(it)
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Content shown when search bar is active
-            if (recentSearches.isNotEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.search_screen_content_recent),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-
-                    recentSearches.forEach { location ->
-                        ListItem(
-                            headlineContent = { Text(location) },
-                            leadingContent = {
-                                Icon(
-                                    imageVector = Icons.Default.History,
-                                    contentDescription = null
-                                )
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    viewModel.updateSearchQuery("")
-                                    viewModel.searchAndAddLocation(location)
-                                    searchBarActive = false
-                                    viewModel.setShowRecentSearches(false)
-                                }
+                } else if (searchBarActive) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Start typing to search for a location",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
-            } else if (searchBarActive) {
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(64.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                }
+            }
+
+            // Weather HorizontalPager
+            if (locations.isEmpty() && !isLoading) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,198 +282,184 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Start typing to search for a location",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = "Add a location to see the weather!",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
-        }
 
+            if (locations.isNotEmpty() && !isLoading) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxWidth()
+                ) { page ->
+                    val weatherData = locations.getOrNull(page) ?: return@HorizontalPager
+                    WeatherCard(
+                        weatherData = weatherData,
+                        onRemoveClick = { locationName ->
+                            viewModel.removeLocation(locationName)
+                        },
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(64.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
-        }
-
-        // Weather HorizontalPager
-        if (locations.isEmpty() && !isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Add a location to see the weather!",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-        }
-
-        if (locations.isNotEmpty() && !isLoading) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth()
-            ) { page ->
-                val weatherData = locations.getOrNull(page) ?: return@HorizontalPager
-                WeatherCard(
-                    weatherData = weatherData,
-                    onRemoveClick = { locationName ->
-                        viewModel.removeLocation(locationName)
-                    },
-                    modifier = Modifier.padding(horizontal = 4.dp)
-                )
-            }
-
-            // Page Indicators
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(locations.size) { iteration ->
-                    val weatherData = locations[iteration] ?: return@repeat
-                    val isSelected = pagerState.currentPage == iteration
-                    val isGpsPage = weatherData.isCurrentLocation
-                    val color = if (isSelected) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                    }
-
-                    Box(
-                        modifier = Modifier.padding(4.dp).size(12.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (isGpsPage) {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = stringResource(
-                                    R.string.weather_screen_gps_icon_description
-                                ),
-                                modifier = Modifier.fillMaxSize(),
-                                tint = color
-                            )
+                // Page Indicators
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    repeat(locations.size) { iteration ->
+                        val weatherData = locations[iteration] ?: return@repeat
+                        val isSelected = pagerState.currentPage == iteration
+                        val isGpsPage = weatherData.isCurrentLocation
+                        val color = if (isSelected) {
+                            MaterialTheme.colorScheme.primary
                         } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(8.dp)
-                                    .background(color, CircleShape)
-                            )
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                        }
+
+                        Box(
+                            modifier = Modifier.padding(4.dp).size(12.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (isGpsPage) {
+                                Icon(
+                                    imageVector = Icons.Default.LocationOn,
+                                    contentDescription = stringResource(
+                                        R.string.weather_screen_gps_icon_description
+                                    ),
+                                    modifier = Modifier.fillMaxSize(),
+                                    tint = color
+                                )
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .size(8.dp)
+                                        .background(color, CircleShape)
+                                )
+                            }
                         }
                     }
                 }
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            // Weather Details Grid
-            Text(
-                text = stringResource(id = R.string.weather_screen_weather_detail_title),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-            if (currentWeatherData != null) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        WeatherDetailCard(
-                            icon = Icons.Default.WaterDrop,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_humidity
-                            ),
-                            value = "${currentWeatherData.humidity}%",
-                            modifier = Modifier.weight(1f)
-                        )
-                        WeatherDetailCard(
-                            icon = Icons.Default.Air,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_wind_speed
-                            ),
-                            value = "${currentWeatherData.windSpeed} ${
-                                when (currentWeatherData.unit) {
-                                    TemperatureSystem.METRIC.code -> "m/s"
-                                    else -> "mph"
-                                }
-                            }",
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        WeatherDetailCard(
-                            icon = Icons.Default.Visibility,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_visibility
-                            ),
-                            value = "${currentWeatherData.visibility} km",
-                            modifier = Modifier.weight(1f)
-                        )
-                        WeatherDetailCard(
-                            icon = Icons.Default.Speed,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_pressure
-                            ),
-                            value = "${currentWeatherData.pressure} hPa",
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        WeatherDetailCard(
-                            icon = Icons.Default.WbSunny,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_sunrise
-                            ),
-                            value = currentWeatherData.sunrise,
-                            modifier = Modifier.weight(1f)
-                        )
-                        WeatherDetailCard(
-                            icon = Icons.Default.WbSunny,
-                            label = stringResource(
-                                id = R.string.weather_screen_weather_detail_sunset
-                            ),
-                            value = currentWeatherData.sunset,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // 5-Day Forecast
+                // Weather Details Grid
                 Text(
-                    text = stringResource(
-                        id = R.string.weather_screen_weather_detail_five_day_forecast
-                    ),
+                    text = stringResource(id = R.string.weather_screen_weather_detail_title),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+                if (currentWeatherData != null) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            WeatherDetailCard(
+                                icon = Icons.Default.WaterDrop,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_humidity
+                                ),
+                                value = "${currentWeatherData.humidity}%",
+                                modifier = Modifier.weight(1f)
+                            )
+                            WeatherDetailCard(
+                                icon = Icons.Default.Air,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_wind_speed
+                                ),
+                                value = "${currentWeatherData.windSpeed} ${
+                                    when (currentWeatherData.unit) {
+                                        TemperatureSystem.METRIC.code -> "m/s"
+                                        else -> "mph"
+                                    }
+                                }",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            WeatherDetailCard(
+                                icon = Icons.Default.Visibility,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_visibility
+                                ),
+                                value = "${currentWeatherData.visibility} km",
+                                modifier = Modifier.weight(1f)
+                            )
+                            WeatherDetailCard(
+                                icon = Icons.Default.Speed,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_pressure
+                                ),
+                                value = "${currentWeatherData.pressure} hPa",
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            WeatherDetailCard(
+                                icon = Icons.Default.WbSunny,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_sunrise
+                                ),
+                                value = currentWeatherData.sunrise,
+                                modifier = Modifier.weight(1f)
+                            )
+                            WeatherDetailCard(
+                                icon = Icons.Default.WbSunny,
+                                label = stringResource(
+                                    id = R.string.weather_screen_weather_detail_sunset
+                                ),
+                                value = currentWeatherData.sunset,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                    }
 
-                ForecastCard(forecast = currentWeatherData.forecast)
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    // 5-Day Forecast
+                    Text(
+                        text = stringResource(
+                            id = R.string.weather_screen_weather_detail_five_day_forecast
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    ForecastCard(forecast = currentWeatherData.forecast)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
             }
+        }
+
+        // Invisible overlay to dismiss search bar when clicking outside
+        if (searchBarActive) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        searchBarActive = false
+                        viewModel.setShowRecentSearches(false)
+                        keyboardController?.hide()
+                    }
+            )
         }
     }
 }
