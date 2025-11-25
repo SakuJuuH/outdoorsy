@@ -163,4 +163,8 @@ dependencies {
     // Location Dependencies
     implementation(libs.play.services.location)
     implementation(libs.accompanist.permissions)
+
+    // App Widget Dependencies
+    implementation("androidx.glance:glance-appwidget:1.0.0")
+    implementation("androidx.glance:glance-material3:1.0.0")
 }

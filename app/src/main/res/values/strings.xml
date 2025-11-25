@@ -82,4 +82,8 @@
     <string name="weather_screen_gps_icon_description">Current Location</string>
     <string name="weather_screen_remove_location_description">Remove location</string>
 
+    <!-- app/src/main/res/values/strings.xml -->
+    <string name="widget_description">Shows current weather for saved location</string>
+
+
 </resources>
