@@ -30,7 +30,7 @@ data class ActivityLogEntity(
     val suitabilityLabel: String,
     val suitabilityScore: Int
 ) {
-    fun toDomain(): ActivityLog= ActivityLog(
+    fun toDomain(): ActivityLog = ActivityLog(
         location = location,
         activityId = activityId,
         startDateTime = startDateTime,
