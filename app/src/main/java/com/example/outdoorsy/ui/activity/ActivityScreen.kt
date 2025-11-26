@@ -67,8 +67,8 @@ import java.time.format.DateTimeFormatter
 fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val isSearchEnabled = uiState.selectedLocation.isNotBlank() &&
-        uiState.selectedActivity.isNotBlank()
+    val isSearchEnabled = uiState.selectedLocation != null &&
+        uiState.selectedActivity != null
 
     LazyColumn(modifier = modifier) {
         item {
@@ -86,18 +86,19 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 options = uiState.locations,
                 label = stringResource(id = R.string.activity_screen_location_label),
                 prompt = stringResource(id = R.string.activity_screen_location_prompt),
-                selectedText = uiState.selectedLocation,
+                selectedText = uiState.selectedLocation ?: "",
                 onValueSelected = viewModel::updateLocation
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
+            val activities by uiState.activities.collectAsState(initial = emptyList())
             EditableFilteringInput(
-                options = uiState.activities,
+                options = activities.map { activity -> activity.name },
                 label = stringResource(id = R.string.activity_screen_activity_label),
                 prompt = stringResource(id = R.string.activity_screen_activity_prompt),
-                selectedText = uiState.selectedActivity,
+                selectedText = uiState.selectedActivity?.name ?: "",
                 onValueSelected = viewModel::updateActivity
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -256,6 +257,7 @@ fun EditableFilteringInput(
             onValueChange = { newValue ->
                 text = newValue
                 expanded = true
+                onValueSelected(newValue)
             },
             placeholder = { Text(prompt) },
             label = null,
