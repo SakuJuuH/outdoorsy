@@ -13,7 +13,7 @@ import com.example.outdoorsy.utils.DateTimeConverters
 
 @Database(
     entities = [ActivityEntity::class, Location::class, ActivityLogEntity::class],
-    version = 6,
+    version = 7,
     exportSchema = true
 )
 @TypeConverters(DateTimeConverters::class)
