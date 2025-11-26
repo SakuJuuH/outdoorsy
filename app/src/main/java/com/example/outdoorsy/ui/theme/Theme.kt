@@ -32,15 +32,15 @@ private val DarkColorScheme = darkColorScheme(
 
     // --- TEXT & ICON COLORS ---
     // Text colors are inverted to be light.
-    onPrimary = Color.White, // White text on primary buttons (pineGreen).
-    onSecondary = Color.White, // White text on secondary buttons (forestGreen).
+    onPrimary = textOnDarkPrimary, // White text on primary buttons (pineGreen).
+    onSecondary = textOnDarkPrimary, // White text on secondary buttons (forestGreen).
     onTertiary = textPrimary, // Dark text on the bright gold accent.
 
-    onBackground = offWhite, // Near-white text on the dark green background.
-    onSurface = offWhite, // Near-white text on dark green cards.
+    onBackground = textOnDarkPrimary, // Near-white text on the dark green background.
+    onSurface = textOnDarkPrimary, // Near-white text on dark green cards.
 
-    onPrimaryContainer = Color.White, // White text/icons on the main WeatherCard.
-    onSurfaceVariant = offWhite // Near-white text on the forecast card.
+    onPrimaryContainer = textOnDarkPrimary, // White text/icons on the main WeatherCard.
+    onSurfaceVariant = textOnDarkSecondary // Near-white text on the forecast card.
 )
 
 private val LightColorScheme = lightColorScheme(

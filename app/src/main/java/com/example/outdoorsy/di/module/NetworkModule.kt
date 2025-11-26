@@ -1,18 +1,22 @@
 package com.example.outdoorsy.di.module
 
 import com.example.outdoorsy.data.remote.AiAssistantApiService
+import com.example.outdoorsy.data.remote.CurrencyApiService
 import com.example.outdoorsy.data.remote.EbayApiService
 import com.example.outdoorsy.data.remote.EbayAuthService
 import com.example.outdoorsy.data.remote.ForecastApiService
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.repository.AssistantRepositoryImpl
+import com.example.outdoorsy.di.CurrencyApi
 import com.example.outdoorsy.di.EbayApi
 import com.example.outdoorsy.di.EbayAuth
 import com.example.outdoorsy.di.OpenWeather
+import com.example.outdoorsy.di.interceptor.CurrencyApiAuthInterceptor
 import com.example.outdoorsy.di.interceptor.EbayAccessAuthInterceptor
 import com.example.outdoorsy.di.interceptor.EbayAuthInterceptor
 import com.example.outdoorsy.di.interceptor.OpenWeatherInterceptor
 import com.example.outdoorsy.domain.repository.AssistantRepository
+import com.example.outdoorsy.utils.CURRENCY_BASE_URL
 import com.example.outdoorsy.utils.EBAY_BASE_URL
 import com.example.outdoorsy.utils.OWM_BASE_URL
 import dagger.Module
@@ -80,6 +84,20 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @CurrencyApi
+    fun provideCurrencyApiOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        currencyApiAuthInterceptor: CurrencyApiAuthInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .writeTimeout(20, TimeUnit.SECONDS)
+        .addInterceptor(currencyApiAuthInterceptor)
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    @Provides
+    @Singleton
     @OpenWeather
     fun provideOpenWeatherRetrofit(@OpenWeather client: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(OWM_BASE_URL)
@@ -101,6 +119,15 @@ object NetworkModule {
     @EbayAuth
     fun provideEbayAuthRetrofit(@EbayAuth client: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(EBAY_BASE_URL)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    @Singleton
+    @CurrencyApi
+    fun provideCurrencyApiRetrofit(@CurrencyApi client: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(CURRENCY_BASE_URL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -131,6 +158,11 @@ object NetworkModule {
     @EbayAuth
     fun provideEbayAuthApi(@EbayAuth retrofit: Retrofit): EbayAuthService =
         retrofit.create(EbayAuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCurrencyApiService(@CurrencyApi retrofit: Retrofit): CurrencyApiService =
+        retrofit.create(CurrencyApiService::class.java)
 
     @Provides
     @Singleton

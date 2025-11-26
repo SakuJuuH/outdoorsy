@@ -3,3 +3,4 @@
 sdk.dir=sdk_directory_here //Should already be in the file by default
 OPENWEATHER_API_KEY=your_openweather_api_key_here
 EBAY_BASIC_KEY=your_ebay_basic_key_here
+CURRENCY_API_KEY=your_currency_api_key_here
