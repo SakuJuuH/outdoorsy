@@ -5,13 +5,13 @@ import java.time.LocalDateTime
 
 data class ActivityLog(
     val location: String,
-    val activityId: Int,
+    val activityName: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
     val suitabilityLabel: String,
     val suitabilityScore: Int
 ) {
-    fun toEntity(): ActivityLogEntity = ActivityLogEntity(
+    fun toEntity(activityId: Int): ActivityLogEntity = ActivityLogEntity(
         location = location,
         activityId = activityId,
         startDateTime = startDateTime,
