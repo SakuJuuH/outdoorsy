@@ -4,12 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.appwidget.updateAll
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import coil.ImageLoader
-import coil.request.ImageRequest
 import com.example.outdoorsy.domain.repository.LocationRepository
 import com.example.outdoorsy.domain.repository.WeatherRepository
 import com.example.outdoorsy.ui.widget.WeatherWidget
@@ -28,11 +25,12 @@ class WeatherWidgetWorker @AssistedInject constructor(
     private val weatherRepository: WeatherRepository
 ) : CoroutineWorker(context, workerParams) {
 
+    private val gson = Gson()
+
     override suspend fun doWork(): Result = try {
         val primaryData = fetchPrimaryWeatherData()
 
-        val dataList = if (primaryData != null) listOf(primaryData) else emptyList()
-        val jsonString = Gson().toJson(dataList)
+        val jsonString = gson.toJson(primaryData)
 
         Log.d("WeatherWidgetWorker", "JSON String: $jsonString")
 
@@ -47,8 +45,8 @@ class WeatherWidgetWorker @AssistedInject constructor(
                     "Updated Widget State: ${prefs[WeatherWidget.WEATHER_DATA_KEY]}"
                 )
             }
+            WeatherWidget().update(context, glanceId)
         }
-        WeatherWidget().updateAll(context)
 
         Result.success()
     } catch (e: CancellationException) {
@@ -60,19 +58,17 @@ class WeatherWidgetWorker @AssistedInject constructor(
     }
 
     private suspend fun fetchPrimaryWeatherData(): WeatherWidgetData? {
-        // Determine Target: Priority is GPS -> First Saved Location
         val gpsLocation = locationRepository.getCurrentLocation()
 
         val targetParams = if (gpsLocation != null) {
             LocationParams(gpsLocation.latitude, gpsLocation.longitude, null, true)
         } else {
-            // Fallback to the first saved location if GPS is off/unavailable
             val firstSaved = locationRepository.getAllLocations().first().firstOrNull()
             if (firstSaved != null) {
                 Log.d("WeatherWidgetWorker", "Using Saved Location: ${firstSaved.name}")
                 LocationParams(firstSaved.latitude, firstSaved.longitude, firstSaved.name, false)
             } else {
-                return null // No locations found at all
+                return null
             }
         }
 
@@ -84,16 +80,6 @@ class WeatherWidgetWorker @AssistedInject constructor(
                 lang = "en"
             )
 
-            // Pre-load Icon for instant display
-            val iconCode = response.weather.firstOrNull()?.icon
-            if (!iconCode.isNullOrBlank()) {
-                val request = ImageRequest.Builder(context)
-                    .data("https://openweathermap.org/img/wn/$iconCode@2x.png")
-                    .build()
-                ImageLoader(context).execute(request)
-            }
-
-            // Return Data
             val weatherWidgetData = WeatherWidgetData(
                 location = targetParams.name ?: response.name,
                 temperature = response.main.temperature.toInt(),
@@ -102,8 +88,7 @@ class WeatherWidgetWorker @AssistedInject constructor(
                     ?: "",
                 high = response.main.maxTemperature.toInt(),
                 low = response.main.minTemperature.toInt(),
-                icon = iconCode ?: "",
-                unit = "metric",
+                icon = response.weather.firstOrNull()?.icon ?: "",
                 isCurrentLocation = targetParams.isGps
             )
             Log.d("WeatherWidgetWorker", "Fetched Weather Data: $weatherWidgetData")

@@ -42,10 +42,11 @@ import com.example.outdoorsy.MainActivity
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.widget.model.WeatherWidgetData
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class WeatherWidget : GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
+
+    private val gson = Gson()
 
     companion object {
         val WEATHER_DATA_KEY = stringPreferencesKey("weather_data_json")
@@ -54,35 +55,28 @@ class WeatherWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Log.d("WeatherWidget", "provideGlance CALLED for ID: $id")
 
-        // 1. Retrieve the state (Preferences)
         val prefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
         val jsonString = prefs[WEATHER_DATA_KEY]
 
-        // 2. Parse the state
-        val dataList: List<WeatherWidgetData> = if (jsonString != null) {
+        val currentData: WeatherWidgetData? = if (jsonString != null) {
             try {
-                val type = object : TypeToken<List<WeatherWidgetData>>() {}.type
-                Gson().fromJson(jsonString, type)
+                gson.fromJson(jsonString, WeatherWidgetData::class.java)
             } catch (e: Exception) {
                 Log.e("WeatherWidget", "Error parsing JSON", e)
-                emptyList()
+                null
             }
         } else {
-            emptyList()
+            null
         }
 
-        Log.d("WeatherWidget", "Loaded Weather Data: $dataList")
+        Log.d("WeatherWidget", "Loaded Weather Data: $currentData")
 
-        // 3. Prepare UI assets (Icon) based on the state
-        val currentData = dataList.firstOrNull()
         val currentBitmap = if (currentData != null) {
             loadWeatherIcon(context, currentData.icon)
         } else {
             null
         }
 
-        // 4. Render the UI
-        // We no longer trigger a fetch here. The UI is a pure reflection of the current state.
         provideContent {
             GlanceTheme {
                 if (currentData != null) {

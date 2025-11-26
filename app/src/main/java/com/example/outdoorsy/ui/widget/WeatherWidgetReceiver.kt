@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.outdoorsy.ui.widget.worker.WeatherWidgetWorker
@@ -27,6 +28,10 @@ class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
 
     private fun enqueueUpdate(context: Context) {
         val request = OneTimeWorkRequestBuilder<WeatherWidgetWorker>().build()
-        WorkManager.getInstance(context).enqueue(request)
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "weather_widget_update",
+            ExistingWorkPolicy.REPLACE,
+            request
+        )
     }
 }
