@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.domain.model.ebay.Price
+import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.repository.CurrencyRepository
 import com.example.outdoorsy.domain.repository.EbayRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,8 @@ import kotlinx.coroutines.launch
 class ShoppingViewModel @Inject constructor(
     private val ebayRepository: EbayRepository,
     private val currencyRepository: CurrencyRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val activityRepository: ActivityRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ShoppingUiState())
