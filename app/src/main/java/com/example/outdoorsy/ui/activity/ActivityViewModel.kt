@@ -167,6 +167,7 @@ class ActivityViewModel @Inject constructor(
                 val response = getAiAssistant(prompt)
                 Log.d("Response", "$response")
                 val aiAnswer = Gson().fromJson(response.answer, AiAssistantAnswerDto::class.java)
+                activityRepository.setClothingItems(aiAnswer.clothingItems)
 
                 val activityLog = ActivityLog(
                     location = location,
