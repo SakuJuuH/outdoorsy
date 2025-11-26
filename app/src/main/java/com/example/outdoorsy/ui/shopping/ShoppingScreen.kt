@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -49,6 +51,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
     val isLoading = uiState.value.isLoading
     val error = uiState.value.error
     val items = uiState.value.items
+    val recommendedItems = uiState.value.recommendedItems
 
     LazyColumn(
         modifier = modifier,
@@ -76,15 +79,30 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         }
 
         // --- Recommended Items Section ---
-        item {
-            Text(
-                text = stringResource(
-                    id = R.string.shopping_screen_recommended_items_section_title
-                ),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+        // Only show this section if there are recommended items
+        if (recommendedItems.isNotEmpty()) {
+            item {
+                Text(
+                    text = stringResource(
+                        id = R.string.shopping_screen_recommended_items_section_title
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = MaterialTheme.spacing(2)) // Indent title
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                // Use a horizontal scrolling row for recommendations
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(horizontal = MaterialTheme.spacing(2))
+                ) {
+                    items(recommendedItems) { item ->
+                        // Using the same ProductCard, you can create a new one for a different style
+                        ProductCard(item = item, modifier = Modifier.size(width = 300.dp, height = 200.dp))
+                    }
+                }
+            }
         }
 
         // --- All Items Section ---
