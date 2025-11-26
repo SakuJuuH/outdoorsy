@@ -7,18 +7,17 @@ import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 import com.example.outdoorsy.domain.model.ActivityLog
 
-// TODO: Uncomment ForeignKey logic once the Activity entity is properly configured
 @Entity(
     tableName = "activity_log",
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = Activity::class,
-//            parentColumns = ["id"],
-//            childColumns = ["activityId"],
-//            onDelete = ForeignKey.CASCADE
-//        )
-//    ],
-//    indices = [Index(value = ["activityId"])]
+    foreignKeys = [
+        ForeignKey(
+            entity = ActivityEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["activityId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index(value = ["activityId"])]
 )
 data class ActivityLogEntity(
     @PrimaryKey(autoGenerate = true)
@@ -30,9 +29,9 @@ data class ActivityLogEntity(
     val suitabilityLabel: String,
     val suitabilityScore: Int
 ) {
-    fun toDomain(): ActivityLog = ActivityLog(
+    fun toDomain(activityName: String): ActivityLog = ActivityLog(
         location = location,
-        activityId = activityId,
+        activityName = activityName,
         startDateTime = startDateTime,
         endDateTime = endDateTime,
         suitabilityLabel = suitabilityLabel,
