@@ -9,11 +9,12 @@ import com.example.outdoorsy.di.EbayAuth
 import com.example.outdoorsy.di.EbayTokenHolder
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.domain.repository.EbayRepository
+import dagger.Lazy
 import javax.inject.Inject
 
 class EbayRepositoryImpl @Inject constructor(
-    @param:EbayApi private val apiService: EbayApiService,
-    @param:EbayAuth private val authService: EbayAuthService,
+    @param:EbayApi private val apiService: Lazy<EbayApiService>,
+    @param:EbayAuth private val authService: Lazy<EbayAuthService>,
     private val tokenHolder: EbayTokenHolder
 ) : EbayRepository {
     override suspend fun getItems(query: String, limit: Int, filter: String): List<EbayItem> {
@@ -21,7 +22,7 @@ class EbayRepositoryImpl @Inject constructor(
             getAccessToken()
         }
 
-        val response = apiService.getItems(query = query, limit = limit, filter = filter)
+        val response = apiService.get().getItems(query = query, limit = limit, filter = filter)
 
         return if (response.isSuccessful && response.body() != null) {
             Log.d("EbayRepositoryImpl", "getItems: ${response.body()!!.toDomain()}")
@@ -32,7 +33,7 @@ class EbayRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getAccessToken() {
-        val response = authService.getToken()
+        val response = authService.get().getToken()
 
         tokenHolder.updateToken(token = response.accessToken, expiresInSeconds = response.expiresIn)
     }

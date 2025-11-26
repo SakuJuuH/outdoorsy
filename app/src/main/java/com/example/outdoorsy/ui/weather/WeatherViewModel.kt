@@ -1,6 +1,8 @@
 package com.example.outdoorsy.ui.weather
 
+import android.content.Context
 import android.util.Log
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.data.repository.SettingsRepository
@@ -10,6 +12,7 @@ import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.ui.weather.mappers.toUiModel
 import com.example.outdoorsy.ui.weather.model.WeatherData
+import com.example.outdoorsy.ui.widget.WeatherWidget
 import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.TemperatureSystem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -235,4 +238,10 @@ class WeatherViewModel @Inject constructor(
     }
 
     private data class CurrentSettings(val unit: String, val lang: String)
+
+    fun updateWidget(context: Context) {
+        viewModelScope.launch {
+            WeatherWidget().updateAll(context)
+        }
+    }
 }

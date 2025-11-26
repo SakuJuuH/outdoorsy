@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
-import com.example.outdoorsy.data.test.ActivitiesData
+import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
+import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.utils.WeatherPromptProvider
@@ -32,30 +33,50 @@ class ActivityViewModel @Inject constructor(
     private val getAiAssistant: GetAiAssistant,
     private val getForecast: GetForecast,
     private val settingsRepository: SettingsRepository,
-    private val activityLogRepository: ActivityLogRepository
+    private val activityLogRepository: ActivityLogRepository,
+    private val activityRepository: ActivityRepository
 ) : ViewModel() {
+    init {
+        // TODO: Replace with proper automatic DB check and insertion or user input-driven insertion
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                activityRepository.saveActivity(Activity("Hiking"))
+                activityRepository.saveActivity(Activity("Gardening"))
+                activityRepository.saveActivity(Activity("Camping"))
+            } catch (e: Exception) {
+                Log.e("Insertion Error", e.toString())
+            }
+        }
+    }
+
     private val _uiState = MutableStateFlow(
         ActivityUiState(
             // TODO: Replace location placeholder values with proper database queries
             locations = listOf("Helsinki", "Espoo", "Vantaa"),
-            activities = ActivitiesData.activities
+            activities = activityRepository.getAllActivities()
         )
     )
     val uiState: StateFlow<ActivityUiState> = _uiState
 
     fun updateLocation(newLocation: String) {
+        val locations = _uiState.value.locations
+        val matched = locations.firstOrNull { it == newLocation }
         _uiState.update {
             it.copy(
-                selectedLocation = newLocation
+                selectedLocation = matched
             )
         }
     }
 
     fun updateActivity(newActivity: String) {
-        _uiState.update {
-            it.copy(
-                selectedActivity = newActivity
-            )
+        val activities = _uiState.value.activities
+        viewModelScope.launch {
+            activities.collect { activities ->
+                val matched = activities.firstOrNull { it.name == newActivity }
+                _uiState.update {
+                    it.copy(selectedActivity = matched)
+                }
+            }
         }
     }
 
@@ -120,8 +141,12 @@ class ActivityViewModel @Inject constructor(
                 Log.e("Forecast", "Error fetching forecast", e)
             }
 
+            if (activity == null || location == null) {
+                throw IllegalArgumentException("Activity must not be null")
+            }
+
             val prompt = WeatherPromptProvider.buildPrompt(
-                activity,
+                activity.name,
                 location,
                 date.toString(),
                 startTime.toString(),
@@ -145,7 +170,7 @@ class ActivityViewModel @Inject constructor(
 
                 val activityLog = ActivityLog(
                     location = location,
-                    activityId = 0, // TODO: Implement Activity table connection
+                    activityName = activity.name,
                     startDateTime = LocalDateTime.of(date, startTime),
                     endDateTime = LocalDateTime.of(date, endTime),
                     suitabilityLabel = aiAnswer.suitabilityLabel,

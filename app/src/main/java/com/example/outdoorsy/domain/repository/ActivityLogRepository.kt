@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ActivityLogRepository {
     fun getAllActivityLogs(): Flow<List<ActivityLog>>
 
-    fun saveActivityLog(activityLog: ActivityLog)
+    suspend fun saveActivityLog(activityLog: ActivityLog)
 
-    fun deleteActivityLog(activityLog: ActivityLog)
+    suspend fun deleteActivityLog(activityLog: ActivityLog)
 }

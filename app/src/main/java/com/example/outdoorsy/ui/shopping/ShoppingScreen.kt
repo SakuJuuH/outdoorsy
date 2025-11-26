@@ -39,6 +39,7 @@ import com.example.outdoorsy.ui.components.ButtonType
 import com.example.outdoorsy.ui.components.CustomButton
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
+import com.example.outdoorsy.utils.Currencies
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
@@ -183,11 +184,18 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                 Text(
                     text = "${
                         when (item.price.currency) {
-                            "USD" -> "$"
-                            "GBP" -> "£"
+                            Currencies.USD.code -> Currencies.USD.symbol
+                            Currencies.GBP.code -> Currencies.GBP.symbol
                             else -> ""
                         }
-                    }${item.price.value}${if (item.price.currency == "EUR") "€" else ""}",
+                    }${item.price.value} " +
+                        if (item.price.currency ==
+                            Currencies.EUR.code
+                        ) {
+                            Currencies.EUR.symbol
+                        } else {
+                            ""
+                        },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.primary

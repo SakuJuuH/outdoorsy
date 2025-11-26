@@ -5,24 +5,27 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.outdoorsy.data.local.entity.Activity
+import com.example.outdoorsy.data.local.entity.ActivityEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ActivityDao {
 
     @Query("SELECT * FROM activity")
-    fun getAll(): Flow<List<Activity>>
+    fun getAll(): Flow<List<ActivityEntity>>
+
+    @Query("SELECT * FROM activity WHERE id = :id")
+    fun getById(id: Int): Flow<ActivityEntity>
 
     @Query("SELECT * FROM activity WHERE name = :name")
-    fun getByName(name: String): Flow<Activity>
+    fun getByName(name: String): Flow<ActivityEntity>
 
     @Query("SELECT * FROM activity WHERE id = :id")
     suspend fun getById(id: Int): Activity?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertActivity(activity: Activity)
+    fun insertActivity(activity: ActivityEntity)
 
     @Delete
-    fun deleteActivity(activity: Activity)
+    fun deleteActivity(activity: ActivityEntity)
 }

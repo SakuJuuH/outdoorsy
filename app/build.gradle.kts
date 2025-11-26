@@ -61,6 +61,12 @@ android {
                 name = "EBAY_API_KEY",
                 value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
             )
+
+            buildConfigField(
+                "String",
+                "CURRENCY_API_KEY",
+                "\"${localProperties["CURRENCY_API_KEY"]}\""
+            )
         }
         debug {
             val localProperties = Properties()
@@ -79,6 +85,12 @@ android {
                 type = "String",
                 name = "EBAY_API_KEY",
                 value = "\"${localProperties["EBAY_BASIC_KEY"]}\""
+            )
+
+            buildConfigField(
+                "String",
+                "CURRENCY_API_KEY",
+                "\"${localProperties["CURRENCY_API_KEY"]}\""
             )
         }
     }
@@ -111,6 +123,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.engage.core)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
@@ -121,7 +134,7 @@ dependencies {
     androidTestImplementation(libs.truth)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation(libs.androidx.constraintlayout.compose)
 
     // Room Dependencies
     implementation(libs.androidx.room.runtime)
@@ -150,4 +163,8 @@ dependencies {
     // Location Dependencies
     implementation(libs.play.services.location)
     implementation(libs.accompanist.permissions)
+
+    // App Widget Dependencies
+    implementation("androidx.glance:glance-appwidget:1.0.0")
+    implementation("androidx.glance:glance-material3:1.0.0")
 }
