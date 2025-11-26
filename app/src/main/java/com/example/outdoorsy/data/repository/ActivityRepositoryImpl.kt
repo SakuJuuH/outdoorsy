@@ -10,6 +10,16 @@ import javax.inject.Inject
 class ActivityRepositoryImpl @Inject constructor(
     private val activityDao: ActivityDao
 ) : ActivityRepository {
+    private object RecommendationsData {
+        var clothingItems: List<String> = emptyList()
+    }
+
+    override fun getClothingItems(): List<String> = RecommendationsData.clothingItems
+
+    override fun setClothingItems(items: List<String>) {
+        RecommendationsData.clothingItems = items
+    }
+
     override fun getAllActivities(): Flow<List<Activity>> =
         activityDao.getAll().map { entityList ->
             entityList.map { entity -> entity.toDomain() }
