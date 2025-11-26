@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.outdoorsy.data.local.AppDatabase
 import com.example.outdoorsy.data.local.dao.ActivityDao
+import com.example.outdoorsy.data.local.dao.ActivityLogDao
 import com.example.outdoorsy.data.local.dao.LocationDao
 import dagger.Module
 import dagger.Provides
@@ -31,4 +32,7 @@ object DatabaseModule {
 
     @Provides
     fun provideActivityDao(database: AppDatabase): ActivityDao = database.activityDao()
+
+    @Provides
+    fun provideActivityLogDao(database: AppDatabase): ActivityLogDao = database.activityLogDao()
 }

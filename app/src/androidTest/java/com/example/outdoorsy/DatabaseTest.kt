@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.outdoorsy.data.local.AppDatabase
 import com.example.outdoorsy.data.local.dao.ActivityDao
 import com.example.outdoorsy.data.local.dao.LocationDao
-import com.example.outdoorsy.data.local.entity.Activity
+import com.example.outdoorsy.data.local.entity.ActivityEntity
 import com.example.outdoorsy.data.local.entity.Location
 import com.google.common.truth.Truth.assertThat
 import java.io.IOException
@@ -62,7 +62,7 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndReadActivity() = runTest {
-        val activity = Activity(id = 1, name = "Hiking")
+        val activity = ActivityEntity(id = 1, name = "Hiking")
 
         activityDao.insertActivity(activity)
 
@@ -76,8 +76,8 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun checkAutoIncrementActivityId() = runTest {
-        val activity1 = Activity(name = "Cycling")
-        val activity2 = Activity(name = "Kayaking")
+        val activity1 = ActivityEntity(name = "Cycling")
+        val activity2 = ActivityEntity(name = "Kayaking")
 
         activityDao.insertActivity(activity1)
         activityDao.insertActivity(activity2)
@@ -93,8 +93,8 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun deleteActivity() = runTest {
-        val activity1 = Activity(name = "Hiking")
-        val activity2 = Activity(name = "Cycling")
+        val activity1 = ActivityEntity(name = "Hiking")
+        val activity2 = ActivityEntity(name = "Cycling")
 
         activityDao.insertActivity(activity1)
         activityDao.insertActivity(activity2)
