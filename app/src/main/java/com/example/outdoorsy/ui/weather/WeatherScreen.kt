@@ -92,7 +92,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (granted) {
             viewModel.loadCurrentLocationWeather()
         }

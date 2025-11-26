@@ -34,7 +34,7 @@ class LocationRepositoryImpl @Inject constructor(
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
 
-        if (!hasAccessCoarseLocationPermission || !hasAccessFineLocationPermission) {
+        if (!hasAccessCoarseLocationPermission && !hasAccessFineLocationPermission) {
             return null
         }
 

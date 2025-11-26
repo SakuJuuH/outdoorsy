@@ -1,11 +1,11 @@
 package com.example.outdoorsy.data.test
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsBike
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
+import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Waves
-import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.Terrain
 import com.example.outdoorsy.ui.history.ActivityHistoryItem
 import com.example.outdoorsy.ui.history.ConditionRating
@@ -14,7 +14,7 @@ object ActivityHistoryData {
     val historyItems: List<ActivityHistoryItem> = listOf(
         ActivityHistoryItem(
             activityName = "Cycling",
-            activityIcon = Icons.Filled.DirectionsBike,
+            activityIcon = Icons.AutoMirrored.Filled.DirectionsBike,
             location = "San Francisco, CA",
             city = "San Francisco",
             state = "CA",
@@ -54,7 +54,7 @@ object ActivityHistoryData {
         ),
         ActivityHistoryItem(
             activityName = "Running/Jogging",
-            activityIcon = Icons.Outlined.DirectionsRun,
+            activityIcon = Icons.AutoMirrored.Outlined.DirectionsRun,
             location = "New York, NY",
             city = "New York",
             state = "NY",

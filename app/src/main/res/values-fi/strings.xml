@@ -72,5 +72,7 @@
     <string name="weather_screen_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
     <string name="weather_screen_gps_icon_description">Nykyinen sijainti</string>
     <string name="weather_screen_remove_location_description">Poista sijainti</string>
+    <string name="widget_no_data">Ei tietoja</string>
+    <string name="widget_tap_to_open">Avaa napauttamalla</string>
 
 </resources>
