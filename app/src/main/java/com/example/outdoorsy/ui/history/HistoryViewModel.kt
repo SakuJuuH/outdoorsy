@@ -3,17 +3,13 @@ package com.example.outdoorsy.ui.history
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.outdoorsy.data.local.dao.ActivityDao
 import com.example.outdoorsy.data.local.datastore.SearchHistoryRepository
-import com.example.outdoorsy.data.model.ActivityHistoryItem
-import com.example.outdoorsy.data.model.ConditionRating
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
@@ -25,12 +21,14 @@ import androidx.compose.material.icons.filled.Waves
 import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.Terrain
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.outdoorsy.domain.model.Activity
+import com.example.outdoorsy.domain.repository.ActivityRepository
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     application: Application,
     private val activityLogRepository: ActivityLogRepository,
-    private val activityDao: ActivityDao
+    private val activityRepository: ActivityRepository
 ) : ViewModel() {
     private val searchHistoryRepository = SearchHistoryRepository(application)
     
@@ -39,15 +37,15 @@ class HistoryViewModel @Inject constructor(
     
     val historyItems = combine(
         activityLogRepository.getAllActivityLogs(),
-        activityDao.getAll()
+        activityRepository.getAllActivities()
     ) { logs, activities ->
-        val activityMap = activities.associateBy { it.id }
+        val activityMap = activities.associateBy { it.name }
         logs.map { log -> log.toActivityHistoryItem(activityMap) }
     }
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    private fun ActivityLog.toActivityHistoryItem(activityMap: Map<Int, com.example.outdoorsy.data.local.entity.Activity>): ActivityHistoryItem {
-        val activity = activityMap[activityId]
+    private fun ActivityLog.toActivityHistoryItem(activityMap: Map<String, Activity>): ActivityHistoryItem {
+        val activity = activityMap[activityName]
         val activityName = activity?.name ?: "Activity"
         val locationParts = location.split(", ")
         val city = locationParts.getOrElse(0) { location }
@@ -66,7 +64,6 @@ class HistoryViewModel @Inject constructor(
         }
         
         return ActivityHistoryItem(
-            id = activityId.toString(),
             activityName = activityName,
             activityIcon = getActivityIcon(activityName),
             location = location,

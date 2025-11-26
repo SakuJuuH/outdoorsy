@@ -7,13 +7,12 @@ import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Waves
 import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.Terrain
-import com.example.outdoorsy.data.model.ActivityHistoryItem
-import com.example.outdoorsy.data.model.ConditionRating
+import com.example.outdoorsy.ui.history.ActivityHistoryItem
+import com.example.outdoorsy.ui.history.ConditionRating
 
 object ActivityHistoryData {
     val historyItems: List<ActivityHistoryItem> = listOf(
         ActivityHistoryItem(
-            id = "1",
             activityName = "Cycling",
             activityIcon = Icons.Filled.DirectionsBike,
             location = "San Francisco, CA",
@@ -24,7 +23,6 @@ object ActivityHistoryData {
             condition = ConditionRating.EXCELLENT
         ),
         ActivityHistoryItem(
-            id = "2",
             activityName = "Beach Activities",
             activityIcon = Icons.Filled.Waves,
             location = "Los Angeles, CA",
@@ -35,7 +33,6 @@ object ActivityHistoryData {
             condition = ConditionRating.VERY_GOOD
         ),
         ActivityHistoryItem(
-            id = "3",
             activityName = "Photography",
             activityIcon = Icons.Filled.PhotoCamera,
             location = "New York, NY",
@@ -46,7 +43,6 @@ object ActivityHistoryData {
             condition = ConditionRating.EXCELLENT
         ),
         ActivityHistoryItem(
-            id = "4",
             activityName = "Hiking",
             activityIcon = Icons.Outlined.Terrain,
             location = "San Francisco, CA",
@@ -57,7 +53,6 @@ object ActivityHistoryData {
             condition = ConditionRating.GOOD
         ),
         ActivityHistoryItem(
-            id = "5",
             activityName = "Running/Jogging",
             activityIcon = Icons.Outlined.DirectionsRun,
             location = "New York, NY",
@@ -68,7 +63,6 @@ object ActivityHistoryData {
             condition = ConditionRating.VERY_GOOD
         ),
         ActivityHistoryItem(
-            id = "6",
             activityName = "Dog Walking",
             activityIcon = Icons.Filled.Pets,
             location = "Los Angeles, CA",

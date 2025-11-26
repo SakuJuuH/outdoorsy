@@ -1,9 +1,8 @@
-package com.example.outdoorsy.data.model
+package com.example.outdoorsy.ui.history
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class ActivityHistoryItem(
-    val id: String,
     val activityName: String,
     val activityIcon: ImageVector,
     val location: String,

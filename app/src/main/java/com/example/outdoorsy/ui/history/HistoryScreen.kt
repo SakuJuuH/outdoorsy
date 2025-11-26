@@ -39,8 +39,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
-import com.example.outdoorsy.data.model.ActivityHistoryItem
-import com.example.outdoorsy.data.model.ConditionRating
 import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing

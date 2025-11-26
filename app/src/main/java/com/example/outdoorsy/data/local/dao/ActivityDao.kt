@@ -20,9 +20,6 @@ interface ActivityDao {
     @Query("SELECT * FROM activity WHERE name = :name")
     fun getByName(name: String): Flow<ActivityEntity>
 
-    @Query("SELECT * FROM activity WHERE id = :id")
-    suspend fun getById(id: Int): Activity?
-
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertActivity(activity: ActivityEntity)
 
