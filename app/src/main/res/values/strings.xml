@@ -71,6 +71,8 @@
     <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
     <string name="shopping_screen_all_items_section_title">All Items</string>
     <string name="shopping_screen_view_listing_button">View Item</string>
+    <string name="shopping_screen_product_image_description">Product image for %1$s</string>
+
 
     <!-- ui - screens - WeatherScreen -->
 

@@ -63,6 +63,8 @@
     <string name="shopping_screen_title">Säävarusteiden kauppa</string>
     <string name="shopping_screen_recommended_items_section_title">Suositellaan nykyiseen säähän</string>
     <string name="shopping_screen_all_items_section_title">Kaikki tuotteet</string>
+    <string name="shopping_screen_product_image_description">Tuotekuva: %1$s</string>
+
 
     <string name="weather_screen_weather_detail_humidity">Kosteus</string>
     <string name="weather_screen_weather_detail_wind_speed">Tuulen nopeus</string>
@@ -80,5 +82,7 @@
     <string name="weather_screen_remove_location_description">Poista sijainti</string>
     <string name="widget_no_data">Ei tietoja</string>
     <string name="widget_tap_to_open">Avaa napauttamalla</string>
+    <string name="widget_description">Näyttää nykyisen säätilan tallennetulle sijainnille</string>
+
 
 </resources>
