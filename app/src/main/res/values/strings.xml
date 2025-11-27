@@ -17,12 +17,12 @@
     <!-- ui - screens - ActivityScreen -->
     <string name="activity_screen_title">Activity Planner</string>"
     <string name="activity_screen_location_label">Select Location</string>
-    <string name="activity_screen_location_prompt">Choose a location...</string>
+    <string name="activity_screen_location_prompt">Choose a location…</string>
     <string name="activity_screen_activity_label">Select Activity</string>
-    <string name="activity_screen_activity_prompt">Choose an activity...</string>
+    <string name="activity_screen_activity_prompt">Choose an activity…</string>
     <string name="activity_screen_start_time_label">Select Start Time</string>
     <string name="activity_screen_end_time_label">Select End Time</string>
-    <string name="activity_screen_time_prompt">Choose a time...</string>
+    <string name="activity_screen_time_prompt">Choose a time…</string>
     <string name="activity_screen_search_button">Search</string>
     <string name="activity_screen_no_matches">No matches found</string>
     <string name="activity_screen_time_error_adjusted">End time was automatically adjusted.</string>
@@ -33,6 +33,7 @@
     <string name="activity_screen_clothing_tips">Clothing Tips</string>
     <string name="activity_screen_hide_options">Hide options</string>
     <string name="activity_screen_show_options">Show options</string>
+
 
     <!-- ui - screens - HistoryScreen -->
     <string name="history_screen_title">Activity History</string>
@@ -58,6 +59,11 @@
     <string name="settings_screen_language_dialog_title">Select Language</string>
     <string name="settings_screen_dialog_confirm_button">OK</string>
     <string name="settings_screen_unit_dialog_title">Select Unit System</string>
+    <string name="settings_screen_navigate_icon">Navigate to setting</string>
+    <string name="settings_screen_language_icon">Language setting</string>
+    <string name="settings_screen_dark_mode_icon">Dark mode setting</string>
+    <string name="settings_screen_currency_icon">Currency setting</string>
+    <string name="settings_screen_unit_icon">Temperature unit setting</string>
 
     <!-- ui - screens - ShoppingScreen -->
 
@@ -65,6 +71,8 @@
     <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
     <string name="shopping_screen_all_items_section_title">All Items</string>
     <string name="shopping_screen_view_listing_button">View Item</string>
+    <string name="shopping_screen_product_image_description">Product image for %1$s</string>
+
 
     <!-- ui - screens - WeatherScreen -->
 
@@ -76,7 +84,7 @@
     <string name="weather_screen_weather_detail_sunrise">Sunrise</string>
     <string name="weather_screen_weather_detail_sunset">Sunset</string>
     <string name="weather_screen_weather_detail_five_day_forecast">5-Day Forecast</string>
-    <string name="weather_screen_search_bar_hint">Search for a city or location...</string>
+    <string name="weather_screen_search_bar_hint">Search for a city or location…</string>
     <string name="weather_screen_search_bar_icon_description">Search</string>
     <string name="weather_screen_search_bar_location_icon_description">Use Current Location</string>
     <string name="weather_screen_gps_icon_description">Current Location</string>

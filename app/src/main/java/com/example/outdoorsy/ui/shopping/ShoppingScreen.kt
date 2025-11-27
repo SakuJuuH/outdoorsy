@@ -168,7 +168,7 @@ fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
             ) {
                 AsyncImage(
                     model = item.imageUrl,
-                    contentDescription = item.title,
+                    contentDescription = stringResource(id = R.string.shopping_screen_product_image_description, item.title),
                     modifier = Modifier
                         .size(100.dp)
                         .clip(RoundedCornerShape(8.dp))
