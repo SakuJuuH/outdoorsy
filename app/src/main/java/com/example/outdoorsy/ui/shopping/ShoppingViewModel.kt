@@ -41,7 +41,6 @@ class ShoppingViewModel @Inject constructor(
 
     private var originalRecommendedItems: List<EbayItem> = emptyList()
 
-
     init {
         // 2. Start observing currency changes as soon as the ViewModel is created.
         observeCurrencyChanges()
@@ -62,7 +61,8 @@ class ShoppingViewModel @Inject constructor(
                         "Currency changed to $targetCurrency. Re-converting prices."
                     )
                     val convertedItems = convertItemPrices(originalEbayItems, targetCurrency)
-                    val convertedRecommendedItems = convertItemPrices(originalRecommendedItems, targetCurrency)
+                    val convertedRecommendedItems =
+                        convertItemPrices(originalRecommendedItems, targetCurrency)
                     _uiState.update {
                         it.copy(
                             items = convertedItems,
@@ -77,7 +77,10 @@ class ShoppingViewModel @Inject constructor(
         viewModelScope.launch {
             val clothingItems = activityRepository.getClothingItems()
             if (clothingItems.isEmpty()) {
-                Log.d("ShoppingViewModel", "No recommended clothing items found in activity. Skipping fetch.")
+                Log.d(
+                    "ShoppingViewModel",
+                    "No recommended clothing items found in activity. Skipping fetch."
+                )
                 _uiState.update { it.copy(recommendedItems = emptyList()) }
                 return@launch
             }
@@ -89,11 +92,15 @@ class ShoppingViewModel @Inject constructor(
                     async { ebayRepository.getItems(query) }
                 }.awaitAll().flatten()
 
-                Log.d("ShoppingViewModel", "Successfully fetched ${originalRecommendedItems.size} recommended items.")
+                Log.d(
+                    "ShoppingViewModel",
+                    "Successfully fetched ${originalRecommendedItems.size} recommended items."
+                )
 
                 // Perform the initial currency conversion
                 val targetCurrency = settingsRepository.getCurrency().first()
-                val convertedRecommendedItems = convertItemPrices(originalRecommendedItems, targetCurrency)
+                val convertedRecommendedItems =
+                    convertItemPrices(originalRecommendedItems, targetCurrency)
 
                 _uiState.update {
                     it.copy(recommendedItems = convertedRecommendedItems)

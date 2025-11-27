@@ -2,9 +2,9 @@ package com.example.outdoorsy.ui.activity
 
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.domain.model.Activity
+import java.time.LocalTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import java.time.LocalTime
 
 data class ActivityUiState(
     val locations: List<String> = emptyList(),

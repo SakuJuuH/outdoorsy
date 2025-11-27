@@ -7,8 +7,8 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Waves
 import androidx.compose.material.icons.outlined.Terrain
-import com.example.outdoorsy.ui.history.ActivityHistoryItem
-import com.example.outdoorsy.ui.history.ConditionRating
+import com.example.outdoorsy.ui.history.model.ActivityHistoryItem
+import com.example.outdoorsy.ui.history.model.ConditionRating
 
 object ActivityHistoryData {
     val historyItems: List<ActivityHistoryItem> = listOf(
