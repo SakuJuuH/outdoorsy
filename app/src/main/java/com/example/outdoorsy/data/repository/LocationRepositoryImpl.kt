@@ -5,8 +5,6 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.example.outdoorsy.data.local.dao.LocationDao
-import com.example.outdoorsy.data.local.entity.toDomain
-import com.example.outdoorsy.data.local.entity.toEntity
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.remote.dto.geocoding.toDomain
 import com.example.outdoorsy.domain.model.Location
