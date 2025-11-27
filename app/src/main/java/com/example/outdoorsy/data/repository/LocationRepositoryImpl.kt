@@ -38,15 +38,17 @@ class LocationRepositoryImpl @Inject constructor(
 
         return suspendCoroutine { continuation ->
             locationClient.lastLocation.addOnSuccessListener { location ->
-                continuation.resume(
-                    Location(
-                        name = null,
-                        country = null,
-                        state = null,
-                        latitude = location.latitude,
-                        longitude = location.longitude
+                if (location != null) {
+                    continuation.resume(
+                        Location(
+                            name = null,
+                            country = null,
+                            state = null,
+                            latitude = location.latitude,
+                            longitude = location.longitude
+                        )
                     )
-                )
+                }
             }.addOnFailureListener {
                 continuation.resume(null)
             }.addOnCanceledListener {
