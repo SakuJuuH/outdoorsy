@@ -85,6 +85,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.Language,
             title = stringResource(id = R.string.settings_screen_language_title),
             subtitle = LocaleHelper.getLanguageName(uiState.language),
+            iconContentDescription = stringResource(id = R.string.settings_screen_language_icon),
             onClick = {
                 selectedLanguage = uiState.language
                 showLanguageDialog = true
@@ -95,6 +96,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.DarkMode,
             title = stringResource(id = R.string.settings_screen_dark_mode_title),
             subtitle = stringResource(id = R.string.settings_screen_dark_mode_sub_title),
+            iconContentDescription = stringResource(id = R.string.settings_screen_dark_mode_icon),
             checked = uiState.isDarkMode,
             onCheckedChange = { viewModel.setIsDarkMode(it) }
         )
@@ -108,8 +110,8 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsItem(
             icon = Icons.Default.AttachMoney,
             title = stringResource(id = R.string.settings_screen_currency),
-            // Display the currently selected currency
             subtitle = Currencies.fromCode(uiState.currency).displayName,
+            iconContentDescription = stringResource(id = R.string.settings_screen_currency_icon),
             onClick = {
                 selectedCurrency = uiState.currency
                 showCurrencyDialog = true
@@ -121,6 +123,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),
             subtitle = TemperatureSystem.fromCode(uiState.temperatureUnit).displayName,
+            iconContentDescription = stringResource(id = R.string.settings_screen_unit_icon),
             onClick = {
                 selectedUnit = uiState.temperatureUnit
                 showUnitDialog = true
@@ -265,7 +268,13 @@ private fun SettingsSectionHeader(title: String) {
 }
 
 @Composable
-private fun SettingsItem(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit) {
+private fun SettingsItem(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    iconContentDescription: String,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -275,7 +284,7 @@ private fun SettingsItem(icon: ImageVector, title: String, subtitle: String, onC
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = iconContentDescription,
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -292,7 +301,7 @@ private fun SettingsItem(icon: ImageVector, title: String, subtitle: String, onC
         }
         Icon(
             imageVector = Icons.Default.ChevronRight,
-            contentDescription = null,
+            contentDescription = stringResource(id = R.string.settings_screen_navigate_icon),
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -303,6 +312,7 @@ private fun SettingsItemWithSwitch(
     icon: ImageVector,
     title: String,
     subtitle: String,
+    iconContentDescription: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -314,7 +324,7 @@ private fun SettingsItemWithSwitch(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = iconContentDescription,
             tint = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.width(16.dp))

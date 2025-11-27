@@ -34,6 +34,7 @@
     <string name="activity_screen_hide_options">Hide options</string>
     <string name="activity_screen_show_options">Show options</string>
 
+
     <!-- ui - screens - HistoryScreen -->
     <string name="history_screen_title">Activity History</string>
     <string name="history_screen_view_previous_activity_search">View your previous activity searches and conditions</string>
@@ -58,6 +59,11 @@
     <string name="settings_screen_language_dialog_title">Select Language</string>
     <string name="settings_screen_dialog_confirm_button">OK</string>
     <string name="settings_screen_unit_dialog_title">Select Unit System</string>
+    <string name="settings_screen_navigate_icon">Navigate to setting</string>
+    <string name="settings_screen_language_icon">Language setting</string>
+    <string name="settings_screen_dark_mode_icon">Dark mode setting</string>
+    <string name="settings_screen_currency_icon">Currency setting</string>
+    <string name="settings_screen_unit_icon">Temperature unit setting</string>
 
     <!-- ui - screens - ShoppingScreen -->
 

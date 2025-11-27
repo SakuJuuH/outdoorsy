@@ -53,6 +53,12 @@
     <string name="settings_screen_unit_item_title">Yksikköjärjestelmä</string>
     <string name="settings_screen_dialog_confirm_button">OK</string>
     <string name="settings_screen_unit_dialog_title">Valitse yksikköjärjestelmä</string>
+    <string name="settings_screen_navigate_icon">Siirry asetukseen</string>
+    <string name="settings_screen_language_icon">Kieli asetus</string>
+    <string name="settings_screen_dark_mode_icon">Tumma tila asetus</string>
+    <string name="settings_screen_currency_icon">Valuutta asetus</string>
+    <string name="settings_screen_unit_icon">Lämpötilan yksikkö asetus</string>
+
 
     <string name="shopping_screen_title">Säävarusteiden kauppa</string>
     <string name="shopping_screen_recommended_items_section_title">Suositellaan nykyiseen säähän</string>
