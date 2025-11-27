@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
-import com.example.outdoorsy.data.test.ActivityHistoryData
 import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.history.components.ActivityHistoryCard
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
@@ -55,15 +54,5 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
 private fun HistoryScreenPreview() {
     WeatherAppTheme {
         HistoryScreen()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ActivityHistoryCardPreview() {
-    WeatherAppTheme {
-        ActivityHistoryCard(
-            item = ActivityHistoryData.historyItems.first()
-        )
     }
 }
