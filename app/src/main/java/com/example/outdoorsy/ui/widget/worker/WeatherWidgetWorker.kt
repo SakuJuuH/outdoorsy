@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.widget.worker
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -36,22 +37,34 @@ class WeatherWidgetWorker @AssistedInject constructor(
 
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(WeatherWidget::class.java)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
 
         glanceIds.forEach { glanceId ->
-            updateAppWidgetState(context, glanceId) { prefs ->
-                prefs[WeatherWidget.WEATHER_DATA_KEY] = jsonString
-                Log.d(
-                    "WeatherWidgetWorker",
-                    "Updated Widget State: ${prefs[WeatherWidget.WEATHER_DATA_KEY]}"
-                )
+            try {
+                val widgetIdInt = glanceId.toString().filter { it.isDigit() }.toIntOrNull()
+
+                if (widgetIdInt != null && appWidgetManager.getAppWidgetInfo(widgetIdInt) == null) {
+                    Log.d("WeatherWidgetWorker", "Skipping invalid widget ID: $glanceId")
+                    return@forEach
+                }
+
+                updateAppWidgetState(context.applicationContext, glanceId) { prefs ->
+                    prefs[WeatherWidget.WEATHER_DATA_KEY] = jsonString
+                    Log.d(
+                        "WeatherWidgetWorker",
+                        "Updated Widget State: ${prefs[WeatherWidget.WEATHER_DATA_KEY]}"
+                    )
+                }
+                WeatherWidget().update(context.applicationContext, glanceId)
+            } catch (e: Exception) {
+                Log.e("WeatherWidgetWorker", "Failed to update widget $glanceId", e)
             }
-            WeatherWidget().update(context, glanceId)
         }
 
         Result.success()
     } catch (e: CancellationException) {
         Log.e("WeatherWidgetWorker", "Worker cancelled", e)
-        throw e
+        Result.failure()
     } catch (e: Exception) {
         Log.e("WeatherWidgetWorker", "Error fetching weather data", e)
         Result.failure()
@@ -84,8 +97,8 @@ class WeatherWidgetWorker @AssistedInject constructor(
                 location = targetParams.name ?: response.name,
                 temperature = response.main.temperature.toInt(),
                 condition =
-                response.weather.firstOrNull()?.description?.replaceFirstChar { it.uppercase() }
-                    ?: "",
+                    response.weather.firstOrNull()?.description?.replaceFirstChar { it.uppercase() }
+                        ?: "",
                 high = response.main.maxTemperature.toInt(),
                 low = response.main.minTemperature.toInt(),
                 icon = response.weather.firstOrNull()?.icon ?: "",

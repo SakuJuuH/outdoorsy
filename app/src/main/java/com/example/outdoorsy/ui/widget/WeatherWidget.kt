@@ -55,8 +55,11 @@ class WeatherWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         Log.d("WeatherWidget", "provideGlance CALLED for ID: $id")
 
-        val prefs = getAppWidgetState(context, PreferencesGlanceStateDefinition, id)
+        val prefs =
+            getAppWidgetState(context.applicationContext, PreferencesGlanceStateDefinition, id)
         val jsonString = prefs[WEATHER_DATA_KEY]
+
+        Log.d("WeatherWidget", "Loaded JSON String: $jsonString")
 
         val currentData: WeatherWidgetData? = if (jsonString != null) {
             try {
@@ -72,7 +75,7 @@ class WeatherWidget : GlanceAppWidget() {
         Log.d("WeatherWidget", "Loaded Weather Data: $currentData")
 
         val currentBitmap = if (currentData != null) {
-            loadWeatherIcon(context, currentData.icon)
+            loadWeatherIcon(context.applicationContext, currentData.icon)
         } else {
             null
         }
