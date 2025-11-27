@@ -1,6 +1,6 @@
 package com.example.outdoorsy.domain.model
 
-import com.example.outdoorsy.data.local.entity.Location
+import com.example.outdoorsy.data.local.entity.LocationEntity
 
 data class Location(
     val name: String? = null,
@@ -9,7 +9,7 @@ data class Location(
     val latitude: Double,
     val longitude: Double
 ) {
-    fun toEntity(): Location = Location(
+    fun toEntity(): LocationEntity = LocationEntity(
         name = name?.replaceFirstChar { it.uppercase() } ?: "Unknown",
         country = country ?: "",
         state = state,
