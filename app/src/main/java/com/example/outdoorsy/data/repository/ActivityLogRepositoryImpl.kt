@@ -4,18 +4,18 @@ import com.example.outdoorsy.data.local.dao.ActivityDao
 import com.example.outdoorsy.data.local.dao.ActivityLogDao
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
+import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
 class ActivityLogRepositoryImpl @Inject constructor(
     private val activityLogDao: ActivityLogDao,
     private val activityDao: ActivityDao
-): ActivityLogRepository {
+) : ActivityLogRepository {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllActivityLogs(): Flow<List<ActivityLog>> =
         activityLogDao.getAll().flatMapLatest { entityList ->
@@ -24,7 +24,8 @@ class ActivityLogRepositoryImpl @Inject constructor(
                 activityDao.getAll()
             ) { activityLogs, activities ->
                 activityLogs.map { activityLog ->
-                    val activityName = activities.firstOrNull { it.id == activityLog.activityId }?.name ?: ""
+                    val activityName =
+                        activities.firstOrNull { it.id == activityLog.activityId }?.name ?: ""
                     activityLog.toDomain(activityName)
                 }
             }

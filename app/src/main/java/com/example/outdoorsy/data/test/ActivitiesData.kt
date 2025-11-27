@@ -1,5 +1,6 @@
 package com.example.outdoorsy.data.test
 
+// TODO: Remove this after activities are passed somewhere
 object ActivitiesData {
     val activities: List<String> = listOf(
         "Hiking",

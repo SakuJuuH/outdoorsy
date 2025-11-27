@@ -8,11 +8,11 @@ import com.example.outdoorsy.data.local.dao.ActivityLogDao
 import com.example.outdoorsy.data.local.dao.LocationDao
 import com.example.outdoorsy.data.local.entity.ActivityEntity
 import com.example.outdoorsy.data.local.entity.ActivityLogEntity
-import com.example.outdoorsy.data.local.entity.Location
+import com.example.outdoorsy.data.local.entity.LocationEntity
 import com.example.outdoorsy.utils.DateTimeConverters
 
 @Database(
-    entities = [ActivityEntity::class, Location::class, ActivityLogEntity::class],
+    entities = [ActivityEntity::class, LocationEntity::class, ActivityLogEntity::class],
     version = 7,
     exportSchema = true
 )

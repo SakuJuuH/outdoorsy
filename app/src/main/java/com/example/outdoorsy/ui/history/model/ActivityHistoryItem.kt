@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.history
+package com.example.outdoorsy.ui.history.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
