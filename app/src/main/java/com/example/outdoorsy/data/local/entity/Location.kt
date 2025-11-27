@@ -17,20 +17,12 @@ data class Location(
     val state: String? = null,
     val latitude: Double,
     val longitude: Double
-)
-
-fun Location.toDomain(): LocationModel = LocationModel(
-    name = name.replaceFirstChar { it.uppercase() },
-    country = country,
-    state = state,
-    latitude = latitude,
-    longitude = longitude
-)
-
-fun LocationModel.toEntity(): Location = Location(
-    name = name?.replaceFirstChar { it.uppercase() } ?: "Unknown",
-    country = country ?: "",
-    state = state,
-    latitude = latitude,
-    longitude = longitude
-)
+) {
+    fun toDomain(): LocationModel = LocationModel(
+        name = name.replaceFirstChar { it.uppercase() },
+        country = country,
+        state = state,
+        latitude = latitude,
+        longitude = longitude
+    )
+}
