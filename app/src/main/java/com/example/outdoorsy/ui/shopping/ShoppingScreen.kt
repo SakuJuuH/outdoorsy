@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -22,6 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,16 +44,19 @@ import com.example.outdoorsy.utils.Currencies
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
-    viewModel.uiState.collectAsState()
+    // This tells the ViewModel to fetch data when the screen is first displayed.
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchAllShoppingData()
+    }
 
-    val uiState = viewModel.uiState.collectAsState()
-    val isLoading = uiState.value.isLoading
-    val error = uiState.value.error
-    val items = uiState.value.items
-    val recommendedItems = uiState.value.recommendedItems
+    val uiState = viewModel.uiState.collectAsState().value // Use .value here
+    val isLoading = uiState.isLoading
+    val error = uiState.error
+    val items = uiState.items
+    val recommendedItems = uiState.recommendedItems
 
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = MaterialTheme.spacing(2)),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // Title section
@@ -63,7 +65,6 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = MaterialTheme.spacing(4),
                         vertical = MaterialTheme.spacing(3)
                     )
             ) {
@@ -79,7 +80,6 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         }
 
         // --- Recommended Items Section ---
-        // Only show this section if there are recommended items
         if (recommendedItems.isNotEmpty()) {
             item {
                 Text(
@@ -88,36 +88,29 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(start = MaterialTheme.spacing(2)) // Indent title
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // Use a horizontal scrolling row for recommendations
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(horizontal = MaterialTheme.spacing(2))
-                ) {
-                    items(recommendedItems) { item ->
-                        // Using the same ProductCard, you can create a new one for a different style
-                        ProductCard(item = item, modifier = Modifier.size(width = 300.dp, height = 200.dp))
-                    }
-                }
+            }
+            items(recommendedItems) { item ->
+                ProductCard(item = item)
             }
         }
 
         // --- All Items Section ---
         item {
-            // Add a spacer for visual separation before the next section
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = stringResource(id = R.string.shopping_screen_all_items_section_title),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
         // Handle loading state
-        if (isLoading) {
+        // Improved logic: show loading indicator only when both lists are empty
+        if (isLoading && items.isEmpty() && recommendedItems.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -131,7 +124,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // 3. Handle Error State
+        // Handle Error State
         if (error != null) {
             item {
                 Text(
@@ -142,11 +135,9 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // 4. Display the items from the API
+        // Display the items from the API
         items(items) { item ->
-            ProductCard(
-                item = item
-            )
+            ProductCard(item = item)
         }
     }
 }
