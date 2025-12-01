@@ -1,6 +1,8 @@
 package com.example.outdoorsy.ui.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,6 +12,7 @@ import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,7 +43,10 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     var showCurrencyDialog by remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Title Area
         ScreenTitle(title = stringResource(R.string.settings_screen_title))

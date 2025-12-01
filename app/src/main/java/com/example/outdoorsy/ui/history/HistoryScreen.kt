@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.history
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,7 +26,9 @@ fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = h
     val historyItems by viewModel.historyItems.collectAsState()
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         // Title
         ScreenTitle(
