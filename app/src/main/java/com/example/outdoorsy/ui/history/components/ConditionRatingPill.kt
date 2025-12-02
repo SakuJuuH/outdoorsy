@@ -3,14 +3,8 @@ package com.example.outdoorsy.ui.history.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,19 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.outdoorsy.ui.history.model.ConditionRating
 import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
-internal fun ConditionRatingPill(condition: ConditionRating, modifier: Modifier = Modifier) {
-    val backgroundColor = when (condition) {
-        ConditionRating.EXCELLENT -> Color(0xFF4CAF50)
-
-        // Green
-        ConditionRating.VERY_GOOD -> Color(0xFF8BC34A)
-
-        // Light Green
-        ConditionRating.GOOD -> Color(0xFF2196F3) // Blue
+internal fun ConditionRatingPill(
+    suitabilityLabel: String,
+    suitabilityScore: Int,
+    modifier: Modifier = Modifier
+) {
+    // Colors match the Activity page's RecommendationCard suitability colors
+    val (backgroundColor, textColor) = when (suitabilityScore) {
+        1 -> Color(0xFFD32F2F) to Color.White
+        2 -> Color(0xFFF44336) to Color.White
+        3 -> Color(0xFFFFB300) to Color.Black
+        4 -> Color(0xFF4CAF50) to Color.White
+        5 -> Color(0xFF2E7D32) to Color.White
+        else -> Color(0xFF9E9E9E) to Color.White
     }
 
     Row(
@@ -45,17 +42,10 @@ internal fun ConditionRatingPill(condition: ConditionRating, modifier: Modifier 
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = condition.displayName,
+            text = suitabilityLabel,
             style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.Medium,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Icon(
-            imageVector = Icons.Filled.ExpandMore,
-            contentDescription = "Expand",
-            modifier = Modifier.size(16.dp),
-            tint = Color.White
+            color = textColor
         )
     }
 }

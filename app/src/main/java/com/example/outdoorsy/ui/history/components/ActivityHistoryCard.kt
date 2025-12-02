@@ -63,7 +63,8 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
 
             // Pin the Condition Rating Pill to the end
             ConditionRatingPill(
-                condition = item.condition,
+                suitabilityLabel = item.suitabilityLabel,
+                suitabilityScore = item.suitabilityScore,
                 modifier = Modifier.constrainAs(ratingPill) {
                     end.linkTo(parent.end)
                     centerVerticallyTo(parent)

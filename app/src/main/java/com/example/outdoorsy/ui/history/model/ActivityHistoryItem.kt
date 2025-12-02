@@ -1,6 +1,7 @@
 package com.example.outdoorsy.ui.history.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import java.time.LocalDateTime
 
 data class ActivityHistoryItem(
     val activityName: String,
@@ -10,11 +11,7 @@ data class ActivityHistoryItem(
     val state: String,
     val timeRange: String,
     val date: String,
-    val condition: ConditionRating
+    val suitabilityLabel: String,
+    val suitabilityScore: Int,
+    val startDateTime: LocalDateTime
 )
-
-enum class ConditionRating(val displayName: String) {
-    EXCELLENT("Excellent"),
-    VERY_GOOD("Very Good"),
-    GOOD("Good")
-}
