@@ -17,7 +17,6 @@ import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.ui.history.model.ActivityHistoryItem
-import com.example.outdoorsy.ui.history.model.ConditionRating
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -43,6 +42,7 @@ class HistoryViewModel @Inject constructor(
     ) { logs, activities ->
         val activityMap = activities.associateBy { it.name }
         logs.map { log -> log.toActivityHistoryItem(activityMap) }
+            .sortedByDescending { it.startDateTime } // Sort from youngest to oldest
     }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -62,12 +62,6 @@ class HistoryViewModel @Inject constructor(
         val dateFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
         val date = startDateTime.format(dateFormatter)
 
-        val condition = when (suitabilityLabel.lowercase()) {
-            "excellent" -> ConditionRating.EXCELLENT
-            "very good" -> ConditionRating.VERY_GOOD
-            else -> ConditionRating.GOOD
-        }
-
         return ActivityHistoryItem(
             activityName = activityName,
             activityIcon = getActivityIcon(activityName),
@@ -76,7 +70,9 @@ class HistoryViewModel @Inject constructor(
             state = state,
             timeRange = timeRange,
             date = date,
-            condition = condition
+            suitabilityLabel = suitabilityLabel,
+            suitabilityScore = suitabilityScore,
+            startDateTime = startDateTime
         )
     }
 
