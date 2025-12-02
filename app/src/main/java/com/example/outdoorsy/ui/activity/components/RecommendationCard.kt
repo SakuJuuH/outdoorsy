@@ -1,6 +1,7 @@
 package com.example.outdoorsy.ui.activity.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,7 +49,8 @@ internal fun RecommendationCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    //change from primary to onSurface for better visibility on light/dark themes
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -73,6 +75,12 @@ internal fun RecommendationCard(
                         text = suitabilityLabel,
                         color = textColor,
                         modifier = modifier
+                            // add a border ensures the pill is visible even if the color matches the background
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(percent = 50)
+                            )
                             .background(bgColor, shape = RoundedCornerShape(percent = 50))
                             .padding(horizontal = 12.dp),
                         fontSize = 14.sp,

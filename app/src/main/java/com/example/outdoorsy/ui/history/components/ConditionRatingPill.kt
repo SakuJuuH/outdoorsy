@@ -1,6 +1,7 @@
 package com.example.outdoorsy.ui.history.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,12 @@ internal fun ConditionRatingPill(
 
     Row(
         modifier = modifier
+            // add a border ensures the pill is visible even if the color matches the background
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                shape = RoundedCornerShape(16.dp)
+            )
             .background(
                 color = backgroundColor,
                 shape = RoundedCornerShape(16.dp)

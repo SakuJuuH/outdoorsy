@@ -58,7 +58,8 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                         centerVerticallyTo(parent)
                     }
                     .size(32.dp),
-                tint = MaterialTheme.colorScheme.primary
+                // change from primary to onSurface to improve visibility
+                tint = MaterialTheme.colorScheme.onSurface
             )
 
             // Pin the Condition Rating Pill to the end

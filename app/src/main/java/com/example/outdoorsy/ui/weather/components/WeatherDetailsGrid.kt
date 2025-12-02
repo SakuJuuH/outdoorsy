@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.WbTwilight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -79,7 +80,8 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
-                icon = Icons.Default.WbSunny,
+                // update sunset  icon to appropriate one
+                icon = Icons.Default.WbTwilight,
                 label = stringResource(id = R.string.weather_screen_weather_detail_sunset),
                 value = weatherData.sunset,
                 modifier = Modifier.weight(1f)

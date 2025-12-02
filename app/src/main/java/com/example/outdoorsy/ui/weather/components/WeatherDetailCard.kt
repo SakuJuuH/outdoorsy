@@ -42,7 +42,7 @@ internal fun WeatherDetailCard(
                 imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(28.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onSurface // Was: MaterialTheme.colorScheme.primary
             )
             Column {
                 Text(

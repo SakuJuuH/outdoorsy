@@ -100,7 +100,8 @@ internal fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                         },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
+                    // change to onSurface for better contrast
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 CustomButton(
                     onClick = {
