@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
+import com.example.outdoorsy.ui.activity.components.DatePickerField
 import com.example.outdoorsy.ui.activity.components.EditableFilteringInput
 import com.example.outdoorsy.ui.activity.components.RecommendationCard
 import com.example.outdoorsy.ui.activity.components.TimePickerField
@@ -70,6 +71,31 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 onValueSelected = viewModel::updateActivity
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                DatePickerField(
+                    label = "Select Start Date",
+                    selectedDate = uiState.selectedStartDate,
+                    onDateSelected = { newStartDate ->
+//                        viewModel.updateStartDate(newStartDate, uiState.selectedEndDate)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                DatePickerField(
+                    label = "Select End Date",
+                    selectedDate = uiState.selectedEndDate,
+                    onDateSelected = { newEndDate ->
+//                        viewModel.updateEndDate(newEndDate, uiState.selectedStartDate)
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         item {
