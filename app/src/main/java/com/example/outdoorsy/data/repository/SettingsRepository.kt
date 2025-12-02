@@ -2,11 +2,11 @@ package com.example.outdoorsy.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.TemperatureSystem
 import javax.inject.Inject
@@ -19,7 +19,7 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
 
     private object PreferenceKeys {
         val LANGUAGE = stringPreferencesKey("language")
-        val DARK_MODE = booleanPreferencesKey("dark_mode")
+        val APP_THEME = stringPreferencesKey("app_theme")
         val TEMPERATURE_UNIT = stringPreferencesKey("temperature_unit")
         val RECENT_SEARCHES = stringSetPreferencesKey("recent_searches")
         val CURRENCY_CODE = stringPreferencesKey("currency_code")
@@ -32,16 +32,6 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
     suspend fun saveLanguage(language: String) {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.LANGUAGE] = language
-        }
-    }
-
-    fun getDarkMode(): Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.DARK_MODE] ?: false
-    }
-
-    suspend fun saveDarkMode(darkMode: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[PreferenceKeys.DARK_MODE] = darkMode
         }
     }
 
@@ -81,5 +71,15 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
 
     fun getCurrency(): Flow<String> = dataStore.data.map { preferences ->
         preferences[PreferenceKeys.CURRENCY_CODE] ?: Currencies.GBP.code
+    }
+
+    suspend fun saveAppTheme(theme: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.APP_THEME] = theme
+        }
+    }
+
+    fun getAppTheme(): Flow<String> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.APP_THEME] ?: AppTheme.SYSTEM.code
     }
 }

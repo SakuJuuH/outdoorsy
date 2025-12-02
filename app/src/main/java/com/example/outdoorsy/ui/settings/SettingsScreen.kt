@@ -8,7 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material3.HorizontalDivider
@@ -27,9 +27,9 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.components.SectionTitle
 import com.example.outdoorsy.ui.settings.components.SettingsItem
-import com.example.outdoorsy.ui.settings.components.SettingsItemWithSwitch
 import com.example.outdoorsy.ui.settings.components.SingleChoiceDialog
 import com.example.outdoorsy.utils.AppLanguage
+import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
@@ -39,6 +39,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     var showLanguageDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
     var showCurrencyDialog by remember { mutableStateOf(false) }
 
@@ -65,12 +66,12 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             onClick = { showLanguageDialog = true }
         )
 
-        SettingsItemWithSwitch(
-            icon = Icons.Default.DarkMode,
-            title = stringResource(id = R.string.settings_screen_dark_mode_title),
-            subtitle = stringResource(id = R.string.settings_screen_dark_mode_sub_title),
-            checked = uiState.isDarkMode,
-            onCheckedChange = { viewModel.setIsDarkMode(it) }
+        SettingsItem(
+            icon = Icons.Default.Brightness4,
+            title = stringResource(id = R.string.settings_screen_app_theme_title),
+            subtitle = stringResource(id = AppTheme.fromCode(uiState.appTheme).displayName),
+            iconContentDescription = stringResource(id = R.string.settings_screen_app_theme_icon),
+            onClick = { showThemeDialog = true }
         )
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
@@ -81,10 +82,11 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
+        // Currency
         SettingsItem(
             icon = Icons.Default.AttachMoney,
             title = stringResource(id = R.string.settings_screen_currency),
-            subtitle = Currencies.fromCode(uiState.currency).displayName,
+            subtitle = stringResource(id = Currencies.fromCode(uiState.currency).displayName),
             iconContentDescription = stringResource(id = R.string.settings_screen_currency_icon),
             onClick = { showCurrencyDialog = true }
         )
@@ -93,7 +95,9 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         SettingsItem(
             icon = Icons.Default.Thermostat,
             title = stringResource(id = R.string.settings_screen_unit_item_title),
-            subtitle = TemperatureSystem.fromCode(uiState.temperatureUnit).displayName,
+            subtitle = stringResource(
+                id = TemperatureSystem.fromCode(uiState.temperatureUnit).displayName
+            ),
             iconContentDescription = stringResource(id = R.string.settings_screen_unit_icon),
             onClick = { showUnitDialog = true }
         )
@@ -113,6 +117,20 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         )
     }
 
+    if (showThemeDialog) {
+        SingleChoiceDialog(
+            title = stringResource(R.string.settings_screen_app_theme_dialog_title),
+            options = AppTheme.entries,
+            initialSelection = AppTheme.entries.find { it.code == uiState.appTheme },
+            onConfirm = { theme ->
+                viewModel.setAppTheme(theme.code)
+                showThemeDialog = false
+            },
+            onDismissRequest = { showThemeDialog = false },
+            labelSelector = { stringResource(id = it.displayName) }
+        )
+    }
+
     if (showUnitDialog) {
         SingleChoiceDialog(
             title = stringResource(id = R.string.settings_screen_unit_dialog_title),
@@ -125,7 +143,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                 showUnitDialog = false
             },
             onDismissRequest = { showUnitDialog = false },
-            labelSelector = { it.displayName }
+            labelSelector = { stringResource(id = it.displayName) }
         )
     }
 
@@ -139,7 +157,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                 showCurrencyDialog = false
             },
             onDismissRequest = { showCurrencyDialog = false },
-            labelSelector = { it.displayName }
+            labelSelector = { stringResource(it.displayName) }
         )
     }
 }

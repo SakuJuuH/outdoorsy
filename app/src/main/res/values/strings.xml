@@ -49,8 +49,7 @@
     <string name="settings_screen_title">Settings</string>
     <string name="settings_screen_section_header_general">General</string>
     <string name="settings_screen_language_title">Language</string>
-    <string name="settings_screen_dark_mode_title">Dark Mode</string>
-    <string name="settings_screen_dark_mode_sub_title">Adjust app theme</string>
+    <string name="settings_screen_app_theme_title">App theme</string>
     <string name="settings_screen_currency">Currency</string>
     <string name="settings_screen_select_currency">Select currency</string>
     <string name="settings_screen_dialog_dismiss_button">Dismiss</string>
@@ -61,9 +60,12 @@
     <string name="settings_screen_unit_dialog_title">Select Unit System</string>
     <string name="settings_screen_navigate_icon">Navigate to setting</string>
     <string name="settings_screen_language_icon">Language setting</string>
-    <string name="settings_screen_dark_mode_icon">Dark mode setting</string>
+    <string name="settings_screen_app_theme_icon">App theme setting</string>
     <string name="settings_screen_currency_icon">Currency setting</string>
     <string name="settings_screen_unit_icon">Temperature unit setting</string>
+    <string name="settings_screen_app_theme_light">Light theme</string>
+    <string name="settings_screen_app_theme_dark">Dark theme</string>
+    <string name="settings_screen_app_theme_system">Use device theme</string>
 
     <!-- ui - screens - ShoppingScreen -->
 
@@ -92,6 +94,12 @@
     <string name="widget_description">Shows current weather for saved location</string>
     <string name="widget_no_data">No data</string>
     <string name="widget_tap_to_open">Tap to open app</string>
+    <string name="settings_screen_app_theme_dialog_title">Select App Theme</string>
+    <string name="settings_screen_unit_metric">Metric (°C)</string>
+    <string name="settings_screen_unit_imperial">Imperial (°F)</string>
+    <string name="settings_screen_currency_usd">US Dollar ($)</string>
+    <string name="settings_screen_currency_eur">Euro (€)</string>
+    <string name="settings_screen_currency_gbp">British Pound (£)</string>
 
 
 </resources>

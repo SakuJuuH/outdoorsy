@@ -32,9 +32,8 @@ internal fun <T> SingleChoiceDialog(
     initialSelection: T?,
     onConfirm: (T) -> Unit,
     onDismissRequest: () -> Unit,
-    labelSelector: (T) -> String
+    labelSelector: @Composable (T) -> String
 ) {
-    // We maintain the temporary selection state inside the dialog
     var selectedOption by remember(initialSelection) { mutableStateOf(initialSelection) }
 
     AlertDialog(
