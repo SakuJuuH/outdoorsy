@@ -79,7 +79,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             ) {
                 TimePickerField(
                     label = stringResource(id = R.string.activity_screen_start_time_label),
-                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
                     selectedTime = uiState.selectedStartTime,
                     onTimeSelected = { newStartTime ->
                         viewModel.updateStartTime(newStartTime, uiState.selectedEndTime)
@@ -89,7 +88,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
                 TimePickerField(
                     label = stringResource(id = R.string.activity_screen_end_time_label),
-                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
                     selectedTime = uiState.selectedEndTime,
                     onTimeSelected = { newEndTime ->
                         viewModel.updateEndTime(newEndTime, uiState.selectedStartTime)

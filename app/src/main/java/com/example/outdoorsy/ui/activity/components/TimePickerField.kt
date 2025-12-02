@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter
 @Composable
 internal fun TimePickerField(
     label: String,
-    prompt: String,
     selectedTime: LocalTime,
     onTimeSelected: (LocalTime) -> Unit,
     modifier: Modifier = Modifier
