@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.outdoorsy.ui.main.MainViewModel
 import com.example.outdoorsy.ui.navigation.AppNavHost
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import com.example.outdoorsy.utils.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,9 +27,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val isDarkMode by viewmodel.isDarkMode.collectAsState()
+            val appTheme by viewmodel.appTheme.collectAsState()
 
-            WeatherAppTheme(darkTheme = isDarkMode, dynamicColor = false) {
+            val isDarkTheme = when (appTheme) {
+                AppTheme.LIGHT.code -> false
+                AppTheme.DARK.code -> true
+                else -> isSystemInDarkTheme()
+            }
+
+            WeatherAppTheme(darkTheme = isDarkTheme, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

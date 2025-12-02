@@ -43,9 +43,8 @@
     <string name="settings_screen_section_header_general">Yleiset</string>
     <string name="settings_screen_language_title">Kieli</string>
     <string name="settings_screen_language_dialog_title">Valitse kieli</string>
-    <string name="settings_screen_dark_mode_title">Tumma tila</string>
+    <string name="settings_screen_app_theme_title">Sovelluksen teema</string>
     <string name="activity_screen_no_matches">Osumia ei löytynyt</string>
-    <string name="settings_screen_dark_mode_sub_title">Säädä sovelluksen teemaa</string>
     <string name="settings_screen_currency">Valuutta</string>
     <string name="settings_screen_select_currency">Valitse valuutta</string>
     <string name="settings_screen_dialog_dismiss_button">Hylkää</string>
@@ -55,21 +54,28 @@
     <string name="settings_screen_unit_dialog_title">Valitse yksikköjärjestelmä</string>
     <string name="settings_screen_navigate_icon">Siirry asetukseen</string>
     <string name="settings_screen_language_icon">Kieli asetus</string>
-    <string name="settings_screen_dark_mode_icon">Tumma tila asetus</string>
+    <string name="settings_screen_app_theme_icon">Sovelluksen teema asetus</string>
     <string name="settings_screen_currency_icon">Valuutta asetus</string>
     <string name="settings_screen_unit_icon">Lämpötilan yksikkö asetus</string>
-
+    <string name="settings_screen_app_theme_dialog_title">Valitse sovelluksen teema</string>
+    <string name="settings_screen_app_theme_light">Vaalea teema</string>
+    <string name="settings_screen_app_theme_dark">Tumma teema</string>
+    <string name="settings_screen_app_theme_system">Käytä laitteen teemaa</string>
+    <string name="settings_screen_unit_metric">Metrijärjestelmä (°C)</string>
+    <string name="settings_screen_unit_imperial">Brittiläinen järjestelmä (°F)</string>
+    <string name="settings_screen_currency_usd">US Dollari ($)</string>
+    <string name="settings_screen_currency_eur">Euro (€)</string>
+    <string name="settings_screen_currency_gbp">Britti Punta (£)</string>
 
     <string name="shopping_screen_title">Säävarusteiden kauppa</string>
     <string name="shopping_screen_recommended_items_section_title">Suositellaan nykyiseen säähän</string>
     <string name="shopping_screen_all_items_section_title">Kaikki tuotteet</string>
     <string name="shopping_screen_product_image_description">Tuotekuva: %1$s</string>
-
+    <string name="shopping_screen_view_listing_button">Katso tuote</string>
 
     <string name="weather_screen_weather_detail_humidity">Kosteus</string>
     <string name="weather_screen_weather_detail_wind_speed">Tuulen nopeus</string>
     <string name="weather_screen_weather_detail_visibility">Näkyvyys</string>
-    <string name="shopping_screen_view_listing_button">Katso tuote</string>
     <string name="weather_screen_weather_detail_title">Säätiedot</string>
     <string name="weather_screen_weather_detail_pressure">Paine</string>
     <string name="weather_screen_weather_detail_sunrise">Auringonnousu</string>
@@ -83,6 +89,4 @@
     <string name="widget_no_data">Ei tietoja</string>
     <string name="widget_tap_to_open">Avaa napauttamalla</string>
     <string name="widget_description">Näyttää nykyisen säätilan tallennetulle sijainnille</string>
-
-
 </resources>
