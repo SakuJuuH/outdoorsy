@@ -8,9 +8,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -68,13 +67,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
         )
 
         SettingsItem(
-            icon = if (uiState.appTheme ==
-                AppTheme.DARK.code
-            ) {
-                Icons.Default.DarkMode
-            } else {
-                Icons.Default.LightMode
-            },
+            icon = Icons.Default.Brightness4,
             title = stringResource(id = R.string.settings_screen_app_theme_title),
             subtitle = stringResource(id = AppTheme.fromCode(uiState.appTheme).displayName),
             iconContentDescription = stringResource(id = R.string.settings_screen_app_theme_icon),
