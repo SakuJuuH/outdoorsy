@@ -180,7 +180,8 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                                         contentDescription = stringResource(
                                             R.string.weather_screen_search_bar_location_icon_description
                                         ),
-                                        tint = MaterialTheme.colorScheme.primary
+                                        // change from primary to onSurface for better visibility
+                                        tint = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             }
