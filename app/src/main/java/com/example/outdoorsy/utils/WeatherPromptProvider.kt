@@ -4,7 +4,8 @@ object WeatherPromptProvider {
     fun buildPrompt(
         activity: String,
         location: String,
-        date: String,
+        startDate: String,
+        endDate: String,
         startTime: String,
         endTime: String,
         forecast: String,
@@ -17,9 +18,8 @@ object WeatherPromptProvider {
 
         - Activity: $activity
         - Location: $location
-        - Date: $date
-        - Start time: $startTime
-        - End time: $endTime
+        - Start date and time: $startDate at $startTime
+        - End date and time: $endDate at $endTime
         
         Here is the weather forecast for the city: $forecast
         Here is the unit system that you must use in the answer: $unit. If metric, use Celsius
@@ -36,7 +36,8 @@ object WeatherPromptProvider {
           "unit": "$unit",
           "language": "$language",
           "location": "$location",
-          "date": "$date",
+          "start_date": "$startDate",
+          "end_date": "$endDate",
           "start_time": "$startTime",
           "end_time": "$endTime",
           "activity": "$activity",
