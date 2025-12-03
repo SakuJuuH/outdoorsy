@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 // Has to be parsed separately from the AiAssistantResponseDto.answer
 data class AiAssistantAnswerDto(
     val location: String,
-    val date: String,
+    @SerializedName(value = "start_date") val startDate: String,
+    @SerializedName(value = "end_date") val endDate: String,
     @SerializedName("start_time") val startTime: String,
     @SerializedName("end_time") val endTime: String,
     val activity: String,
