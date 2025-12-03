@@ -1,17 +1,24 @@
 package com.example.outdoorsy.ui.activity.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +38,8 @@ internal fun EditableFilteringInput(
     label: String,
     prompt: String,
     selectedText: String,
-    onValueSelected: (String) -> Unit
+    onValueSelected: (String) -> Unit,
+    onDeleteOption: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(selectedText) }
@@ -49,7 +57,8 @@ internal fun EditableFilteringInput(
 
         ExposedDropdownMenuBox(
             expanded = expanded,
-            onExpandedChange = { expanded = it }
+            onExpandedChange = { expanded = it },
+            modifier = Modifier.fillMaxWidth()
         ) {
             TextField(
                 value = text,
@@ -58,6 +67,7 @@ internal fun EditableFilteringInput(
                     onValueSelected(newValue)
                 },
                 placeholder = { Text(prompt) },
+                singleLine = true,
                 modifier = Modifier
                     .menuAnchor(
                         type = ExposedDropdownMenuAnchorType.PrimaryEditable,
@@ -70,7 +80,12 @@ internal fun EditableFilteringInput(
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
                 },
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface
+                )
             )
 
             ExposedDropdownMenu(
@@ -91,7 +106,21 @@ internal fun EditableFilteringInput(
                 } else {
                     limitedOptions.forEach { option ->
                         DropdownMenuItem(
-                            text = { Text(option) },
+                            text = {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(option)
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Delete Option",
+                                        modifier = Modifier.clickable {
+                                            onDeleteOption(option)
+                                        }
+                                    )
+                                }
+                            },
                             onClick = {
                                 text = option
                                 onValueSelected(option)
