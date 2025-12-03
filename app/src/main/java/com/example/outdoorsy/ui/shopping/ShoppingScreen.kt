@@ -3,7 +3,9 @@ package com.example.outdoorsy.ui.shopping
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,11 +13,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -23,16 +26,25 @@ import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.components.SectionTitle
 import com.example.outdoorsy.ui.shopping.components.ProductCard
-import com.example.outdoorsy.ui.shopping.components.RecommendedItemsSection
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.refreshRecommendations()
+    }
+
+    val uiState = viewModel.uiState.collectAsState().value
+    val isLoading = uiState.isLoading
+    val error = uiState.error
+    val items = uiState.items
+    val recommendedItems = uiState.recommendedItems
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
+            .padding(horizontal = MaterialTheme.spacing(2))
             .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -41,14 +53,25 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             ScreenTitle(title = stringResource(id = R.string.shopping_screen_title))
         }
 
-        // 2. Recommended Items
-        if (uiState.recommendedItems.isNotEmpty()) {
+        // --- Recommended Items Section ---
+        if (recommendedItems.isNotEmpty()) {
             item {
-                RecommendedItemsSection(items = uiState.recommendedItems)
+                Text(
+                    text = stringResource(
+                        id = R.string.shopping_screen_recommended_items_section_title
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            items(recommendedItems) { item ->
+                ProductCard(item = item)
             }
         }
 
-        // 3. All Items Title
+        // --- All Items Section ---
         item {
             SectionTitle(
                 title = stringResource(id = R.string.shopping_screen_all_items_section_title),
@@ -57,7 +80,8 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         }
 
         // 4. Loading State
-        if (uiState.isLoading) {
+        // Improved logic: show loading indicator only when both lists are empty
+        if (isLoading && items.isEmpty() && recommendedItems.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -71,20 +95,22 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // 5. Error State
-        if (uiState.error != null) {
+        // Handle Error State
+        if (error != null) {
             item {
                 Text(
-                    text = uiState.error!!,
+                    text = error,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(16.dp)
                 )
             }
         }
 
-        // 6. Product List
-        items(uiState.items) { item ->
-            ProductCard(item = item)
+        // 4. Display the items from the API
+        items(items) { item ->
+            ProductCard(
+                item = item
+            )
         }
     }
 }

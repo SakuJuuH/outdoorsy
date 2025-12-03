@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.outdoorsy.data.local.AppDatabase
 import com.example.outdoorsy.data.local.dao.ActivityDao
 import com.example.outdoorsy.data.local.dao.ActivityLogDao
+import com.example.outdoorsy.data.local.dao.CurrencyRateDao
 import com.example.outdoorsy.data.local.dao.LocationDao
 import dagger.Module
 import dagger.Provides
@@ -35,4 +36,7 @@ object DatabaseModule {
 
     @Provides
     fun provideActivityLogDao(database: AppDatabase): ActivityLogDao = database.activityLogDao()
+
+    @Provides
+    fun provideCurrencyRateDao(database: AppDatabase): CurrencyRateDao = database.currencyRateDao()
 }

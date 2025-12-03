@@ -4,6 +4,7 @@ import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.google.gson.annotations.SerializedName
 
 data class ItemSummaryDto(
+    val itemId: String,
     val title: String,
     val categories: List<CategoryDto>,
     val image: ImageDto,
@@ -14,6 +15,7 @@ data class ItemSummaryDto(
 )
 
 fun ItemSummaryDto.toDomain(): EbayItem = EbayItem(
+    this.itemId,
     title = this.title,
     price = this.price.toDomain(),
     imageUrl = this.image.url,

@@ -39,8 +39,8 @@ class WeatherViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
 
     private val settingsFlow = combine(
-        settingsRepository.getTemperatureUnit(),
-        settingsRepository.getLanguage()
+        settingsRepository.temperatureUnit,
+        settingsRepository.language
     ) { units, language ->
         CurrentSettings(
             units,
@@ -61,7 +61,7 @@ class WeatherViewModel @Inject constructor(
 
     val searchQuery: StateFlow<String> = _searchQuery
     val showRecentSearches: StateFlow<Boolean> = _showRecentSearches
-    val recentSearches: StateFlow<List<String>> = settingsRepository.getRecentSearches()
+    val recentSearches: StateFlow<List<String>> = settingsRepository.recentSearches
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val isLoading: StateFlow<Boolean> = _isLoading
     val weatherList: StateFlow<List<WeatherData?>> = combine(
