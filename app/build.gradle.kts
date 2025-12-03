@@ -171,4 +171,6 @@ dependencies {
     // App Widget Dependencies
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+
+    testImplementation("io.mockk:mockk:1.13.10")
 }
