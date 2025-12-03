@@ -1,6 +1,8 @@
 # Outdoorsy 🏕️
 
-**Outdoorsy** is a modern Android outdoor activity planner that helps users plan activities based on time, location, and weather conditions. The app leverages AI to analyze weather forecasts and provide intelligent recommendations about activity suitability, clothing tips, and more.
+**Outdoorsy** is a modern Android outdoor activity planner that helps users plan activities based on
+time, location, and weather conditions. The app leverages AI to analyze weather forecasts and
+provide intelligent recommendations about activity suitability, clothing tips, and more.
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-purple?logo=kotlin)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-blue?logo=android)
@@ -60,7 +62,8 @@
 
 ## 🏗️ Architecture
 
-Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Model-View-ViewModel)** pattern, ensuring separation of concerns, testability, and maintainability.
+Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Model-View-ViewModel)
+** pattern, ensuring separation of concerns, testability, and maintainability.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -281,7 +284,7 @@ app/src/main/java/com/example/outdoorsy/
 ## 🛠️ Tech Stack
 
 | Category                 | Technologies                    |
-| ------------------------ | ------------------------------- |
+|--------------------------|---------------------------------|
 | **Language**             | Kotlin 2.2.21                   |
 | **UI Framework**         | Jetpack Compose with Material 3 |
 | **Architecture**         | Clean Architecture + MVVM       |
@@ -304,9 +307,9 @@ app/src/main/java/com/example/outdoorsy/
 
 - **Purpose**: Current weather data and 5-day forecasts
 - **Endpoints Used**:
-  - `/data/2.5/weather` - Current weather
-  - `/data/2.5/forecast` - 5-day forecast
-  - `/geo/1.0/direct` - Geocoding (city to coordinates)
+    - `/data/2.5/weather` - Current weather
+    - `/data/2.5/forecast` - 5-day forecast
+    - `/geo/1.0/direct` - Geocoding (city to coordinates)
 - **Documentation**: [OpenWeatherMap API](https://openweathermap.org/api)
 
 ### 2. eBay Browse API
@@ -336,16 +339,16 @@ app/src/main/java/com/example/outdoorsy/
 - JDK 11+
 - Android SDK 35+ (minimum) / 36 (target)
 - API keys for the following services:
-  - [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
-  - [eBay Developer Program](https://developer.ebay.com/) (free tier available)
-  - [CurrencyAPI](https://currencyapi.com/) (free tier available)
+    - [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
+    - [eBay Developer Program](https://developer.ebay.com/) (free tier available)
+    - [CurrencyAPI](https://currencyapi.com/) (free tier available)
 
 ### Setup Instructions
 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/outdoorsy.git
+   git clone https://github.com/SakuJuuH/outdoorsy.git
    cd outdoorsy
    ```
 
@@ -362,18 +365,18 @@ app/src/main/java/com/example/outdoorsy/
 
 3. **Open in Android Studio**
 
-   - Open Android Studio
-   - Select "Open an existing project"
-   - Navigate to the cloned directory
+    - Open Android Studio
+    - Select "Open an existing project"
+    - Navigate to the cloned directory
 
 4. **Sync and Build**
 
-   - Wait for Gradle sync to complete
-   - Build the project: `Build > Make Project`
+    - Wait for Gradle sync to complete
+    - Build the project: `Build > Make Project`
 
 5. **Run the app**
-   - Select a device/emulator (API 35+)
-   - Click `Run 'app'`
+    - Select a device/emulator (API 35+)
+    - Click `Run 'app'`
 
 ### Permissions
 
@@ -387,7 +390,7 @@ The app requires the following permissions:
 ## 📱 Screens Overview
 
 | Screen       | Description                                                       |
-| ------------ | ----------------------------------------------------------------- |
+|--------------|-------------------------------------------------------------------|
 | **Weather**  | Main dashboard showing weather for saved locations with forecasts |
 | **History**  | View past activity plans with their conditions and suitability    |
 | **Activity** | Plan new activities with AI-powered weather analysis              |
@@ -426,7 +429,7 @@ To add a new language:
 ## 📋 Requirements
 
 | Requirement | Value           |
-| ----------- | --------------- |
+|-------------|-----------------|
 | Minimum SDK | 35 (Android 15) |
 | Target SDK  | 36              |
 | Compile SDK | 36              |
@@ -450,7 +453,8 @@ To add a new language:
 
 ## 📄 License
 
-This project is for educational purposes. Please ensure you have proper licenses for any APIs used in production.
+This project is for educational purposes. Please ensure you have proper licenses for any APIs used
+in production.
 
 ---
 
