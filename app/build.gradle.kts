@@ -125,7 +125,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.engage.core)
     implementation(libs.androidx.hilt.common)
-    implementation(libs.androidx.ui.test.junit4)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
@@ -172,6 +171,4 @@ dependencies {
     // App Widget Dependencies
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
-
-    testImplementation("io.mockk:mockk:1.13.10")
 }
