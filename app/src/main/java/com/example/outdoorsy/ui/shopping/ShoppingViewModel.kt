@@ -1,4 +1,4 @@
-package com.example.outdoorsy.ui.shopping
+package com.example.outdoorsy.ui.shopping // Corrected package name
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -15,12 +15,12 @@ import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -40,25 +40,39 @@ class ShoppingViewModel @Inject constructor(
     private var originalRecommendedItems: List<EbayItem> = emptyList()
 
     init {
-        // Start observing currency changes immediately.
-        // Data fetching will be triggered by the UI.
-        observeCurrencyChanges()
+        // This single call now handles both initial data loading and currency updates.
+        observeDataAndCurrencyChanges()
     }
 
-    // Fetches all data for the shopping page, including main items and recommendations.
-    // This is made public to be called from the UI to refresh data on screen entry.
-    fun fetchAllShoppingData() {
-        // Set loading state only if we don't have any items yet.
-        if (originalEbayItems.isEmpty() && originalRecommendedItems.isEmpty()) {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-        }
-
+    private fun observeDataAndCurrencyChanges() {
         viewModelScope.launch {
-            try {
-                // Get the target currency first
-                val targetCurrency = settingsRepository.getCurrency().first()
+            // Use the cleaner property access we defined in SettingsRepository
+            settingsRepository.currency
+                .distinctUntilChanged()
+                .debounce(300) // Debounce to avoid rapid updates
+                .collectLatest { targetCurrency ->
+                    // Check if the original data has been loaded yet.
+                    if (originalEbayItems.isEmpty() && originalRecommendedItems.isEmpty()) {
+                        // If not, this is the first run. Fetch everything.
+                        Log.d("ShoppingViewModel", "Initial data load. Target currency: $targetCurrency")
+                        fetchAllShoppingData(targetCurrency)
+                    } else {
+                        // If data exists, just re-convert the prices with the new currency.
+                        Log.d("ShoppingViewModel", "Currency changed to $targetCurrency. Re-converting prices.")
+                        reconvertPrices(targetCurrency)
+                    }
+                }
+        }
+    }
 
-                // Launch both main items and recommended items fetches in parallel
+
+     suspend fun fetchAllShoppingData(targetCurrency: String) {
+        _uiState.update { it.copy(isLoading = true, error = null) }
+
+        // Use coroutineScope to create a scope for concurrent tasks
+        coroutineScope {
+            try {
+                // Now `async` is called within a proper CoroutineScope
                 val mainItemsDeferred = async {
                     val queries =
                         listOf("hiking boots", "camping tent", "waterproof jacket", "backpack")
@@ -70,17 +84,19 @@ class ShoppingViewModel @Inject constructor(
                 val recommendedItemsDeferred = async {
                     val clothingItems = activityRepository.getClothingItems()
                     if (clothingItems.isEmpty()) {
+<<<<<<< HEAD
                         Log.d("ShoppingViewModel", "No recommended clothing items found.")
                         emptyList() // Return an empty list if no clothing items
+=======
+                        emptyList()
+>>>>>>> 305cdca (issue 95, improve currency logic)
                     } else {
-                        Log.d("ShoppingViewModel", "Fetching recommended items for: $clothingItems")
                         clothingItems.map { query ->
                             async { ebayRepository.getItems(query) }
                         }.awaitAll().flatten()
                     }
                 }
 
-                // Wait for both fetches to complete
                 originalEbayItems = mainItemsDeferred.await()
                 originalRecommendedItems = recommendedItemsDeferred.await()
 
@@ -89,7 +105,6 @@ class ShoppingViewModel @Inject constructor(
                     "Fetched ${originalEbayItems.size} main items and ${originalRecommendedItems.size} recommended items."
                 )
 
-                // Now, convert and update the UI state ONCE with all data
                 val convertedItems = convertItemPrices(originalEbayItems, targetCurrency)
                 val convertedRecommendedItems =
                     convertItemPrices(originalRecommendedItems, targetCurrency)
@@ -109,29 +124,15 @@ class ShoppingViewModel @Inject constructor(
         }
     }
 
-    private fun observeCurrencyChanges() {
-        viewModelScope.launch {
-            settingsRepository.getCurrency()
-                .distinctUntilChanged()
-                .debounce(300)
-                .collectLatest { targetCurrency ->
-                    Log.d(
-                        "ShoppingViewModel",
-                        "Currency changed to $targetCurrency. Re-converting prices."
-                    )
-                    // Only convert if we have data to avoid running on initial load
-                    if (originalEbayItems.isNotEmpty() || originalRecommendedItems.isNotEmpty()) {
-                        val convertedItems = convertItemPrices(originalEbayItems, targetCurrency)
-                        val convertedRecommendedItems =
-                            convertItemPrices(originalRecommendedItems, targetCurrency)
-                        _uiState.update {
-                            it.copy(
-                                items = convertedItems,
-                                recommendedItems = convertedRecommendedItems
-                            )
-                        }
-                    }
-                }
+    private suspend fun reconvertPrices(targetCurrency: String) {
+        val convertedItems = convertItemPrices(originalEbayItems, targetCurrency)
+        val convertedRecommendedItems = convertItemPrices(originalRecommendedItems, targetCurrency)
+
+        _uiState.update {
+            it.copy(
+                items = convertedItems,
+                recommendedItems = convertedRecommendedItems
+            )
         }
     }
 
@@ -140,22 +141,19 @@ class ShoppingViewModel @Inject constructor(
         targetCurrency: String
     ): List<EbayItem> {
         if (items.isEmpty()) return emptyList()
-        val baseCurrency = items.first().price.currency
-        val conversionRate = currencyRepository.getConversionRate(baseCurrency, targetCurrency)
-
-        if (conversionRate == null || conversionRate == 1.0 || baseCurrency == targetCurrency) {
-            Log.d("ShoppingViewModel", "Skipping conversion. Rate: $conversionRate")
-            return items.map { it.copy(price = it.price.copy(currency = baseCurrency)) }
-        }
-
-        Log.d(
-            "ShoppingViewModel",
-            "Applying conversion rate of $conversionRate from $baseCurrency to $targetCurrency"
-        )
 
         val priceFormat = DecimalFormat("#,##0.00")
 
         return items.map { item ->
+            val baseCurrency = item.price.currency
+            if (baseCurrency == targetCurrency) return@map item
+
+            val conversionRate = currencyRepository.getConversionRate(baseCurrency, targetCurrency)
+            if (conversionRate == null) {
+                Log.w("ShoppingViewModel", "Skipping conversion for item '${item.title}'. No rate from $baseCurrency to $targetCurrency.")
+                return@map item
+            }
+
             val originalValue = item.price.value.toDoubleOrNull() ?: 0.0
             val convertedValue = originalValue * conversionRate
             val formattedValue = priceFormat.format(convertedValue)
