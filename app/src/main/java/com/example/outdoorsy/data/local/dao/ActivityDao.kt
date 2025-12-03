@@ -1,7 +1,6 @@
 package com.example.outdoorsy.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -23,6 +22,6 @@ interface ActivityDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insertActivity(activity: ActivityEntity)
 
-    @Delete
-    fun deleteActivity(activity: ActivityEntity)
+    @Query("DELETE FROM activity WHERE name = :name")
+    fun deleteActivityByName(name: String)
 }
