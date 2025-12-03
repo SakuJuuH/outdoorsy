@@ -1,12 +1,12 @@
 package com.example.outdoorsy.ui.activity.components
 
-import android.app.TimePickerDialog
+import android.app.DatePickerDialog
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -23,14 +23,14 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import java.time.LocalTime
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-internal fun TimePickerField(
+internal fun DatePickerField(
     label: String,
-    selectedTime: LocalTime,
-    onTimeSelected: (LocalTime) -> Unit,
+    selectedDate: LocalDate,
+    onDateSelected: (LocalDate) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -38,8 +38,8 @@ internal fun TimePickerField(
 
     val focusRequester = remember { FocusRequester() }
 
-    val formattedTime = remember(selectedTime) {
-        selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+    val formattedDate = remember(selectedDate) {
+        selectedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
     }
 
     Column(
@@ -52,7 +52,7 @@ internal fun TimePickerField(
         )
 
         OutlinedTextField(
-            value = formattedTime,
+            value = formattedDate,
             onValueChange = {},
             readOnly = true,
             label = null,
@@ -68,7 +68,7 @@ internal fun TimePickerField(
                 },
             trailingIcon = {
                 Icon(
-                    imageVector = Icons.Default.AccessTime,
+                    imageVector = Icons.Default.DateRange,
                     contentDescription = null,
                     modifier = Modifier.clickable { showDialog = true }
                 )
@@ -83,15 +83,15 @@ internal fun TimePickerField(
         )
 
         if (showDialog) {
-            val dialog = TimePickerDialog(
+            val dialog = DatePickerDialog(
                 context,
-                { _, hour: Int, minute: Int ->
-                    onTimeSelected(LocalTime.of(hour, minute))
+                { _, year: Int, month: Int, dayOfMonth: Int ->
+                    onDateSelected(LocalDate.of(year, month + 1, dayOfMonth))
                     showDialog = false
                 },
-                selectedTime.hour,
-                selectedTime.minute,
-                true
+                selectedDate.year,
+                selectedDate.monthValue - 1,
+                selectedDate.dayOfMonth
             )
             dialog.setOnDismissListener {
                 showDialog = false

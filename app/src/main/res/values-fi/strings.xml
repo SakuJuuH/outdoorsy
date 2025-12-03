@@ -16,6 +16,8 @@
     <string name="activity_screen_title">Aktiviteetti suunnittelija</string>
     <string name="activity_screen_activity_label">Valitse aktiviteetti</string>
     <string name="activity_screen_activity_prompt">Valitse aktiviteetti…</string>
+    <string name="activity_screen_start_date_label">Valitse aloituspäivämäärä</string>
+    <string name="activity_screen_end_date_label">Valitse päättymispäivä</string>
     <string name="activity_screen_start_time_label">Valitse aloitus aika</string>
     <string name="activity_screen_end_time_label">Valitse lopetus aika</string>
     <string name="activity_screen_time_prompt">Valitse aika…</string>
