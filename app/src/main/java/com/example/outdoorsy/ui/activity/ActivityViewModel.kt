@@ -80,20 +80,22 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateStartTime(newTime: LocalTime, endTime: LocalTime) {
+    fun updateStartDateTime(newDate: LocalDate, newTime: LocalTime, endDate: LocalDate, endTime: LocalTime) {
         _uiState.update {
             it.copy(
+                selectedStartDate = newDate,
                 selectedStartTime = newTime,
                 timeRangeErrorId = null
             )
         }
 
-        if (endTime.isBefore(newTime)) {
-            val adjustedEndTime = newTime.plusHours(1)
+        if (endDate.isBefore(newDate) || (endDate.isEqual(newDate) && endTime.isBefore(newTime))) {
+            val newEndDateTime = LocalDateTime.of(newDate, newTime).plusHours(1)
 
             _uiState.update {
                 it.copy(
-                    selectedEndTime = adjustedEndTime,
+                    selectedEndDate = newEndDateTime.toLocalDate(),
+                    selectedEndTime = newEndDateTime.toLocalTime(),
                     timeRangeErrorId = R.string.activity_screen_time_error_adjusted
                 )
             }
@@ -104,8 +106,8 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateEndTime(newTime: LocalTime, startTime: LocalTime) {
-        if (newTime.isBefore(startTime)) {
+    fun updateEndDateTime(newDate: LocalDate, newTime: LocalTime, startDate: LocalDate, startTime: LocalTime) {
+        if (newDate.isBefore(startDate) || (newDate.isEqual(startDate) && newTime.isBefore(startTime))) {
             _uiState.update {
                 it.copy(
                     timeRangeErrorId = R.string.activity_screen_time_error_invalid
@@ -114,6 +116,7 @@ class ActivityViewModel @Inject constructor(
         } else {
             _uiState.update {
                 it.copy(
+                    selectedEndDate = newDate,
                     selectedEndTime = newTime,
                     timeRangeErrorId = null
                 )
