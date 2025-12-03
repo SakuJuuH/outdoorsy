@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,12 +45,13 @@ import com.example.outdoorsy.utils.Currencies
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
+
     // This tells the ViewModel to fetch data when the screen is first displayed.
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchAllShoppingData()
+        viewModel.fetchAllShoppingData(targetCurrency = Currencies.GBP.code)
     }
 
-    val uiState = viewModel.uiState.collectAsState().value // Use .value here
+    val uiState by viewModel.uiState.collectAsState()
     val isLoading = uiState.isLoading
     val error = uiState.error
     val items = uiState.items

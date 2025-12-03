@@ -1,6 +1,7 @@
 package com.example.outdoorsy.domain.model.ebay
 
 data class EbayItem(
+    val itemId: String,
     val title: String,
     val price: Price,
     val imageUrl: String,

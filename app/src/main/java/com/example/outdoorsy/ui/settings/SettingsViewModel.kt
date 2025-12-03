@@ -17,10 +17,10 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
     ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = combine(
-        settingsRepository.getTemperatureUnit(),
-        settingsRepository.getDarkMode(),
-        settingsRepository.getLanguage(),
-        settingsRepository.getCurrency()
+        settingsRepository.temperatureUnit,
+        settingsRepository.isDarkMode,
+        settingsRepository.language,
+        settingsRepository.currency
     ) { temperatureUnit, isDarkMode, language, currency ->
         SettingsUiState(
             temperatureUnit = temperatureUnit,

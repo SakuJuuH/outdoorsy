@@ -25,18 +25,33 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         val CURRENCY_CODE = stringPreferencesKey("currency_code")
     }
 
-    fun getLanguage(): Flow<String> = dataStore.data.map { preferences ->
+
+    // Expose flows as public properties instead of get() functions
+    val language: Flow<String> = dataStore.data.map { preferences ->
         preferences[PreferenceKeys.LANGUAGE] ?: AppLanguage.ENGLISH.code
     }
+
+    val isDarkMode: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.DARK_MODE] ?: false
+    }
+
+    val temperatureUnit: Flow<String> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.TEMPERATURE_UNIT] ?: TemperatureSystem.METRIC.code
+    }
+
+    val recentSearches: Flow<List<String>> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.RECENT_SEARCHES]?.toList() ?: emptyList()
+    }
+
+    val currency: Flow<String> = dataStore.data.map { preferences ->
+        preferences[PreferenceKeys.CURRENCY_CODE] ?: Currencies.GBP.code
+    }
+
 
     suspend fun saveLanguage(language: String) {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.LANGUAGE] = language
         }
-    }
-
-    fun getDarkMode(): Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.DARK_MODE] ?: false
     }
 
     suspend fun saveDarkMode(darkMode: Boolean) {
@@ -45,18 +60,10 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         }
     }
 
-    fun getTemperatureUnit(): Flow<String> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.TEMPERATURE_UNIT] ?: TemperatureSystem.METRIC.code
-    }
-
     suspend fun saveTemperatureUnit(unit: String) {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.TEMPERATURE_UNIT] = unit
         }
-    }
-
-    fun getRecentSearches(): Flow<List<String>> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.RECENT_SEARCHES]?.toList() ?: emptyList()
     }
 
     suspend fun addRecentSearch(location: String) {
@@ -79,7 +86,4 @@ class SettingsRepository @Inject constructor(private val dataStore: DataStore<Pr
         }
     }
 
-    fun getCurrency(): Flow<String> = dataStore.data.map { preferences ->
-        preferences[PreferenceKeys.CURRENCY_CODE] ?: Currencies.GBP.code
-    }
 }

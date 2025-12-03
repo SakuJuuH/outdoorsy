@@ -152,8 +152,8 @@ class ActivityViewModel @Inject constructor(
                 startTime.toString(),
                 endTime.toString(),
                 forecast.toString(),
-                settingsRepository.getTemperatureUnit().first(),
-                settingsRepository.getLanguage().first()
+                settingsRepository.temperatureUnit.first(),
+                settingsRepository.language.first()
             )
 
             try {

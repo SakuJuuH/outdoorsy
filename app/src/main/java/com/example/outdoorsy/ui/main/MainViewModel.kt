@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(private val settingsRepository: Settings
 
     private fun loadSettings() {
         viewModelScope.launch {
-            settingsRepository.getDarkMode().collect { isDarkMode ->
+            settingsRepository.isDarkMode.collect { isDarkMode ->
                 _isDarkMode.value = isDarkMode
             }
         }
