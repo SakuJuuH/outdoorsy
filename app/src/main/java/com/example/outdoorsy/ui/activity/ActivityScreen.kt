@@ -41,7 +41,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation != null &&
-        uiState.selectedActivity != null
+            uiState.selectedActivity != null
 
     LazyColumn(modifier = modifier) {
         item {
@@ -106,6 +106,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     modifier = Modifier.weight(1f)
                 )
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
         item {
@@ -117,7 +118,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.activity_screen_start_time_label),
                     selectedTime = uiState.selectedStartTime,
                     onTimeSelected = { newTime ->
-                         viewModel.updateStartDateTime(
+                        viewModel.updateStartDateTime(
                             newDate = uiState.selectedStartDate,
                             newTime,
                             endDate = uiState.selectedEndDate,
