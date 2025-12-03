@@ -79,7 +79,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 DatePickerField(
-                    label = "Select Start Date",
+                    label = stringResource(id = R.string.activity_screen_start_date_label),
                     selectedDate = uiState.selectedStartDate,
                     onDateSelected = { newDate ->
                         viewModel.updateStartDateTime(
@@ -93,7 +93,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 )
 
                 DatePickerField(
-                    label = "Select End Date",
+                    label = stringResource(id = R.string.activity_screen_end_date_label),
                     selectedDate = uiState.selectedEndDate,
                     onDateSelected = { newDate ->
                         viewModel.updateEndDateTime(
