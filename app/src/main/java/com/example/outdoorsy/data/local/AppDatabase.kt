@@ -10,11 +10,11 @@ import com.example.outdoorsy.data.local.dao.LocationDao
 import com.example.outdoorsy.data.local.entity.ActivityEntity
 import com.example.outdoorsy.data.local.entity.ActivityLogEntity
 import com.example.outdoorsy.data.local.entity.CurrencyRateEntity
-import com.example.outdoorsy.data.local.entity.Location
+import com.example.outdoorsy.data.local.entity.LocationEntity
 import com.example.outdoorsy.utils.DateTimeConverters
 
 @Database(
-    entities = [ActivityEntity::class, Location::class, ActivityLogEntity::class, CurrencyRateEntity::class],
+    entities = [ActivityEntity::class, LocationEntity::class, ActivityLogEntity::class, CurrencyRateEntity::class],
     version = 8,
     exportSchema = true
 )

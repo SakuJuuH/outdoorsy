@@ -5,8 +5,6 @@ import android.app.Application
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.example.outdoorsy.data.local.dao.LocationDao
-import com.example.outdoorsy.data.local.entity.toDomain
-import com.example.outdoorsy.data.local.entity.toEntity
 import com.example.outdoorsy.data.remote.WeatherApiService
 import com.example.outdoorsy.data.remote.dto.geocoding.toDomain
 import com.example.outdoorsy.domain.model.Location
@@ -40,15 +38,17 @@ class LocationRepositoryImpl @Inject constructor(
 
         return suspendCoroutine { continuation ->
             locationClient.lastLocation.addOnSuccessListener { location ->
-                continuation.resume(
-                    Location(
-                        name = null,
-                        country = null,
-                        state = null,
-                        latitude = location.latitude,
-                        longitude = location.longitude
+                if (location != null) {
+                    continuation.resume(
+                        Location(
+                            name = null,
+                            country = null,
+                            state = null,
+                            latitude = location.latitude,
+                            longitude = location.longitude
+                        )
                     )
-                )
+                }
             }.addOnFailureListener {
                 continuation.resume(null)
             }.addOnCanceledListener {

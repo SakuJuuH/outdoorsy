@@ -1,5 +1,8 @@
 package com.example.outdoorsy.ui.main
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -27,18 +30,27 @@ import com.example.outdoorsy.ui.weather.WeatherViewModel
 fun AppContainer(mainNavController: NavHostController) {
     val nestedNavController = rememberNavController()
 
-    Scaffold(
-        bottomBar = {
-            AppBottomNavBar(navController = nestedNavController)
-        }
-    ) { paddingValues ->
-
+    Scaffold(bottomBar = {
+        AppBottomNavBar(navController = nestedNavController)
+    }) { paddingValues ->
         NavHost(
             navController = nestedNavController,
             startDestination = Screen.AppNav.Weather.route,
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            enterTransition = {
+                fadeIn(animationSpec = tween(200))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(200))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(200))
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(200))
+            }
         ) {
             composable(Screen.AppNav.Weather.route) {
                 val viewModel: WeatherViewModel = hiltViewModel()

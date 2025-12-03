@@ -17,14 +17,14 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
     ViewModel() {
 
     val uiState: StateFlow<SettingsUiState> = combine(
-        settingsRepository.temperatureUnit,
-        settingsRepository.isDarkMode,
-        settingsRepository.language,
-        settingsRepository.currency
-    ) { temperatureUnit, isDarkMode, language, currency ->
+        settingsRepository.getTemperatureUnit(),
+        settingsRepository.getAppTheme(),
+        settingsRepository.getLanguage(),
+        settingsRepository.getCurrency()
+    ) { temperatureUnit, appTheme, language, currency ->
         SettingsUiState(
             temperatureUnit = temperatureUnit,
-            isDarkMode = isDarkMode,
+            appTheme = appTheme,
             language = language,
             currency = currency
         )
@@ -40,9 +40,9 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
         }
     }
 
-    fun setIsDarkMode(isDarkMode: Boolean) {
+    fun setAppTheme(theme: String) {
         viewModelScope.launch {
-            settingsRepository.saveDarkMode(isDarkMode)
+            settingsRepository.saveAppTheme(theme)
         }
     }
 

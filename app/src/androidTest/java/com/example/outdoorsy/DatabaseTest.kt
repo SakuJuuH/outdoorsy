@@ -9,7 +9,7 @@ import com.example.outdoorsy.data.local.AppDatabase
 import com.example.outdoorsy.data.local.dao.ActivityDao
 import com.example.outdoorsy.data.local.dao.LocationDao
 import com.example.outdoorsy.data.local.entity.ActivityEntity
-import com.example.outdoorsy.data.local.entity.Location
+import com.example.outdoorsy.data.local.entity.LocationEntity
 import com.google.common.truth.Truth.assertThat
 import java.io.IOException
 import kotlinx.coroutines.flow.first
@@ -47,7 +47,7 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndReadLocation() = runTest {
-        val location = Location(id = 1, name = "Helsinki", latitude = 60.1699, longitude = 24.9384)
+        val location = LocationEntity(id = 1, name = "Helsinki", latitude = 60.1699, longitude = 24.9384)
 
         locationDao.insertLocation(location)
 

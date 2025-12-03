@@ -1,84 +1,56 @@
 package com.example.outdoorsy.ui.shopping
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.example.outdoorsy.R
-import com.example.outdoorsy.domain.model.ebay.EbayItem
-import com.example.outdoorsy.ui.components.ButtonType
-import com.example.outdoorsy.ui.components.CustomButton
+import com.example.outdoorsy.ui.components.ScreenTitle
+import com.example.outdoorsy.ui.components.SectionTitle
+import com.example.outdoorsy.ui.shopping.components.ProductCard
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
-import com.example.outdoorsy.utils.Currencies
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
-
-    // This tells the ViewModel to fetch data when the screen is first displayed.
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchAllShoppingData(targetCurrency = Currencies.GBP.code)
+    LaunchedEffect(Unit) {
+        viewModel.refreshRecommendations()
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsState().value
     val isLoading = uiState.isLoading
     val error = uiState.error
     val items = uiState.items
     val recommendedItems = uiState.recommendedItems
 
     LazyColumn(
-        modifier = modifier.padding(horizontal = MaterialTheme.spacing(2)),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = MaterialTheme.spacing(2))
+            .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Title section
+        // 1. Header
         item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = MaterialTheme.spacing(3)
-                    )
-            ) {
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing(2)))
-                Text(
-                    text = stringResource(id = R.string.shopping_screen_title),
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
-            }
+            ScreenTitle(title = stringResource(id = R.string.shopping_screen_title))
         }
 
         // --- Recommended Items Section ---
@@ -101,16 +73,13 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
 
         // --- All Items Section ---
         item {
-            Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = stringResource(id = R.string.shopping_screen_all_items_section_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+            SectionTitle(
+                title = stringResource(id = R.string.shopping_screen_all_items_section_title),
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
 
-        // Handle loading state
+        // 4. Loading State
         // Improved logic: show loading indicator only when both lists are empty
         if (isLoading && items.isEmpty() && recommendedItems.isEmpty()) {
             item {
@@ -137,89 +106,11 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // Display the items from the API
+        // 4. Display the items from the API
         items(items) { item ->
-            ProductCard(item = item)
-        }
-    }
-}
-
-@Composable
-fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                AsyncImage(
-                    model = item.imageUrl,
-                    contentDescription = item.title,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentScale = ContentScale.Crop
-                )
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = item.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 2
-                    )
-                    // You can display category if available
-                    if (item.categoryNames.isNotEmpty()) {
-                        Text(
-                            text = item.categoryNames.first(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "${
-                        when (item.price.currency) {
-                            Currencies.USD.code -> Currencies.USD.symbol
-                            Currencies.GBP.code -> Currencies.GBP.symbol
-                            else -> ""
-                        }
-                    }${item.price.value} " +
-                        if (item.price.currency ==
-                            Currencies.EUR.code
-                        ) {
-                            Currencies.EUR.symbol
-                        } else {
-                            ""
-                        },
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                CustomButton(
-                    onClick = {
-                        val intent = Intent(Intent.ACTION_VIEW, item.link.toUri())
-                        context.startActivity(intent)
-                    },
-                    text = stringResource(id = R.string.shopping_screen_view_listing_button),
-                    type = ButtonType.PRIMARY
-                )
-            }
+            ProductCard(
+                item = item
+            )
         }
     }
 }

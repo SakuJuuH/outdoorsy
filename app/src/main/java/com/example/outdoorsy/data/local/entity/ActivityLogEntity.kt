@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
 import com.example.outdoorsy.domain.model.ActivityLog
+import java.time.LocalDateTime
 
 @Entity(
     tableName = "activity_log",

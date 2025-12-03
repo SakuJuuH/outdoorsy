@@ -16,17 +16,17 @@ import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.utils.WeatherPromptProvider
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 
 @HiltViewModel
 class ActivityViewModel @Inject constructor(
@@ -80,20 +80,22 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateStartTime(newTime: LocalTime, endTime: LocalTime) {
+    fun updateStartDateTime(newDate: LocalDate, newTime: LocalTime, endDate: LocalDate, endTime: LocalTime) {
         _uiState.update {
             it.copy(
+                selectedStartDate = newDate,
                 selectedStartTime = newTime,
                 timeRangeErrorId = null
             )
         }
 
-        if (endTime.isBefore(newTime)) {
-            val adjustedEndTime = newTime.plusHours(1)
+        if (endDate.isBefore(newDate) || (endDate.isEqual(newDate) && endTime.isBefore(newTime))) {
+            val newEndDateTime = LocalDateTime.of(newDate, newTime).plusHours(1)
 
             _uiState.update {
                 it.copy(
-                    selectedEndTime = adjustedEndTime,
+                    selectedEndDate = newEndDateTime.toLocalDate(),
+                    selectedEndTime = newEndDateTime.toLocalTime(),
                     timeRangeErrorId = R.string.activity_screen_time_error_adjusted
                 )
             }
@@ -104,8 +106,8 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateEndTime(newTime: LocalTime, startTime: LocalTime) {
-        if (newTime.isBefore(startTime)) {
+    fun updateEndDateTime(newDate: LocalDate, newTime: LocalTime, startDate: LocalDate, startTime: LocalTime) {
+        if (newDate.isBefore(startDate) || (newDate.isEqual(startDate) && newTime.isBefore(startTime))) {
             _uiState.update {
                 it.copy(
                     timeRangeErrorId = R.string.activity_screen_time_error_invalid
@@ -114,6 +116,7 @@ class ActivityViewModel @Inject constructor(
         } else {
             _uiState.update {
                 it.copy(
+                    selectedEndDate = newDate,
                     selectedEndTime = newTime,
                     timeRangeErrorId = null
                 )
@@ -125,7 +128,8 @@ class ActivityViewModel @Inject constructor(
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
-        val date = LocalDate.now()
+        val startDate = _uiState.value.selectedStartDate
+        val endDate = _uiState.value.selectedEndDate
         val startTime = _uiState.value.selectedStartTime
         val endTime = _uiState.value.selectedEndTime
 
@@ -146,14 +150,15 @@ class ActivityViewModel @Inject constructor(
             }
 
             val prompt = WeatherPromptProvider.buildPrompt(
-                activity.name,
-                location,
-                date.toString(),
-                startTime.toString(),
-                endTime.toString(),
-                forecast.toString(),
-                settingsRepository.temperatureUnit.first(),
-                settingsRepository.language.first()
+                activity = activity.name,
+                location = location,
+                startDate = startDate.toString(),
+                endDate = endDate.toString(),
+                startTime = startTime.toString(),
+                endTime = endTime.toString(),
+                forecast = forecast.toString(),
+                unit = settingsRepository.getTemperatureUnit().first(),
+                language = settingsRepository.getLanguage().first()
             )
 
             try {
@@ -172,8 +177,8 @@ class ActivityViewModel @Inject constructor(
                 val activityLog = ActivityLog(
                     location = location,
                     activityName = activity.name,
-                    startDateTime = LocalDateTime.of(date, startTime),
-                    endDateTime = LocalDateTime.of(date, endTime),
+                    startDateTime = LocalDateTime.of(startDate, startTime),
+                    endDateTime = LocalDateTime.of(endDate, endTime),
                     suitabilityLabel = aiAnswer.suitabilityLabel,
                     suitabilityScore = aiAnswer.suitabilityScore
                 )
