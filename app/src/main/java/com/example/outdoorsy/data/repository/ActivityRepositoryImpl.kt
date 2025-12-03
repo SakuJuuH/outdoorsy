@@ -32,7 +32,7 @@ class ActivityRepositoryImpl @Inject constructor(private val activityDao: Activi
         activityDao.insertActivity(activity.toEntity())
     }
 
-    override fun deleteActivity(activity: Activity) {
-        activityDao.deleteActivity(activity.toEntity())
+    override fun deleteActivityByName(activity: Activity) {
+        activityDao.deleteActivityByName(activity.name)
     }
 }
