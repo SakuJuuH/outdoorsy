@@ -3,12 +3,10 @@ package com.example.outdoorsy.ui.activity
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.domain.model.Activity
 import java.time.LocalTime
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 data class ActivityUiState(
     val locations: List<String> = emptyList(),
-    val activities: Flow<List<Activity>> = flowOf(emptyList()),
+    val activities: List<Activity> = emptyList(),
     val selectedLocation: String? = null,
     val selectedActivity: Activity? = null,
     val selectedStartTime: LocalTime = LocalTime.now(),
