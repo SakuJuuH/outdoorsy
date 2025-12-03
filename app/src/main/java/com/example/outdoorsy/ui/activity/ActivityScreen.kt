@@ -55,19 +55,20 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 label = stringResource(id = R.string.activity_screen_location_label),
                 prompt = stringResource(id = R.string.activity_screen_location_prompt),
                 selectedText = uiState.selectedLocation ?: "",
-                onValueSelected = viewModel::updateLocation
+                onValueSelected = viewModel::updateLocation,
+                onDeleteOption = viewModel::deleteLocation
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
-            val activities by uiState.activities.collectAsState(initial = emptyList())
             EditableFilteringInput(
-                options = activities.map { activity -> activity.name },
+                options = uiState.activities.map { activity -> activity.name },
                 label = stringResource(id = R.string.activity_screen_activity_label),
                 prompt = stringResource(id = R.string.activity_screen_activity_prompt),
                 selectedText = uiState.selectedActivity?.name ?: "",
-                onValueSelected = viewModel::updateActivity
+                onValueSelected = viewModel::updateActivity,
+                onDeleteOption = viewModel::deleteActivity
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
