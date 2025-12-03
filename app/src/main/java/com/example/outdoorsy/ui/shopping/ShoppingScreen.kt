@@ -31,9 +31,8 @@ import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
-    // This tells the ViewModel to fetch data when the screen is first displayed.
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchAllShoppingData()
+    LaunchedEffect(Unit) {
+        viewModel.refreshRecommendations()
     }
 
     val uiState = viewModel.uiState.collectAsState().value

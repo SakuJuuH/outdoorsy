@@ -6,11 +6,14 @@ import com.example.outdoorsy.data.local.entity.CurrencyRateEntity
 import com.example.outdoorsy.data.remote.CurrencyApiService
 import com.example.outdoorsy.di.module.IoDispatcher
 import com.example.outdoorsy.domain.repository.CurrencyRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import com.example.outdoorsy.utils.Currencies
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 @Singleton
 class CurrencyRepositoryImpl @Inject constructor(
@@ -20,8 +23,9 @@ class CurrencyRepositoryImpl @Inject constructor(
 ) : CurrencyRepository {
 
     private val apiBaseCurrency = "USD"
-
     private val cacheExpirationTimeMillis = TimeUnit.HOURS.toMillis(6)
+
+    private val refreshMutex = Mutex()
 
     /**
      * Retrieves the conversion rate between a base and target currency, utilizing a local cache
@@ -31,26 +35,33 @@ class CurrencyRepositoryImpl @Inject constructor(
      * @param targetCurrency The currency to convert to (e.g., "EUR").
      * @return The conversion rate as a [Double], or null if the rate cannot be determined.
      */
-    override suspend fun getConversionRate(baseCurrency: String, targetCurrency: String): Double? = withContext(dispatcher) {
-        if (baseCurrency == targetCurrency) return@withContext 1.0
+    override suspend fun getConversionRate(baseCurrency: String, targetCurrency: String): Double? =
+        withContext(dispatcher) {
+            if (baseCurrency == targetCurrency) return@withContext 1.0
 
-        // Attempt to find the most recent rate entry in the database.
-        // We only need one entry to check the timestamp.
-        val lastRate = currencyRateDao.getMostRecentRate()
-        val now = System.currentTimeMillis()
+            // Attempt to find the most recent rate entry in the database.
+            // We only need one entry to check the timestamp.
+            refreshMutex.withLock {
+                val lastRate = currencyRateDao.getMostRecentRate()
+                val now = System.currentTimeMillis()
 
-        val isCacheStale = lastRate == null || (now - lastRate.timestamp) > cacheExpirationTimeMillis
+                val isCacheStale =
+                    lastRate == null || (now - lastRate.timestamp) > cacheExpirationTimeMillis
 
-        if (isCacheStale) {
-            Log.d("CurrencyRepo", "Cache is stale or empty. Fetching fresh rates from API.")
-            fetchAndCacheAllRatesFromApi()
-        } else {
-            Log.d("CurrencyRepo", "Cache is fresh. Using local data for $baseCurrency -> $targetCurrency.")
+                if (isCacheStale) {
+                    Log.d("CurrencyRepo", "Cache is stale or empty. Fetching fresh rates from API.")
+                    fetchAndCacheAllRatesFromApi()
+                } else {
+                    Log.d(
+                        "CurrencyRepo",
+                        "Cache is fresh. Using local data for $baseCurrency -> $targetCurrency."
+                    )
+                }
+            }
+
+            // After ensuring the cache is fresh, calculate the rate.
+            return@withContext calculateRateFromCache(baseCurrency, targetCurrency)
         }
-
-        // After ensuring the cache is fresh, calculate the rate.
-        return@withContext calculateRateFromCache(baseCurrency, targetCurrency)
-    }
 
     /**
      * Fetches all available currency rates from the API relative to [apiBaseCurrency],
@@ -58,8 +69,16 @@ class CurrencyRepositoryImpl @Inject constructor(
      */
     private suspend fun fetchAndCacheAllRatesFromApi() {
         try {
+            val targetCurrencies = Currencies.entries
+                .map { it.code }
+                .filter { it != apiBaseCurrency }
+                .joinToString(",")
+
             // Fetch latest rates from the API, relative to our defined API base (USD).
-            val response = currencyApiService.getLatestRates(baseCurrency = apiBaseCurrency, targetCurrencies = "EUR,GBP")
+            val response = currencyApiService.getLatestRates(
+                baseCurrency = apiBaseCurrency,
+                targetCurrencies = targetCurrencies
+            )
             val ratesFromApi = response.data
             val newTimestamp = System.currentTimeMillis()
 
@@ -75,7 +94,10 @@ class CurrencyRepositoryImpl @Inject constructor(
             if (ratesToStore.isNotEmpty()) {
                 // Clear old data and insert fresh data in a single transaction for safety.
                 currencyRateDao.clearAndInsert(ratesToStore)
-                Log.i("CurrencyRepo", "Successfully cached ${ratesToStore.size} new currency rates.")
+                Log.i(
+                    "CurrencyRepo",
+                    "Successfully cached ${ratesToStore.size} new currency rates."
+                )
             } else {
                 Log.w("CurrencyRepo", "API returned no currency rates.")
             }
@@ -94,7 +116,10 @@ class CurrencyRepositoryImpl @Inject constructor(
      * @param targetCurrency The currency to convert to.
      * @return The calculated rate, or null if a rate is missing.
      */
-    private suspend fun calculateRateFromCache(baseCurrency: String, targetCurrency: String): Double? {
+    private suspend fun calculateRateFromCache(
+        baseCurrency: String,
+        targetCurrency: String
+    ): Double? {
         // Find the rate for the target currency relative to our API base (e.g., USD -> EUR)
         val targetRateAgainstApiBase = if (targetCurrency == apiBaseCurrency) {
             1.0
@@ -110,12 +135,17 @@ class CurrencyRepositoryImpl @Inject constructor(
         }
 
         // Ensure both rates were found and the base rate is not zero to avoid division errors.
-        return if (targetRateAgainstApiBase != null && baseRateAgainstApiBase != null && baseRateAgainstApiBase != 0.0) {
+        return if (targetRateAgainstApiBase != null && baseRateAgainstApiBase != null &&
+            baseRateAgainstApiBase != 0.0
+        ) {
             // The final rate is the ratio of the target rate to the base rate.
             // (e.g., rate for CAD -> EUR = (USD -> EUR) / (USD -> CAD))
             targetRateAgainstApiBase / baseRateAgainstApiBase
         } else {
-            Log.e("CurrencyRepo", "Could not calculate rate for $baseCurrency -> $targetCurrency. One of the currencies might be missing from the cache.")
+            Log.e(
+                "CurrencyRepo",
+                "Could not calculate rate for $baseCurrency -> $targetCurrency. One of the currencies might be missing from the cache."
+            )
             null
         }
     }

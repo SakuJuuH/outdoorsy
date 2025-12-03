@@ -5,7 +5,7 @@ import com.example.outdoorsy.domain.model.ebay.EbayItem
 interface EbayRepository {
     suspend fun getItems(
         query: String,
-        limit: Int = 5,
+        limit: Int = 3,
         filter: String = "sellerAccountTypes:{BUSINESS},conditions:{NEW}"
     ): List<EbayItem>
 }
