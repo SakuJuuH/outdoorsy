@@ -14,5 +14,5 @@ interface ActivityRepository {
 
     fun saveActivity(activity: Activity)
 
-    fun deleteActivity(activity: Activity)
+    fun deleteActivityByName(activity: Activity)
 }
