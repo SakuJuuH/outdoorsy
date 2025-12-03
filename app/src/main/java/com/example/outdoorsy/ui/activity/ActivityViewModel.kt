@@ -128,7 +128,8 @@ class ActivityViewModel @Inject constructor(
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
-        val date = LocalDate.now()
+        val startDate = _uiState.value.selectedStartDate
+        val endDate = _uiState.value.selectedEndDate
         val startTime = _uiState.value.selectedStartTime
         val endTime = _uiState.value.selectedEndTime
 
@@ -149,14 +150,15 @@ class ActivityViewModel @Inject constructor(
             }
 
             val prompt = WeatherPromptProvider.buildPrompt(
-                activity.name,
-                location,
-                date.toString(),
-                startTime.toString(),
-                endTime.toString(),
-                forecast.toString(),
-                settingsRepository.getTemperatureUnit().first(),
-                settingsRepository.getLanguage().first()
+                activity = activity.name,
+                location = location,
+                startDate = startDate.toString(),
+                endDate = endDate.toString(),
+                startTime = startTime.toString(),
+                endTime = endTime.toString(),
+                forecast = forecast.toString(),
+                unit = settingsRepository.getTemperatureUnit().first(),
+                language = settingsRepository.getLanguage().first()
             )
 
             try {
@@ -175,8 +177,8 @@ class ActivityViewModel @Inject constructor(
                 val activityLog = ActivityLog(
                     location = location,
                     activityName = activity.name,
-                    startDateTime = LocalDateTime.of(date, startTime),
-                    endDateTime = LocalDateTime.of(date, endTime),
+                    startDateTime = LocalDateTime.of(startDate, startTime),
+                    endDateTime = LocalDateTime.of(endDate, endTime),
                     suitabilityLabel = aiAnswer.suitabilityLabel,
                     suitabilityScore = aiAnswer.suitabilityScore
                 )
