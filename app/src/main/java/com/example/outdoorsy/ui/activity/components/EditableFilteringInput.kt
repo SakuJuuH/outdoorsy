@@ -89,7 +89,7 @@ internal fun EditableFilteringInput(
             )
 
             ExposedDropdownMenu(
-                expanded = expanded && (text.isNotBlank() || filteredOptions.isNotEmpty()),
+                expanded = expanded,
                 onDismissRequest = { expanded = false },
                 modifier = Modifier.clip(RoundedCornerShape(12.dp))
             ) {
