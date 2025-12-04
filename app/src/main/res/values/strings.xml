@@ -35,6 +35,10 @@
     <string name="activity_screen_clothing_tips">Clothing Tips</string>
     <string name="activity_screen_hide_options">Hide options</string>
     <string name="activity_screen_show_options">Show options</string>
+    <string name="add_activity_title">Add activity</string>
+    <string name="add_activity_prompt">Type new activity name…</string>
+    <string name="confirm_button_label">Confirm</string>
+    <string name="cancel_button_label">Cancel</string>
 
 
     <!-- ui - screens - HistoryScreen -->

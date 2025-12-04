@@ -32,6 +32,10 @@
     <string name="activity_screen_clothing_tips">Pukeutumis vinkkejä</string>
     <string name="activity_screen_hide_options">Piilota vaihtoehdot</string>
     <string name="activity_screen_show_options">Näytä vaihtoehdot</string>
+    <string name="add_activity_title">Lisää aktiviteetti</string>
+    <string name="add_activity_prompt">Kirjoita uuden aktiviteetin nimi…</string>
+    <string name="confirm_button_label">Vahvistaa</string>
+    <string name="cancel_button_label">Peruuttaa</string>
 
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
