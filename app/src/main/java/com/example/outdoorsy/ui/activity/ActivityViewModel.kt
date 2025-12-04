@@ -8,9 +8,11 @@ import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.ActivityLog
+import com.example.outdoorsy.domain.model.Location
 import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.ActivityRepository
+import com.example.outdoorsy.domain.repository.LocationRepository
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.utils.WeatherPromptProvider
@@ -34,14 +36,10 @@ class ActivityViewModel @Inject constructor(
     private val getForecast: GetForecast,
     private val settingsRepository: SettingsRepository,
     private val activityLogRepository: ActivityLogRepository,
-    private val activityRepository: ActivityRepository
+    private val activityRepository: ActivityRepository,
+    private val locationRepository: LocationRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(
-        ActivityUiState(
-            // TODO: Replace location placeholder values with proper database queries
-            locations = listOf("Helsinki", "Espoo", "Vantaa")
-        )
-    )
+    private val _uiState = MutableStateFlow(value = ActivityUiState())
     val uiState: StateFlow<ActivityUiState> = _uiState
 
     init {
@@ -50,11 +48,21 @@ class ActivityViewModel @Inject constructor(
                 _uiState.update { it.copy(activities = activities) }
             }
         }
+        viewModelScope.launch {
+            locationRepository.getAllLocations().collect { locations ->
+                _uiState.update { it.copy(locations = locations) }
+            }
+        }
     }
 
     fun updateLocation(newLocation: String) {
         val locations = _uiState.value.locations
-        val matched = locations.firstOrNull { it == newLocation }
+        val matched: Location? = if (!newLocation.contains("Unknown")) {
+            locations.firstOrNull { it.name == newLocation }
+        } else {
+            locations.firstOrNull { "Unknown: ${it.latitude} ${it.longitude}" == newLocation }
+        }
+
         _uiState.update {
             it.copy(
                 selectedLocation = matched
@@ -70,7 +78,12 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateStartDateTime(newDate: LocalDate, newTime: LocalTime, endDate: LocalDate, endTime: LocalTime) {
+    fun updateStartDateTime(
+        newDate: LocalDate,
+        newTime: LocalTime,
+        endDate: LocalDate,
+        endTime: LocalTime
+    ) {
         _uiState.update {
             it.copy(
                 selectedStartDate = newDate,
@@ -86,7 +99,7 @@ class ActivityViewModel @Inject constructor(
                 it.copy(
                     selectedEndDate = newEndDateTime.toLocalDate(),
                     selectedEndTime = newEndDateTime.toLocalTime(),
-                    timeRangeErrorId = R.string.activity_screen_time_error_adjusted
+                    timeRangeErrorId = R.string.time_error_adjusted
                 )
             }
         } else {
@@ -96,11 +109,16 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun updateEndDateTime(newDate: LocalDate, newTime: LocalTime, startDate: LocalDate, startTime: LocalTime) {
+    fun updateEndDateTime(
+        newDate: LocalDate,
+        newTime: LocalTime,
+        startDate: LocalDate,
+        startTime: LocalTime
+    ) {
         if (newDate.isBefore(startDate) || (newDate.isEqual(startDate) && newTime.isBefore(startTime))) {
             _uiState.update {
                 it.copy(
-                    timeRangeErrorId = R.string.activity_screen_time_error_invalid
+                    timeRangeErrorId = R.string.time_error_invalid
                 )
             }
         } else {
@@ -177,7 +195,9 @@ class ActivityViewModel @Inject constructor(
             var forecast: ForecastResponse? = null
             try {
                 forecast = getForecast(
-                    city = location,
+                    lat = location?.latitude,
+                    lon = location?.longitude,
+                    city = location?.name,
                     units = "metric",
                     language = "en"
                 )
@@ -191,7 +211,7 @@ class ActivityViewModel @Inject constructor(
 
             val prompt = WeatherPromptProvider.buildPrompt(
                 activity = activity.name,
-                location = location,
+                location = location.name ?: "Unknown",
                 startDate = startDate.toString(),
                 endDate = endDate.toString(),
                 startTime = startTime.toString(),
@@ -215,7 +235,7 @@ class ActivityViewModel @Inject constructor(
                 activityRepository.setClothingItems(aiAnswer.clothingItems)
 
                 val activityLog = ActivityLog(
-                    location = location,
+                    location = location.name ?: "Unknown",
                     activityName = activity.name,
                     startDateTime = LocalDateTime.of(startDate, startTime),
                     endDateTime = LocalDateTime.of(endDate, endTime),

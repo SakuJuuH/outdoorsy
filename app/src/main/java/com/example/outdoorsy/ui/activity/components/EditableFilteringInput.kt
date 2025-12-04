@@ -97,7 +97,7 @@ internal fun EditableFilteringInput(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = stringResource(id = R.string.activity_screen_no_matches),
+                                text = stringResource(id = R.string.no_matches_found),
                                 color = MaterialTheme.colorScheme.error
                             )
                         },

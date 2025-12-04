@@ -2,6 +2,7 @@ package com.example.outdoorsy.ui.activity
 
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.domain.model.Activity
+import com.example.outdoorsy.domain.model.Location
 import java.time.LocalTime
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -10,9 +11,9 @@ val timeNow: LocalDateTime = LocalDateTime.now()
 val timePlusOne: LocalDateTime = timeNow.plusHours(1)
 
 data class ActivityUiState(
-    val locations: List<String> = emptyList(),
+    val locations: List<Location> = emptyList(),
     val activities: List<Activity> = emptyList(),
-    val selectedLocation: String? = null,
+    val selectedLocation: Location? = null,
     val selectedActivity: Activity? = null,
     val selectedStartTime: LocalTime = timeNow.toLocalTime(),
     val selectedEndTime: LocalTime = timePlusOne.toLocalTime(),
