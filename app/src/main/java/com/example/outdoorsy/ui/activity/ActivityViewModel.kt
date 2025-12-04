@@ -86,7 +86,7 @@ class ActivityViewModel @Inject constructor(
                 it.copy(
                     selectedEndDate = newEndDateTime.toLocalDate(),
                     selectedEndTime = newEndDateTime.toLocalTime(),
-                    timeRangeErrorId = R.string.activity_screen_time_error_adjusted
+                    timeRangeErrorId = R.string.time_error_adjusted
                 )
             }
         } else {
@@ -100,7 +100,7 @@ class ActivityViewModel @Inject constructor(
         if (newDate.isBefore(startDate) || (newDate.isEqual(startDate) && newTime.isBefore(startTime))) {
             _uiState.update {
                 it.copy(
-                    timeRangeErrorId = R.string.activity_screen_time_error_invalid
+                    timeRangeErrorId = R.string.time_error_invalid
                 )
             }
         } else {

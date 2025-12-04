@@ -56,8 +56,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         item {
             EditableFilteringInput(
                 options = uiState.locations,
-                label = stringResource(id = R.string.activity_screen_location_label),
-                prompt = stringResource(id = R.string.activity_screen_location_prompt),
+                label = stringResource(id = R.string.location_label),
+                prompt = stringResource(id = R.string.location_prompt),
                 selectedText = uiState.selectedLocation ?: "",
                 onValueSelected = viewModel::updateLocation,
                 onDeleteOption = viewModel::deleteLocation
@@ -68,8 +68,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         item {
             EditableFilteringInput(
                 options = uiState.activities.map { activity -> activity.name },
-                label = stringResource(id = R.string.activity_screen_activity_label),
-                prompt = stringResource(id = R.string.activity_screen_activity_prompt),
+                label = stringResource(id = R.string.activity_label),
+                prompt = stringResource(id = R.string.activity_prompt),
                 selectedText = uiState.selectedActivity?.name ?: "",
                 onValueSelected = viewModel::updateActivity,
                 onDeleteOption = viewModel::deleteActivity
@@ -122,7 +122,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 DatePickerField(
-                    label = stringResource(id = R.string.activity_screen_start_date_label),
+                    label = stringResource(id = R.string.start_time_label),
                     selectedDate = uiState.selectedStartDate,
                     onDateSelected = { newDate ->
                         viewModel.updateStartDateTime(
@@ -172,7 +172,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 )
 
                 TimePickerField(
-                    label = stringResource(id = R.string.activity_screen_end_time_label),
+                    label = stringResource(id = R.string.end_time_label),
                     selectedTime = uiState.selectedEndTime,
                     onTimeSelected = { newTime ->
                         viewModel.updateEndDateTime(
@@ -213,7 +213,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text(stringResource(id = R.string.activity_screen_search_button))
+                Text(stringResource(id = R.string.search_button_label))
             }
         }
 
@@ -238,7 +238,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = stringResource(R.string.activity_screen_generic_error),
+                    text = stringResource(R.string.generic_error),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
@@ -255,7 +255,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Info,
-                    title = stringResource(R.string.activity_screen_suitability),
+                    title = stringResource(R.string.suitability),
                     suitabilityLabel = answer.suitabilityLabel,
                     suitabilityScore = answer.suitabilityScore,
                     items = answer.suitabilityInfo
@@ -265,7 +265,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Cloud,
-                    title = stringResource(R.string.activity_screen_weather_tips),
+                    title = stringResource(R.string.weather_tips),
                     items = answer.weatherTips
                 )
             }
@@ -273,7 +273,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             item {
                 RecommendationCard(
                     icon = Icons.Default.Checkroom,
-                    title = stringResource(R.string.activity_screen_clothing_tips),
+                    title = stringResource(R.string.clothing_tips),
                     items = answer.clothingTips
                 )
             }
