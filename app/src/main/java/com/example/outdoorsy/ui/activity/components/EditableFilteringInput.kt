@@ -39,7 +39,7 @@ internal fun EditableFilteringInput(
     prompt: String,
     selectedText: String,
     onValueSelected: (String) -> Unit,
-    onDeleteOption: (String) -> Unit
+    onDeleteOption: ((String) -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(selectedText) }
@@ -112,13 +112,15 @@ internal fun EditableFilteringInput(
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(option)
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = "Delete Option",
-                                        modifier = Modifier.clickable {
-                                            onDeleteOption(option)
-                                        }
-                                    )
+                                    if (onDeleteOption != null) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "Delete Option",
+                                            modifier = Modifier.clickable {
+                                                onDeleteOption(option)
+                                            }
+                                        )
+                                    }
                                 }
                             },
                             onClick = {
