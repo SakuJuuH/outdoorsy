@@ -74,7 +74,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 onValueSelected = viewModel::updateActivity,
                 onDeleteOption = viewModel::deleteActivity
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = { viewModel.updateShowDialog(true) }
             ) {
