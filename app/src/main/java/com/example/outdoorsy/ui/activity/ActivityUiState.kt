@@ -15,5 +15,7 @@ data class ActivityUiState(
     // true = search successful, false = search error, null = search not performed
     val searchPerformed: Boolean? = null,
     val isLoading: Boolean = false,
-    val aiAnswer: AiAssistantAnswerDto? = null
+    val aiAnswer: AiAssistantAnswerDto? = null,
+    val showActivityDialog: Boolean = false,
+    val newActivityName: String = ""
 )
