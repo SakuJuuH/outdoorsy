@@ -132,11 +132,6 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    // TODO: Remove this after replacing location dropdown with same search bar as weather page
-    fun deleteLocation(location: String) {
-
-    }
-
     fun addActivity(newActivity: String) {
         val activities = _uiState.value.activities
         val matched = activities.firstOrNull { it.name == newActivity }
