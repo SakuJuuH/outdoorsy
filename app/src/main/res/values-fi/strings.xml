@@ -27,7 +27,7 @@
     <string name="activity_screen_time_error_adjusted">Päättymisaika säädettiin automaattisesti.</string>
     <string name="activity_screen_time_error_invalid">Päättymisajan on oltava alkamisajan jälkeen.</string>
     <string name="activity_screen_generic_error">Jotain meni pieleen. Yritä uudelleen.</string>
-    <string name="activity_screen_suitability">Suitability</string>
+    <string name="activity_screen_suitability">Soveltuvuus</string>
     <string name="activity_screen_weather_tips">Säävinkkejä</string>
     <string name="activity_screen_clothing_tips">Pukeutumis vinkkejä</string>
     <string name="activity_screen_hide_options">Piilota vaihtoehdot</string>
