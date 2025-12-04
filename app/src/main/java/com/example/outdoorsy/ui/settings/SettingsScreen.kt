@@ -38,6 +38,25 @@ import com.example.outdoorsy.utils.TemperatureSystem
 fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
+    SettingsScreenContent(
+        modifier = modifier,
+        uiState = uiState,
+        onSetLanguage = viewModel::setLanguage,
+        onSetTheme = viewModel::setAppTheme,
+        onSetCurrency = viewModel::setCurrency,
+        onSetTemperatureUnit = viewModel::setTemperatureUnit
+    )
+}
+
+@Composable
+internal fun SettingsScreenContent(
+    modifier: Modifier = Modifier,
+    uiState: SettingsUiState,
+    onSetLanguage: (String) -> Unit,
+    onSetTheme: (String) -> Unit,
+    onSetCurrency: (String) -> Unit,
+    onSetTemperatureUnit: (String) -> Unit
+) {
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showThemeDialog by remember { mutableStateOf(false) }
     var showUnitDialog by remember { mutableStateOf(false) }
@@ -109,7 +128,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             options = AppLanguage.entries,
             initialSelection = AppLanguage.entries.find { it.code == uiState.language },
             onConfirm = { language ->
-                viewModel.setLanguage(language.code)
+                onSetLanguage(language.code)
                 showLanguageDialog = false
             },
             onDismissRequest = { showLanguageDialog = false },
@@ -123,7 +142,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             options = AppTheme.entries,
             initialSelection = AppTheme.entries.find { it.code == uiState.appTheme },
             onConfirm = { theme ->
-                viewModel.setAppTheme(theme.code)
+                onSetTheme(theme.code)
                 showThemeDialog = false
             },
             onDismissRequest = { showThemeDialog = false },
@@ -139,7 +158,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
                 it.code == uiState.temperatureUnit
             },
             onConfirm = { system ->
-                viewModel.setTemperatureUnit(system.code)
+                onSetTemperatureUnit(system.code)
                 showUnitDialog = false
             },
             onDismissRequest = { showUnitDialog = false },
@@ -153,7 +172,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, viewModel: SettingsViewModel =
             options = Currencies.entries,
             initialSelection = Currencies.entries.find { it.code == uiState.currency },
             onConfirm = { currency ->
-                viewModel.setCurrency(currency.code)
+                onSetCurrency(currency.code)
                 showCurrencyDialog = false
             },
             onDismissRequest = { showCurrencyDialog = false },

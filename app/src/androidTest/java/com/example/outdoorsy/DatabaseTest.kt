@@ -11,13 +11,13 @@ import com.example.outdoorsy.data.local.dao.LocationDao
 import com.example.outdoorsy.data.local.entity.ActivityEntity
 import com.example.outdoorsy.data.local.entity.LocationEntity
 import com.google.common.truth.Truth.assertThat
-import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest {
@@ -47,7 +47,8 @@ class DatabaseTest {
     @Test
     @Throws(Exception::class)
     fun insertAndReadLocation() = runTest {
-        val location = LocationEntity(id = 1, name = "Helsinki", latitude = 60.1699, longitude = 24.9384)
+        val location =
+            LocationEntity(id = 1, name = "Helsinki", latitude = 60.1699, longitude = 24.9384)
 
         locationDao.insertLocation(location)
 
@@ -102,7 +103,7 @@ class DatabaseTest {
         val activityToDelete = activityDao.getByName("Hiking").first()
         Log.d("TEST", "deleteActivity: $activityToDelete")
 
-        activityDao.deleteActivity(activityToDelete)
+        activityDao.deleteActivityByName(activityToDelete.name)
 
         val remainingActivities = activityDao.getAll().first()
         Log.d("TEST", "deleteActivity: $remainingActivities")
