@@ -60,8 +60,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 label = stringResource(id = R.string.location_label),
                 prompt = stringResource(id = R.string.location_prompt),
                 selectedText = uiState.selectedLocation?.name ?: "",
-                onValueSelected = viewModel::updateLocation,
-                onDeleteOption = viewModel::deleteLocation
+                onValueSelected = viewModel::updateLocation
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
