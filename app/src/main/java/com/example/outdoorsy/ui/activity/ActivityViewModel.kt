@@ -45,16 +45,6 @@ class ActivityViewModel @Inject constructor(
     val uiState: StateFlow<ActivityUiState> = _uiState
 
     init {
-        // TODO: Replace with proper automatic DB check and insertion or user input-driven insertion
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                activityRepository.saveActivity(Activity("Hiking"))
-                activityRepository.saveActivity(Activity("Gardening"))
-                activityRepository.saveActivity(Activity("Camping"))
-            } catch (e: Exception) {
-                Log.e("Insertion Error", e.toString())
-            }
-        }
         viewModelScope.launch {
             activityRepository.getAllActivities().collect { activities ->
                 _uiState.update { it.copy(activities = activities) }
@@ -121,8 +111,28 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
+    // TODO: Remove this after replacing location dropdown with same search bar as weather page
     fun deleteLocation(location: String) {
 
+    }
+
+    fun addActivity(newActivity: String) {
+        val activities = _uiState.value.activities
+        val matched = activities.firstOrNull { it.name == newActivity }
+
+        if (matched == null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                activityRepository.saveActivity(Activity(name = newActivity))
+            }
+        }
+    }
+
+    fun updateNewActivityName(newActivity: String) {
+        _uiState.update {
+            it.copy(
+                newActivityName = newActivity
+            )
+        }
     }
 
     fun deleteActivity(activityName: String) {
@@ -130,12 +140,24 @@ class ActivityViewModel @Inject constructor(
             val matched = _uiState.value.activities.firstOrNull { it.name == activityName }
 
             if (matched == _uiState.value.selectedActivity) {
-                _uiState.update { it.copy(selectedActivity = null) }
+                _uiState.update {
+                    it.copy(
+                        selectedActivity = null
+                    )
+                }
             }
 
             matched?.let {
                 activityRepository.deleteActivityByName(it)
             }
+        }
+    }
+
+    fun updateShowDialog(value: Boolean) {
+        _uiState.update {
+            it.copy(
+                showActivityDialog = value
+            )
         }
     }
 
