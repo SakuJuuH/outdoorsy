@@ -14,11 +14,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -40,7 +43,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     val uiState by viewModel.uiState.collectAsState()
 
     val isSearchEnabled = uiState.selectedLocation != null &&
-        uiState.selectedActivity != null
+            uiState.selectedActivity != null
 
     LazyColumn(modifier = modifier) {
         item {
@@ -70,8 +73,47 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 onValueSelected = viewModel::updateActivity,
                 onDeleteOption = viewModel::deleteActivity
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = { viewModel.updateShowDialog(true) }
+            ) {
+                Text(text = stringResource(id = R.string.add_activity_title))
+            }
+            Spacer(modifier = Modifier.height(8.dp))
         }
+
+        if (uiState.showActivityDialog) {
+            item {
+                AlertDialog(
+                    onDismissRequest = { viewModel.updateShowDialog(false) },
+                    title = { Text(text = stringResource(id = R.string.add_activity_title)) },
+                    text = {
+                        TextField(
+                            value = uiState.newActivityName,
+                            onValueChange = { viewModel.updateNewActivityName(it) },
+                            label = { Text(stringResource(id = R.string.add_activity_prompt)) }
+                        )
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.addActivity(uiState.newActivityName)
+                                viewModel.updateNewActivityName("")
+                                viewModel.updateShowDialog(false)
+                            }
+                        ) {
+                            Text(stringResource(id = R.string.confirm_button_label))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { viewModel.updateShowDialog(false) }) {
+                            Text(stringResource(id = R.string.cancel_button_label))
+                        }
+                    }
+                )
+            }
+        }
+
 
         item {
             Row(
