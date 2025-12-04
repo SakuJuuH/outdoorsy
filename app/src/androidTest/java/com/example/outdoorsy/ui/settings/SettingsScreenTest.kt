@@ -16,6 +16,9 @@ import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.LocaleHelper
 import com.example.outdoorsy.utils.TemperatureSystem
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -228,7 +231,7 @@ class SettingsScreenTest {
         composeTestRule.onNodeWithText(context.getString(android.R.string.ok))
             .performClick()
 
-        assert(selectedLanguageCode == AppLanguage.FINNISH.code)
+        assertEquals(AppLanguage.FINNISH.code, selectedLanguageCode)
     }
 
     @Test
@@ -254,7 +257,7 @@ class SettingsScreenTest {
         composeTestRule.onNodeWithText(context.getString(android.R.string.cancel))
             .performClick()
 
-        assert(!callbackCalled)
+        assertFalse(callbackCalled)
 
         composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_select_currency))
             .assertDoesNotExist()
@@ -289,6 +292,6 @@ class SettingsScreenTest {
         composeTestRule.onNodeWithText(context.getString(android.R.string.ok))
             .performClick()
 
-        assert(selectedThemeCode == AppTheme.DARK.code)
+        assertEquals(selectedThemeCode, AppTheme.DARK.code)
     }
 }

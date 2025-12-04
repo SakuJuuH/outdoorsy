@@ -8,7 +8,7 @@ import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.TemperatureSystem
-import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.plus
@@ -33,11 +33,11 @@ class SettingsRepositoryTest {
         createRepository(testScope = this)
 
         repository.getLanguage().test {
-            TestCase.assertEquals(AppLanguage.ENGLISH.code, awaitItem())
+            assertEquals(AppLanguage.ENGLISH.code, awaitItem())
 
             repository.saveLanguage(AppLanguage.FINNISH.code)
 
-            TestCase.assertEquals(AppLanguage.FINNISH.code, awaitItem())
+            assertEquals(AppLanguage.FINNISH.code, awaitItem())
         }
     }
 
@@ -46,11 +46,11 @@ class SettingsRepositoryTest {
         createRepository(testScope = this)
 
         repository.getAppTheme().test {
-            TestCase.assertEquals(AppTheme.SYSTEM.code, awaitItem())
+            assertEquals(AppTheme.SYSTEM.code, awaitItem())
 
             repository.saveAppTheme(AppTheme.DARK.code)
 
-            TestCase.assertEquals(AppTheme.DARK.code, awaitItem())
+            assertEquals(AppTheme.DARK.code, awaitItem())
         }
     }
 
@@ -58,11 +58,11 @@ class SettingsRepositoryTest {
     fun `saveCurrency persists correct value`() = runTest {
         createRepository(testScope = this)
         repository.getCurrency().test {
-            TestCase.assertEquals(Currencies.GBP.code, awaitItem())
+            assertEquals(Currencies.GBP.code, awaitItem())
 
             repository.saveCurrency(Currencies.EUR.code)
 
-            TestCase.assertEquals(Currencies.EUR.code, awaitItem())
+            assertEquals(Currencies.EUR.code, awaitItem())
         }
     }
 
@@ -71,11 +71,11 @@ class SettingsRepositoryTest {
         createRepository(testScope = this)
 
         repository.getTemperatureUnit().test {
-            TestCase.assertEquals(TemperatureSystem.METRIC.code, awaitItem())
+            assertEquals(TemperatureSystem.METRIC.code, awaitItem())
 
             repository.saveTemperatureUnit(TemperatureSystem.IMPERIAL.code)
 
-            TestCase.assertEquals(TemperatureSystem.IMPERIAL.code, awaitItem())
+            assertEquals(TemperatureSystem.IMPERIAL.code, awaitItem())
         }
     }
 
@@ -84,18 +84,18 @@ class SettingsRepositoryTest {
         createRepository(testScope = this)
 
         repository.getRecentSearches().test {
-            TestCase.assertEquals(emptyList<String>(), awaitItem())
+            assertEquals(emptyList<String>(), awaitItem())
 
             repository.addRecentSearch("Helsinki")
             val list1 = awaitItem()
-            TestCase.assertEquals(1, list1.size)
-            TestCase.assertEquals("Helsinki", list1[0])
+            assertEquals(1, list1.size)
+            assertEquals("Helsinki", list1[0])
 
             repository.addRecentSearch("London")
             val list2 = awaitItem()
-            TestCase.assertEquals(2, list2.size)
-            TestCase.assertEquals("London", list2[0])
-            TestCase.assertEquals("Helsinki", list2[1])
+            assertEquals(2, list2.size)
+            assertEquals("London", list2[0])
+            assertEquals("Helsinki", list2[1])
         }
     }
 
