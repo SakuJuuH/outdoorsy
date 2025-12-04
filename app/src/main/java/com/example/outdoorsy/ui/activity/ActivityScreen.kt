@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
+import com.example.outdoorsy.ui.activity.components.DatePickerField
 import com.example.outdoorsy.ui.activity.components.EditableFilteringInput
 import com.example.outdoorsy.ui.activity.components.RecommendationCard
 import com.example.outdoorsy.ui.activity.components.TimePickerField
@@ -120,22 +121,66 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                DatePickerField(
+                    label = stringResource(id = R.string.activity_screen_start_date_label),
+                    selectedDate = uiState.selectedStartDate,
+                    onDateSelected = { newDate ->
+                        viewModel.updateStartDateTime(
+                            newDate,
+                            newTime = uiState.selectedStartTime,
+                            endDate = uiState.selectedEndDate,
+                            endTime = uiState.selectedEndTime
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+
+                DatePickerField(
+                    label = stringResource(id = R.string.activity_screen_end_date_label),
+                    selectedDate = uiState.selectedEndDate,
+                    onDateSelected = { newDate ->
+                        viewModel.updateEndDateTime(
+                            newDate,
+                            newTime = uiState.selectedEndTime,
+                            startDate = uiState.selectedStartDate,
+                            startTime = uiState.selectedStartTime
+                        )
+                    },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 TimePickerField(
                     label = stringResource(id = R.string.activity_screen_start_time_label),
-                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
                     selectedTime = uiState.selectedStartTime,
-                    onTimeSelected = { newStartTime ->
-                        viewModel.updateStartTime(newStartTime, uiState.selectedEndTime)
+                    onTimeSelected = { newTime ->
+                        viewModel.updateStartDateTime(
+                            newDate = uiState.selectedStartDate,
+                            newTime,
+                            endDate = uiState.selectedEndDate,
+                            endTime = uiState.selectedEndTime
+                        )
                     },
                     modifier = Modifier.weight(1f)
                 )
 
                 TimePickerField(
                     label = stringResource(id = R.string.activity_screen_end_time_label),
-                    prompt = stringResource(id = R.string.activity_screen_time_prompt),
                     selectedTime = uiState.selectedEndTime,
-                    onTimeSelected = { newEndTime ->
-                        viewModel.updateEndTime(newEndTime, uiState.selectedStartTime)
+                    onTimeSelected = { newTime ->
+                        viewModel.updateEndDateTime(
+                            newDate = uiState.selectedEndDate,
+                            newTime,
+                            startDate = uiState.selectedStartDate,
+                            startTime = uiState.selectedStartTime
+                        )
                     },
                     modifier = Modifier.weight(1f)
                 )
