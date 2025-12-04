@@ -55,10 +55,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         item {
             EditableFilteringInput(
-                options = uiState.locations,
+                options = uiState.locations.map { location -> location.name ?:
+                "Unknown: ${location.latitude} ${location.longitude}" },
                 label = stringResource(id = R.string.location_label),
                 prompt = stringResource(id = R.string.location_prompt),
-                selectedText = uiState.selectedLocation ?: "",
+                selectedText = uiState.selectedLocation?.name ?: "",
                 onValueSelected = viewModel::updateLocation,
                 onDeleteOption = viewModel::deleteLocation
             )
