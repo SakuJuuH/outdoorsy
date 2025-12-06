@@ -41,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.activity.components.DatePickerField
 import com.example.outdoorsy.ui.activity.components.EditableFilteringInput
+import com.example.outdoorsy.ui.activity.components.HelpTooltip
 import com.example.outdoorsy.ui.activity.components.RecommendationCard
 import com.example.outdoorsy.ui.activity.components.TimePickerField
 import com.example.outdoorsy.ui.components.ScreenTitle
@@ -62,14 +63,23 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         }
 
         item {
-            EditableFilteringInput(
-                options = uiState.locations.map { location -> location.name ?:
-                "Unknown: ${location.latitude} ${location.longitude}" },
-                label = stringResource(id = R.string.location_label),
-                prompt = stringResource(id = R.string.location_prompt),
-                selectedText = uiState.selectedLocation?.name ?: "",
-                onValueSelected = viewModel::updateLocation
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                EditableFilteringInput(
+                    modifier = Modifier.weight(1f),
+                    options = uiState.locations.map { location ->
+                        location.name ?: "Unknown: ${location.latitude} ${location.longitude}"
+                    },
+                    label = stringResource(id = R.string.location_label),
+                    prompt = stringResource(id = R.string.location_prompt),
+                    selectedText = uiState.selectedLocation?.name ?: "",
+                    onValueSelected = viewModel::updateLocation,
+                    noOptionsText = stringResource(id = R.string.no_locations)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                HelpTooltip(stringResource(id = R.string.location_tooltip))
+            }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -84,7 +94,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     prompt = stringResource(id = R.string.activity_prompt),
                     selectedText = uiState.selectedActivity?.name ?: "",
                     onValueSelected = viewModel::updateActivity,
-                    onDeleteOption = viewModel::deleteActivity
+                    onDeleteOption = viewModel::deleteActivity,
+                    noOptionsText = stringResource(id = R.string.no_activities)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -103,7 +114,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         if (uiState.showActivityDialog) {
@@ -138,7 +149,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             }
         }
 
-
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -172,7 +182,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     modifier = Modifier.weight(1f)
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
