@@ -1,7 +1,6 @@
 package com.example.outdoorsy.ui.activity
 
 import android.util.Log
-import com.example.outdoorsy.data.repository.ActivityRepositoryImpl
 import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.Location
@@ -106,10 +105,9 @@ class ActivityViewModelTest {
     fun `updateStartDateTime adjusts end time if invalid`() = runTest {
         val startDate = LocalDate.now()
         val startTime = LocalTime.of(10, 0)
-        val endDate = startDate
         val endTime = LocalTime.of(9, 0)
 
-        viewModel.updateStartDateTime(startDate, startTime, endDate, endTime)
+        viewModel.updateStartDateTime(startDate, startTime, startDate, endTime)
 
         val state = viewModel.uiState.value
         assertEquals(com.example.outdoorsy.R.string.time_error_adjusted, state.timeRangeErrorId)
