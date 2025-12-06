@@ -40,7 +40,8 @@ internal fun EditableFilteringInput(
     prompt: String,
     selectedText: String,
     onValueSelected: (String) -> Unit,
-    onDeleteOption: ((String) -> Unit)? = null
+    onDeleteOption: ((String) -> Unit)? = null,
+    noOptionsText: String
 ) {
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(selectedText) }
@@ -97,10 +98,17 @@ internal fun EditableFilteringInput(
                 if (limitedOptions.isEmpty()) {
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                text = stringResource(id = R.string.no_matches_found),
-                                color = MaterialTheme.colorScheme.error
-                            )
+                            if (text.isEmpty()) {
+                                Text(
+                                    text = noOptionsText,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            } else {
+                                Text(
+                                    text = stringResource(id = R.string.no_matches_found),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         onClick = { expanded = false }
                     )
