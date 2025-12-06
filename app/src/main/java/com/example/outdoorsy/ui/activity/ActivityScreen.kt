@@ -68,27 +68,6 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
             ) {
                 EditableFilteringInput(
                     modifier = Modifier.weight(1f),
-                    options = uiState.locations.map { location ->
-                        location.name ?: "Unknown: ${location.latitude} ${location.longitude}"
-                    },
-                    label = stringResource(id = R.string.location_label),
-                    prompt = stringResource(id = R.string.location_prompt),
-                    selectedText = uiState.selectedLocation?.name ?: "",
-                    onValueSelected = viewModel::updateLocation,
-                    noOptionsText = stringResource(id = R.string.no_locations)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                HelpTooltip(stringResource(id = R.string.location_tooltip))
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        item {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                EditableFilteringInput(
-                    modifier = Modifier.weight(1f),
                     options = uiState.activities.map { activity -> activity.name },
                     label = stringResource(id = R.string.activity_label),
                     prompt = stringResource(id = R.string.activity_prompt),
@@ -113,6 +92,27 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                         tint = Color.White
                     )
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                EditableFilteringInput(
+                    modifier = Modifier.weight(1f),
+                    options = uiState.locations.map { location ->
+                        location.name ?: "Unknown: ${location.latitude} ${location.longitude}"
+                    },
+                    label = stringResource(id = R.string.location_label),
+                    prompt = stringResource(id = R.string.location_prompt),
+                    selectedText = uiState.selectedLocation?.name ?: "",
+                    onValueSelected = viewModel::updateLocation,
+                    noOptionsText = stringResource(id = R.string.no_locations)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                HelpTooltip(stringResource(id = R.string.location_tooltip))
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
