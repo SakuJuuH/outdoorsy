@@ -34,6 +34,7 @@ import com.example.outdoorsy.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EditableFilteringInput(
+    modifier: Modifier = Modifier,
     options: List<String>,
     label: String,
     prompt: String,
@@ -48,7 +49,7 @@ internal fun EditableFilteringInput(
     val filteredOptions = options.filter { it.contains(text, ignoreCase = true) }
     val limitedOptions = filteredOptions.take(maxItems)
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
