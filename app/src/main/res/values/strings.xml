@@ -106,6 +106,7 @@
     <string name="settings_screen_currency_usd">US Dollar ($)</string>
     <string name="settings_screen_currency_eur">Euro (€)</string>
     <string name="settings_screen_currency_gbp">British Pound (£)</string>
+    <string name="activity_screen_subtitle">Plan an activity based on the weather conditions for a specific location</string>
 
 
 </resources>

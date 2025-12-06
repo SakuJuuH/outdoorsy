@@ -95,4 +95,5 @@
     <string name="widget_no_data">Ei tietoja</string>
     <string name="widget_tap_to_open">Avaa napauttamalla</string>
     <string name="widget_description">Näyttää nykyisen säätilan tallennetulle sijainnille</string>
+    <string name="activity_screen_subtitle">Suunnittele aktiviteetti tietyn paikan sääolosuhteiden perusteella</string>
 </resources>
