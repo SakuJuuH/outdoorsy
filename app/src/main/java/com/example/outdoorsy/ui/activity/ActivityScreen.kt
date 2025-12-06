@@ -49,7 +49,8 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
     LazyColumn(modifier = modifier) {
         item {
             ScreenTitle(
-                title = stringResource(R.string.activity_screen_title)
+                title = stringResource(R.string.activity_screen_title),
+                subtitle = stringResource(R.string.activity_screen_subtitle)
             )
         }
 
