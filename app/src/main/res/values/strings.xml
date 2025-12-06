@@ -107,6 +107,9 @@
     <string name="settings_screen_currency_eur">Euro (€)</string>
     <string name="settings_screen_currency_gbp">British Pound (£)</string>
     <string name="activity_screen_subtitle">Plan an activity based on the weather conditions for a specific location</string>
+    <string name="no_activities">There are no activities! Please add one first</string>
+    <string name="no_locations">There are no locations! Check the tooltip for information</string>
+    <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
 
 
 </resources>
