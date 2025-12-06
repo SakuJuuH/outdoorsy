@@ -34,12 +34,14 @@ import com.example.outdoorsy.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EditableFilteringInput(
+    modifier: Modifier = Modifier,
     options: List<String>,
     label: String,
     prompt: String,
     selectedText: String,
     onValueSelected: (String) -> Unit,
-    onDeleteOption: ((String) -> Unit)? = null
+    onDeleteOption: ((String) -> Unit)? = null,
+    noOptionsText: String
 ) {
     var expanded by remember { mutableStateOf(false) }
     var text by remember { mutableStateOf(selectedText) }
@@ -48,7 +50,7 @@ internal fun EditableFilteringInput(
     val filteredOptions = options.filter { it.contains(text, ignoreCase = true) }
     val limitedOptions = filteredOptions.take(maxItems)
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
@@ -96,10 +98,17 @@ internal fun EditableFilteringInput(
                 if (limitedOptions.isEmpty()) {
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                text = stringResource(id = R.string.no_matches_found),
-                                color = MaterialTheme.colorScheme.error
-                            )
+                            if (text.isEmpty()) {
+                                Text(
+                                    text = noOptionsText,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            } else {
+                                Text(
+                                    text = stringResource(id = R.string.no_matches_found),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         },
                         onClick = { expanded = false }
                     )
