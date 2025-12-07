@@ -34,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,11 +47,45 @@ import com.example.outdoorsy.ui.activity.components.RecommendationCard
 import com.example.outdoorsy.ui.activity.components.TimePickerField
 import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
+import java.time.LocalDate
+import java.time.LocalTime
 
 @Composable
-fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel = viewModel()) {
+fun ActivityScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ActivityViewModel = viewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
 
+    ActivityScreenContent(
+        modifier = modifier,
+        uiState = uiState,
+        onUpdateActivity = viewModel::updateActivity,
+        onDeleteActivity = viewModel::deleteActivity,
+        onUpdateLocation = viewModel::updateLocation,
+        onUpdateShowDialog = viewModel::updateShowDialog,
+        onUpdateNewActivityName = viewModel::updateNewActivityName,
+        onAddActivity = viewModel::addActivity,
+        onUpdateStartDateTime = viewModel::updateStartDateTime,
+        onUpdateEndDateTime = viewModel::updateEndDateTime,
+        onPerformSearch = viewModel::performSearch
+    )
+}
+
+@Composable
+internal fun ActivityScreenContent(
+    modifier: Modifier = Modifier,
+    uiState: ActivityUiState,
+    onUpdateActivity: (String) -> Unit,
+    onDeleteActivity: (String) -> Unit,
+    onUpdateLocation: (String) -> Unit,
+    onUpdateShowDialog: (Boolean) -> Unit,
+    onUpdateNewActivityName: (String) -> Unit,
+    onAddActivity: (String) -> Unit,
+    onUpdateStartDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
+    onUpdateEndDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
+    onPerformSearch: () -> Unit
+) {
     val isSearchEnabled = uiState.selectedLocation != null &&
             uiState.selectedActivity != null
 
@@ -72,14 +107,14 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.activity_label),
                     prompt = stringResource(id = R.string.activity_prompt),
                     selectedText = uiState.selectedActivity?.name ?: "",
-                    onValueSelected = viewModel::updateActivity,
-                    onDeleteOption = viewModel::deleteActivity,
+                    onValueSelected = onUpdateActivity,
+                    onDeleteOption = onDeleteActivity,
                     noOptionsText = stringResource(id = R.string.no_activities)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
 
                 IconButton(
-                    onClick = { viewModel.updateShowDialog(true) },
+                    onClick = { onUpdateShowDialog(true) },
                     modifier = Modifier
                         .align(Alignment.Bottom)
                         .padding(bottom = 8.dp)
@@ -108,7 +143,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.location_label),
                     prompt = stringResource(id = R.string.location_prompt),
                     selectedText = uiState.selectedLocation?.name ?: "",
-                    onValueSelected = viewModel::updateLocation,
+                    onValueSelected = onUpdateLocation,
                     noOptionsText = stringResource(id = R.string.no_locations)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -120,28 +155,28 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         if (uiState.showActivityDialog) {
             item {
                 AlertDialog(
-                    onDismissRequest = { viewModel.updateShowDialog(false) },
+                    onDismissRequest = { onUpdateShowDialog(false) },
                     title = { Text(text = stringResource(id = R.string.add_activity_title)) },
                     text = {
                         TextField(
                             value = uiState.newActivityName,
-                            onValueChange = { viewModel.updateNewActivityName(it) },
+                            onValueChange = { onUpdateNewActivityName(it) },
                             label = { Text(stringResource(id = R.string.add_activity_prompt)) }
                         )
                     },
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                viewModel.addActivity(uiState.newActivityName)
-                                viewModel.updateNewActivityName("")
-                                viewModel.updateShowDialog(false)
+                                onAddActivity(uiState.newActivityName)
+                                onUpdateNewActivityName("")
+                                onUpdateShowDialog(false)
                             }
                         ) {
                             Text(stringResource(id = R.string.confirm_button_label))
                         }
                     },
                     dismissButton = {
-                        TextButton(onClick = { viewModel.updateShowDialog(false) }) {
+                        TextButton(onClick = { onUpdateShowDialog(false) }) {
                             Text(stringResource(id = R.string.cancel_button_label))
                         }
                     }
@@ -158,11 +193,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.start_time_label),
                     selectedDate = uiState.selectedStartDate,
                     onDateSelected = { newDate ->
-                        viewModel.updateStartDateTime(
+                        onUpdateStartDateTime(
                             newDate,
-                            newTime = uiState.selectedStartTime,
-                            endDate = uiState.selectedEndDate,
-                            endTime = uiState.selectedEndTime
+                            uiState.selectedStartTime,
+                            uiState.selectedEndDate,
+                            uiState.selectedEndTime
                         )
                     },
                     modifier = Modifier.weight(1f)
@@ -172,11 +207,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.activity_screen_end_date_label),
                     selectedDate = uiState.selectedEndDate,
                     onDateSelected = { newDate ->
-                        viewModel.updateEndDateTime(
+                        onUpdateEndDateTime(
                             newDate,
-                            newTime = uiState.selectedEndTime,
-                            startDate = uiState.selectedStartDate,
-                            startTime = uiState.selectedStartTime
+                            uiState.selectedEndTime,
+                            uiState.selectedStartDate,
+                            uiState.selectedStartTime
                         )
                     },
                     modifier = Modifier.weight(1f)
@@ -194,11 +229,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.activity_screen_start_time_label),
                     selectedTime = uiState.selectedStartTime,
                     onTimeSelected = { newTime ->
-                        viewModel.updateStartDateTime(
-                            newDate = uiState.selectedStartDate,
+                        onUpdateStartDateTime(
+                            uiState.selectedStartDate,
                             newTime,
-                            endDate = uiState.selectedEndDate,
-                            endTime = uiState.selectedEndTime
+                            uiState.selectedEndDate,
+                            uiState.selectedEndTime
                         )
                     },
                     modifier = Modifier.weight(1f)
@@ -208,11 +243,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     label = stringResource(id = R.string.end_time_label),
                     selectedTime = uiState.selectedEndTime,
                     onTimeSelected = { newTime ->
-                        viewModel.updateEndDateTime(
-                            newDate = uiState.selectedEndDate,
+                        onUpdateEndDateTime(
+                            uiState.selectedEndDate,
                             newTime,
-                            startDate = uiState.selectedStartDate,
-                            startTime = uiState.selectedStartTime
+                            uiState.selectedStartDate,
+                            uiState.selectedStartTime
                         )
                     },
                     modifier = Modifier.weight(1f)
@@ -223,7 +258,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         if (uiState.timeRangeErrorId != null) {
             item {
                 Text(
-                    text = stringResource(uiState.timeRangeErrorId!!),
+                    text = stringResource(uiState.timeRangeErrorId),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp)
@@ -238,7 +273,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
 
         item {
             Button(
-                onClick = { viewModel.performSearch() },
+                onClick = { onPerformSearch() },
                 enabled = isSearchEnabled,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
@@ -259,9 +294,11 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(64.dp),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .testTag("loading_indicator"),
                         color = MaterialTheme.colorScheme.primary,
-                        strokeWidth = 6.dp
+                        strokeWidth = 6.dp,
                     )
                 }
             }
@@ -283,7 +320,7 @@ fun ActivityScreen(modifier: Modifier = Modifier, viewModel: ActivityViewModel =
         }
 
         if (uiState.searchPerformed == true && uiState.aiAnswer != null) {
-            val answer = uiState.aiAnswer!!
+            val answer = uiState.aiAnswer
 
             item {
                 RecommendationCard(
