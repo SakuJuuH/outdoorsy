@@ -51,12 +51,10 @@ import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import java.time.LocalDate
 import java.time.LocalTime
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.outdoorsy.ui.navigation.Screen
 import com.example.outdoorsy.ui.activity.components.ShopMessageCard
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -67,13 +65,6 @@ fun ActivityScreen(
     navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    if (uiState.navigateToShop) {
-        LaunchedEffect(key1 = true) {
-            navController.navigate(Screen.AppNav.Shopping.route)
-            viewModel.onNavigationComplete()
-        }
-    }
 
     ActivityScreenContent(
         modifier = modifier,
@@ -87,7 +78,13 @@ fun ActivityScreen(
         onUpdateStartDateTime = viewModel::updateStartDateTime,
         onUpdateEndDateTime = viewModel::updateEndDateTime,
         onPerformSearch = viewModel::performSearch,
-        onNavigateToShop = viewModel::onNavigateToShop
+        onNavigateToShop = {
+            navController.navigate(Screen.AppNav.Shopping.route) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navController.graph.startDestinationId) { saveState = true }
+            }
+        }
     )
 }
 
@@ -379,7 +376,6 @@ internal fun ActivityScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
-
 }
 
 @Preview
