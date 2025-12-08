@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Cloud
@@ -28,11 +27,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,26 +69,26 @@ fun ActivityScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     if (uiState.navigateToShop) {
-        LaunchedEffect(key1 = uiState.navigateToShop) {
+        LaunchedEffect(key1 = true) {
             navController.navigate(Screen.AppNav.Shopping.route)
             viewModel.onNavigationComplete()
         }
     }
-        ActivityScreenContent(
-            modifier = modifier,
-            uiState = uiState,
-            onUpdateActivity = viewModel::updateActivity,
-            onDeleteActivity = viewModel::deleteActivity,
-            onUpdateLocation = viewModel::updateLocation,
-            onUpdateShowDialog = viewModel::updateShowDialog,
-            onUpdateNewActivityName = viewModel::updateNewActivityName,
-            onAddActivity = viewModel::addActivity,
-            onUpdateStartDateTime = viewModel::updateStartDateTime,
-            onUpdateEndDateTime = viewModel::updateEndDateTime,
-            onPerformSearch = viewModel::performSearch,
-            onShowClothingTipAlert = viewModel::onShowClothingTipAlert,
-            onNavigateToShop = viewModel::onNavigateToShop
-        )
+
+    ActivityScreenContent(
+        modifier = modifier,
+        uiState = uiState,
+        onUpdateActivity = viewModel::updateActivity,
+        onDeleteActivity = viewModel::deleteActivity,
+        onUpdateLocation = viewModel::updateLocation,
+        onUpdateShowDialog = viewModel::updateShowDialog,
+        onUpdateNewActivityName = viewModel::updateNewActivityName,
+        onAddActivity = viewModel::addActivity,
+        onUpdateStartDateTime = viewModel::updateStartDateTime,
+        onUpdateEndDateTime = viewModel::updateEndDateTime,
+        onPerformSearch = viewModel::performSearch,
+        onNavigateToShop = viewModel::onNavigateToShop
+    )
 }
 
 @Composable
@@ -107,7 +104,6 @@ internal fun ActivityScreenContent(
     onUpdateStartDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
     onUpdateEndDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
     onPerformSearch: () -> Unit,
-    onShowClothingTipAlert: (Boolean) -> Unit,
     onNavigateToShop: () -> Unit
 ) {
     val isSearchEnabled = uiState.selectedLocation != null &&
