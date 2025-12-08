@@ -25,6 +25,5 @@ data class ActivityUiState(
     val isLoading: Boolean = false,
     val aiAnswer: AiAssistantAnswerDto? = null,
     val showActivityDialog: Boolean = false,
-    val newActivityName: String = "",
-    val navigateToShop: Boolean = false
+    val newActivityName: String = ""
 )
