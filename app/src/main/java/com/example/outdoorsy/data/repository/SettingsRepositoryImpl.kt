@@ -72,7 +72,14 @@ class SettingsRepositoryImpl @Inject constructor(private val dataStore: DataStor
     )
 
     override fun getRecentSearches(): Flow<List<String>> = dataStore.data
-        .catch { emit(emptyPreferences()) }
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e("SettingsRepository", "Error reading preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
         .map { preferences ->
             preferences[PreferenceKeys.RECENT_SEARCHES]?.toList() ?: emptyList()
         }
