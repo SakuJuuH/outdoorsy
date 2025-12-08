@@ -91,7 +91,7 @@ class SettingsRepositoryImpl @Inject constructor(private val dataStore: DataStor
                 preferences[PreferenceKeys.RECENT_SEARCHES] = currentSearches.take(5).toSet()
             }
         } catch (e: IOException) {
-            Log.e("SettingsRepo", "Error adding recent search", e)
+            Log.e("SettingsRepository", "Error adding recent search", e)
         }
     }
 
