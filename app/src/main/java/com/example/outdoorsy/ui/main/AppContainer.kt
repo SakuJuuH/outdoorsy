@@ -64,8 +64,7 @@ fun AppContainer(mainNavController: NavHostController) {
 
             composable(Screen.AppNav.Activity.route) {
                 val viewModel: ActivityViewModel = hiltViewModel()
-                val navController = rememberNavController()
-                ActivityScreen(viewModel = viewModel, navController = navController)
+                ActivityScreen(viewModel = viewModel, navController = nestedNavController)
             }
 
             composable(Screen.AppNav.Shopping.route) {
