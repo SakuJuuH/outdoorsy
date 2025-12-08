@@ -39,7 +39,7 @@
     <string name="add_activity_prompt">Type new activity name…</string>
     <string name="confirm_button_label">Confirm</string>
     <string name="cancel_button_label">Cancel</string>
-    <string name="shop_message_card_description">Click below to see the recommended clothing items in the Weather Gear Shop!</string>
+    <string name="shop_message_card_description">Click below to see the recommended clothing items for the activity in the Shopping page</string>
     <string name="shop_message_card_button_text">Go to Shop</string>
 
 
