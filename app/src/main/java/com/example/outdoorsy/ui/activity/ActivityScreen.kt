@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.activity
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Checkroom
 import androidx.compose.material.icons.filled.Cloud
@@ -22,12 +24,15 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -53,7 +58,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.outdoorsy.ui.navigation.Screen
+import com.example.outdoorsy.ui.activity.components.ShopMessageCard
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ActivityScreen(
     modifier: Modifier = Modifier,
@@ -68,22 +77,21 @@ fun ActivityScreen(
             viewModel.onNavigationComplete()
         }
     }
-
-    ActivityScreenContent(
-        modifier = modifier,
-        uiState = uiState,
-        onUpdateActivity = viewModel::updateActivity,
-        onDeleteActivity = viewModel::deleteActivity,
-        onUpdateLocation = viewModel::updateLocation,
-        onUpdateShowDialog = viewModel::updateShowDialog,
-        onUpdateNewActivityName = viewModel::updateNewActivityName,
-        onAddActivity = viewModel::addActivity,
-        onUpdateStartDateTime = viewModel::updateStartDateTime,
-        onUpdateEndDateTime = viewModel::updateEndDateTime,
-        onPerformSearch = viewModel::performSearch,
-        onShowClothingTipAlert = viewModel::onShowClothingTipAlert,
-        onNavigateToShop = viewModel::onNavigateToShop
-    )
+        ActivityScreenContent(
+            modifier = modifier,
+            uiState = uiState,
+            onUpdateActivity = viewModel::updateActivity,
+            onDeleteActivity = viewModel::deleteActivity,
+            onUpdateLocation = viewModel::updateLocation,
+            onUpdateShowDialog = viewModel::updateShowDialog,
+            onUpdateNewActivityName = viewModel::updateNewActivityName,
+            onAddActivity = viewModel::addActivity,
+            onUpdateStartDateTime = viewModel::updateStartDateTime,
+            onUpdateEndDateTime = viewModel::updateEndDateTime,
+            onPerformSearch = viewModel::performSearch,
+            onShowClothingTipAlert = viewModel::onShowClothingTipAlert,
+            onNavigateToShop = viewModel::onNavigateToShop
+        )
 }
 
 @Composable
@@ -360,8 +368,13 @@ internal fun ActivityScreenContent(
                 RecommendationCard(
                     icon = Icons.Default.Checkroom,
                     title = stringResource(R.string.clothing_tips),
-                    items = answer.clothingTips,
-                    onClothingClick = { onNavigateToShop() }
+                    items = answer.clothingTips
+                )
+            }
+
+            item {
+                ShopMessageCard(
+                    onNavigateToShop = onNavigateToShop
                 )
             }
         }
@@ -371,19 +384,6 @@ internal fun ActivityScreenContent(
         }
     }
 
-    // Clothing tips alert
-    if (uiState.showClothingTipAlert) {
-        AlertDialog(
-            onDismissRequest = { onShowClothingTipAlert(false) },
-            title = { Text(text = stringResource(R.string.clothing_tips_alert_title)) },
-            text = { Text(text = stringResource(R.string.clothing_tips_alert_message)) },
-            confirmButton = {
-                TextButton(onClick = { onShowClothingTipAlert(false) }) {
-                    Text("OK")
-                }
-            }
-        )
-    }
 }
 
 @Preview
