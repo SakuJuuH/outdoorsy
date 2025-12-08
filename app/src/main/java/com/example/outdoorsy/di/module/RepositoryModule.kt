@@ -5,12 +5,14 @@ import com.example.outdoorsy.data.repository.ActivityRepositoryImpl
 import com.example.outdoorsy.data.repository.CurrencyRepositoryImpl
 import com.example.outdoorsy.data.repository.EbayRepositoryImpl
 import com.example.outdoorsy.data.repository.ForecastRepositoryImpl
+import com.example.outdoorsy.data.repository.SettingsRepositoryImpl
 import com.example.outdoorsy.data.repository.WeatherRepositoryImpl
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.repository.CurrencyRepository
 import com.example.outdoorsy.domain.repository.EbayRepository
 import com.example.outdoorsy.domain.repository.ForecastRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.repository.WeatherRepository
 import dagger.Binds
 import dagger.Module
@@ -44,4 +46,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindCurrencyRepository(impl: CurrencyRepositoryImpl): CurrencyRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
 }

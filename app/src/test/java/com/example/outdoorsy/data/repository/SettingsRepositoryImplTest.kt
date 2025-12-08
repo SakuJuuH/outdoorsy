@@ -1,5 +1,6 @@
 package com.example.outdoorsy.data.repository
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -8,30 +9,62 @@ import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
 import com.example.outdoorsy.utils.TemperatureSystem
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import java.io.File
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SettingsRepositoryTest {
+class SettingsRepositoryImplTest {
 
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder()
 
-    private lateinit var repository: SettingsRepository
+    private lateinit var repository: SettingsRepositoryImpl
     private lateinit var testDataStore: DataStore<Preferences>
+
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
+
+
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this)
+
+        mockkStatic(Log::class)
+        every { Log.e(any(), any(), any()) } returns 0
+        every { Log.e(any(), any()) } returns 0
+
+        testDataStore = PreferenceDataStoreFactory.create(
+            scope = testScope,
+            produceFile = { tmpFolder.newFile("test_settings.preferences_pb") }
+        )
+
+        repository = SettingsRepositoryImpl(testDataStore)
+    }
+
+    @After
+    fun tearDown() {
+        tmpFolder.delete()
+        unmockkStatic(Log::class)
+    }
 
     @Test
     fun `saveLanguage persists correct value`() = runTest {
-        createRepository(testScope = this)
-
         repository.getLanguage().test {
             assertEquals(AppLanguage.ENGLISH.code, awaitItem())
 
@@ -43,8 +76,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `saveAppTheme persists correct value`() = runTest {
-        createRepository(testScope = this)
-
         repository.getAppTheme().test {
             assertEquals(AppTheme.SYSTEM.code, awaitItem())
 
@@ -56,7 +87,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `saveCurrency persists correct value`() = runTest {
-        createRepository(testScope = this)
         repository.getCurrency().test {
             assertEquals(Currencies.GBP.code, awaitItem())
 
@@ -68,8 +98,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `saveTemperature persists correct value`() = runTest {
-        createRepository(testScope = this)
-
         repository.getTemperatureUnit().test {
             assertEquals(TemperatureSystem.METRIC.code, awaitItem())
 
@@ -81,7 +109,7 @@ class SettingsRepositoryTest {
 
     @Test
     fun `recent searches flow emits updates as items are added`() = runTest {
-        createRepository(testScope = this)
+
 
         repository.getRecentSearches().test {
             assertEquals(emptyList<String>(), awaitItem())
@@ -99,15 +127,30 @@ class SettingsRepositoryTest {
         }
     }
 
-    private fun createRepository(testScope: TestScope) {
-        testDataStore = PreferenceDataStoreFactory.create(
-            scope = testScope + Job(),
-            produceFile = {
-                File(tmpFolder.newFolder(), "test_settings.preferences_pb")
-            }
-        )
-        repository = SettingsRepository(testDataStore)
+    @Test
+    fun `getLanguage handles IOException by returning default value`() = runTest {
+        val mockDataStore = mockk<DataStore<Preferences>>()
+        every { mockDataStore.data } returns flow {
+            throw IOException("Simulated disk read error")
+        }
+
+        val brokenRepository = SettingsRepositoryImpl(mockDataStore)
+
+        brokenRepository.getLanguage().test {
+            assertEquals(AppLanguage.ENGLISH.code, awaitItem())
+            awaitComplete()
+        }
     }
 
+    @Test(expected = Exception::class)
+    fun `getLanguage throws other exceptions`() = runTest {
+        val mockDataStore = mockk<DataStore<Preferences>>()
+        every { mockDataStore.data } returns flow {
+            throw RuntimeException("Critical system failure")
+        }
 
+        val brokenRepository = SettingsRepositoryImpl(mockDataStore)
+
+        brokenRepository.getLanguage().collect()
+    }
 }

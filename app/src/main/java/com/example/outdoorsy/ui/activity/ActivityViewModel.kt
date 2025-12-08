@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
-import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.model.Location
@@ -13,6 +12,7 @@ import com.example.outdoorsy.domain.model.weather.ForecastResponse
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.repository.LocationRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.utils.WeatherPromptProvider
@@ -115,7 +115,9 @@ class ActivityViewModel @Inject constructor(
         startDate: LocalDate,
         startTime: LocalTime
     ) {
-        if (newDate.isBefore(startDate) || (newDate.isEqual(startDate) && newTime.isBefore(startTime))) {
+        if (newDate.isBefore(startDate) ||
+            (newDate.isEqual(startDate) && newTime.isBefore(startTime))
+        ) {
             _uiState.update {
                 it.copy(
                     timeRangeErrorId = R.string.time_error_invalid

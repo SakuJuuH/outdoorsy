@@ -4,5 +4,6 @@ data class SettingsUiState(
     val temperatureUnit: String = "",
     val language: String = "",
     val appTheme: String = "",
-    val currency: String = ""
+    val currency: String = "",
+    val userMessage: Int? = null
 )

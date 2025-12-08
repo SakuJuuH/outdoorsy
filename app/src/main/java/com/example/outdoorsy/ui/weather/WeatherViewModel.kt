@@ -3,9 +3,9 @@ package com.example.outdoorsy.ui.weather
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.Location
 import com.example.outdoorsy.domain.repository.LocationRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.usecase.GetCurrentWeather
 import com.example.outdoorsy.domain.usecase.GetForecast
 import com.example.outdoorsy.ui.weather.mappers.toUiModel
