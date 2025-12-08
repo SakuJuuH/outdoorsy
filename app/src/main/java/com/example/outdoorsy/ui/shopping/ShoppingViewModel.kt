@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -75,8 +76,8 @@ class ShoppingViewModel @Inject constructor(
     private suspend fun fetchAllShoppingData(targetCurrency: String) {
         _uiState.update { it.copy(isLoading = true, error = null) }
 
-        // Use coroutineScope to create a scope for concurrent tasks
-        coroutineScope {
+        // Use supervisorScope to create a scope for concurrent tasks
+        supervisorScope {
             try {
                 // Now `async` is called within a proper CoroutineScope
                 val mainItemsDeferred = async {

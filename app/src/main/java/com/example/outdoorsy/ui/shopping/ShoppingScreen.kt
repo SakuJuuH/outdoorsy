@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,7 +36,19 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         viewModel.refreshRecommendations()
     }
 
-    val uiState = viewModel.uiState.collectAsState().value
+    val uiState by viewModel.uiState.collectAsState()
+
+    ShoppingContent(
+        uiState = uiState,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ShoppingContent(
+    uiState: ShoppingUiState,
+    modifier: Modifier = Modifier
+) {
     val isLoading = uiState.isLoading
     val error = uiState.error
     val items = uiState.items
@@ -54,6 +67,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
         }
 
         // --- Recommended Items Section ---
+        // This section only appears if there are recommended items.
         if (recommendedItems.isNotEmpty()) {
             item {
                 Text(
@@ -79,8 +93,8 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             )
         }
 
-        // 4. Loading State
-        // Improved logic: show loading indicator only when both lists are empty
+        // 2. Loading State
+        // Show loading indicator only when the screen is initially loading (both lists are empty).
         if (isLoading && items.isEmpty() && recommendedItems.isEmpty()) {
             item {
                 Box(
@@ -95,7 +109,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // Handle Error State
+        // 3. Handle Error State
         if (error != null) {
             item {
                 Text(
@@ -106,7 +120,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
             }
         }
 
-        // 4. Display the items from the API
+        // 4. Display the main list of items from the API.
         items(items) { item ->
             ProductCard(
                 item = item
@@ -119,6 +133,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
 @Composable
 fun ShoppingScreenPreview() {
     WeatherAppTheme {
-        ShoppingScreen()
+        // We can now easily preview the screen by providing a sample UiState.
+        ShoppingContent(uiState = ShoppingUiState(isLoading = false))
     }
 }
