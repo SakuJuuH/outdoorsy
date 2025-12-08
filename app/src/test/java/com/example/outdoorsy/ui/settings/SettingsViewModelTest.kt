@@ -1,6 +1,6 @@
 package com.example.outdoorsy.ui.settings
 
-import com.example.outdoorsy.data.repository.SettingsRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.utils.AppLanguage
 import com.example.outdoorsy.utils.AppTheme
 import com.example.outdoorsy.utils.Currencies
@@ -15,7 +15,6 @@ import io.mockk.just
 import io.mockk.mockkObject
 import io.mockk.runs
 import io.mockk.unmockkObject
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -137,10 +136,6 @@ class SettingsViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        // 1. Verify repository save was called
         coVerify { settingsRepository.saveLanguage(AppLanguage.FINNISH.code) }
-
-        // 2. Verify LocaleHelper.setLocale was called
-        verify { LocaleHelper.setLocale(AppLanguage.FINNISH.code) }
     }
 }

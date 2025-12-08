@@ -9,6 +9,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import com.example.outdoorsy.ui.main.MainViewModel
 import com.example.outdoorsy.ui.navigation.AppNavHost
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.utils.AppTheme
+import com.example.outdoorsy.utils.LocaleHelper
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +30,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             val appTheme by viewmodel.appTheme.collectAsState()
+            val language by viewmodel.language.collectAsState()
+
+            LaunchedEffect(language) {
+                LocaleHelper.setLocale(language)
+            }
 
             val isDarkTheme = when (appTheme) {
                 AppTheme.LIGHT.code -> false
@@ -41,7 +48,6 @@ class MainActivity : AppCompatActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-
                     AppNavHost(navController = navController)
                 }
             }

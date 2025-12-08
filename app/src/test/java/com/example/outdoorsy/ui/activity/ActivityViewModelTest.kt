@@ -1,12 +1,12 @@
 package com.example.outdoorsy.ui.activity
 
 import android.util.Log
-import com.example.outdoorsy.data.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.Location
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
 import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.repository.LocationRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.usecase.GetAiAssistant
 import com.example.outdoorsy.domain.usecase.GetForecast
 import io.mockk.MockKAnnotations
@@ -36,16 +36,22 @@ import java.time.LocalTime
 @OptIn(ExperimentalCoroutinesApi::class)
 class ActivityViewModelTest {
     private lateinit var viewModel: ActivityViewModel
+
     @MockK
     private lateinit var getAiAssistant: GetAiAssistant
+
     @MockK
     private lateinit var getForecast: GetForecast
+
     @MockK
     private lateinit var settingsRepository: SettingsRepository
+
     @MockK
     private lateinit var activityLogRepository: ActivityLogRepository
+
     @MockK
     private lateinit var activityRepository: ActivityRepository
+
     @MockK
     private lateinit var locationRepository: LocationRepository
 
@@ -63,7 +69,15 @@ class ActivityViewModelTest {
 
         // Default flows
         every { activityRepository.getAllActivities() } returns flowOf(listOf(Activity("Running")))
-        every { locationRepository.getAllLocations() } returns flowOf(listOf(Location("Park", latitude = 60.0, longitude = 25.0)))
+        every { locationRepository.getAllLocations() } returns flowOf(
+            listOf(
+                Location(
+                    "Park",
+                    latitude = 60.0,
+                    longitude = 25.0
+                )
+            )
+        )
 
         viewModel = ActivityViewModel(
             getAiAssistant,
