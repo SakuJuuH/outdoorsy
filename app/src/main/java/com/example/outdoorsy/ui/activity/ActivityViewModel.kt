@@ -177,14 +177,6 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    fun onNavigateToShop() {
-        _uiState.update { it.copy(navigateToShop = true) }
-    }
-
-    fun onNavigationComplete() {
-        _uiState.update { it.copy(navigateToShop = false) }
-    }
-
     // TODO: Remove Log statements
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
