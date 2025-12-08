@@ -37,6 +37,7 @@
     <string name="confirm_button_label">Vahvistaa</string>
     <string name="cancel_button_label">Peruuttaa</string>
 
+    <string name="shop_message_card_button_text">Mene kauppaan</string>
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
 
@@ -98,5 +99,6 @@
     <string name="activity_screen_subtitle">Suunnittele aktiviteetti tietyn paikan sääolosuhteiden perusteella</string>
     <string name="no_activities">Ei aktiviteetteja! Lisää yksi ensin</string>
     <string name="no_locations">Ei sijainteja! Lisää ne Sää-sivulle. Katso lisätietoja työkaluvihjeestä</string>
-    <string name="location_tooltip">Sijainnit hallitaan Sää-sivulta. Kaikki sinne lisätyt sijainnit ovat käytettävissä aktiviteettien suunnittelussa.</string>
+    <string name="location_tooltip">Sijainnit hallitaan Sää-sivulta. Kaikki sinne lisätyt sijainnit ovat käytettävissä aktiviteettien suunnittelussa</string>
+    <string name="shop_message_card_description">Klikkaa alta nähdäksesi suositellut vaatekappaleet aktiviteettiin Ostokset-sivulla</string>
 </resources>

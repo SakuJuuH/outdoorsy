@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.activity
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,11 +51,18 @@ import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import java.time.LocalDate
 import java.time.LocalTime
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.outdoorsy.ui.navigation.Screen
+import com.example.outdoorsy.ui.activity.components.ShopMessageCard
 
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ActivityScreen(
     modifier: Modifier = Modifier,
-    viewModel: ActivityViewModel = viewModel()
+    viewModel: ActivityViewModel = viewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -68,7 +77,14 @@ fun ActivityScreen(
         onAddActivity = viewModel::addActivity,
         onUpdateStartDateTime = viewModel::updateStartDateTime,
         onUpdateEndDateTime = viewModel::updateEndDateTime,
-        onPerformSearch = viewModel::performSearch
+        onPerformSearch = viewModel::performSearch,
+        onNavigateToShop = {
+            navController.navigate(Screen.AppNav.Shopping.route) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navController.graph.startDestinationId) { saveState = true }
+            }
+        }
     )
 }
 
@@ -84,7 +100,8 @@ internal fun ActivityScreenContent(
     onAddActivity: (String) -> Unit,
     onUpdateStartDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
     onUpdateEndDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
-    onPerformSearch: () -> Unit
+    onPerformSearch: () -> Unit,
+    onNavigateToShop: () -> Unit
 ) {
     val isSearchEnabled = uiState.selectedLocation != null &&
             uiState.selectedActivity != null
@@ -347,6 +364,12 @@ internal fun ActivityScreenContent(
                     items = answer.clothingTips
                 )
             }
+
+            item {
+                ShopMessageCard(
+                    onNavigateToShop = onNavigateToShop
+                )
+            }
         }
 
         item {
@@ -359,6 +382,8 @@ internal fun ActivityScreenContent(
 @Composable
 fun ActivityScreenPreview() {
     WeatherAppTheme {
-        ActivityScreen()
+        ActivityScreen(
+            navController = rememberNavController()
+        )
     }
 }

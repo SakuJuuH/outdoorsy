@@ -39,6 +39,8 @@
     <string name="add_activity_prompt">Type new activity name…</string>
     <string name="confirm_button_label">Confirm</string>
     <string name="cancel_button_label">Cancel</string>
+    <string name="shop_message_card_description">Click below to see the recommended clothing items for the activity in the Shopping page</string>
+    <string name="shop_message_card_button_text">Go to Shop</string>
 
 
     <!-- ui - screens - HistoryScreen -->
@@ -110,6 +112,5 @@
     <string name="no_activities">There are no activities! Please add one first</string>
     <string name="no_locations">There are no locations! Add them in the Weather page. Check the tooltip for more information</string>
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
-
 
 </resources>
