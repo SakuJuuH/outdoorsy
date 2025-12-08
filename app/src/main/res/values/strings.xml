@@ -110,6 +110,7 @@
     <string name="no_activities">There are no activities! Please add one first</string>
     <string name="no_locations">There are no locations! Add them in the Weather page. Check the tooltip for more information</string>
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
-
+    <string name="clothing_tips_alert_title">Clothing Tips</string>
+    <string name="clothing_tips_alert_message">Click on the clothing tips to see the items in Weather Gear Shop!</string>
 
 </resources>

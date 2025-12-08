@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.clickable
 
 @Composable
 internal fun RecommendationCard(
@@ -34,11 +35,19 @@ internal fun RecommendationCard(
     title: String,
     suitabilityLabel: String? = null,
     suitabilityScore: Int? = null,
-    items: List<String>
+    items: List<String>,
+    onClothingClick: (() -> Unit)? = null
 ) {
+    val cardModifier = if (onClothingClick != null) {
+        Modifier.clickable { onClothingClick() }
+    } else {
+        Modifier
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .then(cardModifier)
             .padding(top = 16.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),

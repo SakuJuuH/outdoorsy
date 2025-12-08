@@ -49,13 +49,25 @@ import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import java.time.LocalDate
 import java.time.LocalTime
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.outdoorsy.ui.navigation.Screen
 
 @Composable
 fun ActivityScreen(
     modifier: Modifier = Modifier,
-    viewModel: ActivityViewModel = viewModel()
+    viewModel: ActivityViewModel = viewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    if (uiState.navigateToShop) {
+        LaunchedEffect(key1 = uiState.navigateToShop) {
+            navController.navigate(Screen.AppNav.Shopping.route)
+            viewModel.onNavigationComplete()
+        }
+    }
 
     ActivityScreenContent(
         modifier = modifier,
@@ -68,7 +80,9 @@ fun ActivityScreen(
         onAddActivity = viewModel::addActivity,
         onUpdateStartDateTime = viewModel::updateStartDateTime,
         onUpdateEndDateTime = viewModel::updateEndDateTime,
-        onPerformSearch = viewModel::performSearch
+        onPerformSearch = viewModel::performSearch,
+        onShowClothingTipAlert = viewModel::onShowClothingTipAlert,
+        onNavigateToShop = viewModel::onNavigateToShop
     )
 }
 
@@ -84,7 +98,9 @@ internal fun ActivityScreenContent(
     onAddActivity: (String) -> Unit,
     onUpdateStartDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
     onUpdateEndDateTime: (LocalDate, LocalTime, LocalDate, LocalTime) -> Unit,
-    onPerformSearch: () -> Unit
+    onPerformSearch: () -> Unit,
+    onShowClothingTipAlert: (Boolean) -> Unit,
+    onNavigateToShop: () -> Unit
 ) {
     val isSearchEnabled = uiState.selectedLocation != null &&
             uiState.selectedActivity != null
@@ -344,7 +360,8 @@ internal fun ActivityScreenContent(
                 RecommendationCard(
                     icon = Icons.Default.Checkroom,
                     title = stringResource(R.string.clothing_tips),
-                    items = answer.clothingTips
+                    items = answer.clothingTips,
+                    onClothingClick = { onNavigateToShop() }
                 )
             }
         }
@@ -353,12 +370,28 @@ internal fun ActivityScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+
+    // Clothing tips alert
+    if (uiState.showClothingTipAlert) {
+        AlertDialog(
+            onDismissRequest = { onShowClothingTipAlert(false) },
+            title = { Text(text = stringResource(R.string.clothing_tips_alert_title)) },
+            text = { Text(text = stringResource(R.string.clothing_tips_alert_message)) },
+            confirmButton = {
+                TextButton(onClick = { onShowClothingTipAlert(false) }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
 }
 
 @Preview
 @Composable
 fun ActivityScreenPreview() {
     WeatherAppTheme {
-        ActivityScreen()
+        ActivityScreen(
+            navController = rememberNavController()
+        )
     }
 }
