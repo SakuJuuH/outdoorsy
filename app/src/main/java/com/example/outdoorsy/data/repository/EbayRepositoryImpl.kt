@@ -25,7 +25,6 @@ class EbayRepositoryImpl @Inject constructor(
         val response = apiService.get().getItems(query = query, limit = limit, filter = filter)
 
         return if (response.isSuccessful && response.body() != null) {
-            Log.d("EbayRepositoryImpl", "getItems: ${response.body()!!.toDomain()}")
             response.body()!!.toDomain()
         } else {
             emptyList()
