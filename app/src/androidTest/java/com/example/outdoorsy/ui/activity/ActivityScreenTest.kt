@@ -36,7 +36,8 @@ class ActivityScreenTest {
                     onAddActivity = {},
                     onUpdateStartDateTime = { _, _, _, _ -> },
                     onUpdateEndDateTime = { _, _, _, _ -> },
-                    onPerformSearch = {}
+                    onPerformSearch = {},
+                    onNavigateToShop = {}
                 )
             }
         }
