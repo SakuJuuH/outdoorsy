@@ -1,7 +1,7 @@
 package com.example.outdoorsy.ui.shopping
 
 import android.util.Log
-import com.example.outdoorsy.data.repository.SettingsRepository
+import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.domain.model.ebay.Price
 import com.example.outdoorsy.domain.repository.ActivityRepository
