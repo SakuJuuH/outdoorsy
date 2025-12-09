@@ -182,7 +182,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                                     Icon(
                                         imageVector = Icons.Default.MyLocation,
                                         contentDescription = stringResource(
-                                            R.string.weather_screen_search_bar_location_icon_description
+                                            R.string.weather_search_bar_location_icon_description
                                         ),
                                         tint = MaterialTheme.colorScheme.onSurface
                                     )

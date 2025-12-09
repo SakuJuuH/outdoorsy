@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class CurrencyRepositoryImpl @Inject constructor(
     private val currencyApiService: CurrencyApiService,
     private val currencyRateDao: CurrencyRateDao,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : CurrencyRepository {
 
     private val apiBaseCurrency = "USD"

@@ -179,7 +179,7 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun setShowRecentSearches(show: Boolean) {
-        _showRecentSearches.value = show
+        showRecentSearches.value = show
     }
 
     fun searchAndAddLocation(city: String) {

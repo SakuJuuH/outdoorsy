@@ -18,7 +18,7 @@ data class LocationEntity(
     val latitude: Double,
     val longitude: Double
 ) {
-    fun toDomain(): Location= Location(
+    fun toDomain(): Location = Location(
         name = name.replaceFirstChar { it.uppercase() },
         country = country,
         state = state,

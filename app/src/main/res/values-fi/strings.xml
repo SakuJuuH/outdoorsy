@@ -83,17 +83,17 @@
     <string name="shopping_screen_view_listing_button">Katso tuote</string>
     <string name="shopping_screen_subtitle">Katso suositellut varusteet aktiviteettisi ja paikallisen sään perusteella</string>
 
-    <string name="weather_screen_weather_detail_humidity">Kosteus</string>
-    <string name="weather_screen_weather_detail_wind_speed">Tuulen nopeus</string>
-    <string name="weather_screen_weather_detail_visibility">Näkyvyys</string>
-    <string name="weather_screen_weather_detail_title">Säätiedot</string>
-    <string name="weather_screen_weather_detail_pressure">Paine</string>
+    <string name="weather_screen_detail_humidity">Kosteus</string>
+    <string name="weather_screen_detail_wind_speed">Tuulen nopeus</string>
+    <string name="weather_screen_detail_visibility">Näkyvyys</string>
+    <string name="weather_screen_detail_title">Säätiedot</string>
+    <string name="weather_screen_detail_pressure">Paine</string>
     <string name="weather_screen_weather_detail_sunrise">Auringonnousu</string>
     <string name="weather_screen_weather_detail_sunset">Auringonlasku</string>
     <string name="weather_screen_weather_detail_five_day_forecast">5 päivän ennuste</string>
     <string name="weather_screen_search_bar_hint">Hae kaupunkia tai sijaintia</string>
     <string name="weather_screen_search_bar_icon_description">Hae</string>
-    <string name="weather_screen_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
+    <string name="weather_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
     <string name="weather_screen_gps_icon_description">Nykyinen sijainti</string>
     <string name="weather_screen_remove_location_description">Poista sijainti</string>
     <string name="weather_screen_content_no_locations">Lisää sijainti nähdäksesi sää!</string>

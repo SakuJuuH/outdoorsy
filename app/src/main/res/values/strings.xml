@@ -86,17 +86,17 @@
 
     <!-- ui - screens - WeatherScreen -->
 
-    <string name="weather_screen_weather_detail_title">Weather Details</string>
-    <string name="weather_screen_weather_detail_humidity">Humidity</string>
-    <string name="weather_screen_weather_detail_wind_speed">Wind Speed</string>
-    <string name="weather_screen_weather_detail_visibility">Visibility</string>
-    <string name="weather_screen_weather_detail_pressure">Pressure</string>
+    <string name="weather_screen_detail_title">Weather Details</string>
+    <string name="weather_screen_detail_humidity">Humidity</string>
+    <string name="weather_screen_detail_wind_speed">Wind Speed</string>
+    <string name="weather_screen_detail_visibility">Visibility</string>
+    <string name="weather_screen_detail_pressure">Pressure</string>
     <string name="weather_screen_weather_detail_sunrise">Sunrise</string>
     <string name="weather_screen_weather_detail_sunset">Sunset</string>
     <string name="weather_screen_weather_detail_five_day_forecast">5-Day Forecast</string>
     <string name="weather_screen_search_bar_hint">Search for a city or location…</string>
     <string name="weather_screen_search_bar_icon_description">Search</string>
-    <string name="weather_screen_search_bar_location_icon_description">Use Current Location</string>
+    <string name="weather_search_bar_location_icon_description">Use Current Location</string>
     <string name="weather_screen_gps_icon_description">Current Location</string>
     <string name="weather_screen_remove_location_description">Remove location</string>
     <string name="widget_description">Shows current weather for saved location</string>
@@ -114,5 +114,4 @@
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
     <string name="weather_screen_content_no_locations">Add a location to see the weather!</string>
     <string name="shopping_screen_subtitle">View recommended gear based on your activity and local weather</string>
-
 </resources>

@@ -9,7 +9,9 @@ import com.example.outdoorsy.data.local.entity.CurrencyRateEntity
 
 @Dao
 interface CurrencyRateDao {
-    @Query("SELECT * FROM currency_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency LIMIT 1")
+    @Query(
+        "SELECT * FROM currency_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency LIMIT 1"
+    )
     suspend fun getRate(baseCurrency: String, targetCurrency: String): CurrencyRateEntity?
 
     @Query("SELECT * FROM currency_rates ORDER BY timestamp DESC LIMIT 1")
