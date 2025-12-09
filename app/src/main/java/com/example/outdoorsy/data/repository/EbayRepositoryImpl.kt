@@ -1,9 +1,7 @@
 package com.example.outdoorsy.data.repository
 
-import android.util.Log
 import com.example.outdoorsy.data.remote.EbayApiService
 import com.example.outdoorsy.data.remote.EbayAuthService
-import com.example.outdoorsy.data.remote.dto.ebay.toDomain
 import com.example.outdoorsy.di.EbayApi
 import com.example.outdoorsy.di.EbayAuth
 import com.example.outdoorsy.di.EbayTokenHolder
@@ -25,7 +23,7 @@ class EbayRepositoryImpl @Inject constructor(
         val response = apiService.get().getItems(query = query, limit = limit, filter = filter)
 
         return if (response.isSuccessful && response.body() != null) {
-            response.body()!!.toDomain()
+            response.body()?.toDomain() ?: emptyList()
         } else {
             emptyList()
         }

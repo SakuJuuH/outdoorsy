@@ -1,4 +1,4 @@
-package com.example.outdoorsy.domain.model.weather
+package com.example.outdoorsy.domain.model.weather.components
 
 data class Main(
     val temperature: Double,
