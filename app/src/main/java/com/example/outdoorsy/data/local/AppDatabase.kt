@@ -21,7 +21,7 @@ import com.example.outdoorsy.utils.DateTimeConverters
         CurrencyRateEntity::class
     ],
     version = 9,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(DateTimeConverters::class)
 abstract class AppDatabase : RoomDatabase() {
