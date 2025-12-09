@@ -58,7 +58,7 @@ private fun List<ForecastItem>.toDailyForecasts(timeZone: TimeZone): List<DailyF
 }
 
 private fun formatTime(timeStamp: Long, timeZone: TimeZone): String {
-    val sdf = SimpleDateFormat("HH:mm a", Locale.getDefault())
+    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
     sdf.timeZone = timeZone
     return sdf.format(Date(timeStamp * 1000))
 }
