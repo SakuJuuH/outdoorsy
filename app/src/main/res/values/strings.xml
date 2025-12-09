@@ -112,5 +112,7 @@
     <string name="no_activities">There are no activities! Please add one first</string>
     <string name="no_locations">There are no locations! Add them in the Weather page. Check the tooltip for more information</string>
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
+    <string name="weather_screen_content_no_locations">Add a location to see the weather!</string>
+    <string name="shopping_screen_subtitle">View recommended gear based on your activity and local weather</string>
 
 </resources>
