@@ -28,7 +28,6 @@ import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.components.SectionTitle
 import com.example.outdoorsy.ui.shopping.components.ProductCard
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
-import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel = hiltViewModel()) {
@@ -45,10 +44,7 @@ fun ShoppingScreen(modifier: Modifier = Modifier, viewModel: ShoppingViewModel =
 }
 
 @Composable
-fun ShoppingContent(
-    uiState: ShoppingUiState,
-    modifier: Modifier = Modifier
-) {
+fun ShoppingContent(uiState: ShoppingUiState, modifier: Modifier = Modifier) {
     val isLoading = uiState.isLoading
     val error = uiState.error
     val items = uiState.items
@@ -57,13 +53,15 @@ fun ShoppingContent(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = MaterialTheme.spacing(2))
             .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // 1. Header
         item {
-            ScreenTitle(title = stringResource(id = R.string.shopping_screen_title))
+            ScreenTitle(
+                title = stringResource(id = R.string.shopping_screen_title),
+                subtitle = stringResource(id = R.string.shopping_screen_subtitle)
+            )
         }
 
         // --- Recommended Items Section ---

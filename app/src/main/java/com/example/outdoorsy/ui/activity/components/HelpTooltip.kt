@@ -24,9 +24,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HelpTooltip(
-    tooltipText: String
-) {
+fun HelpTooltip(tooltipText: String) {
     val tooltipState = rememberTooltipState()
     val scope = rememberCoroutineScope()
 

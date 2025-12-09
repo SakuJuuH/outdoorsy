@@ -95,7 +95,7 @@ class SettingsRepositoryImpl @Inject constructor(private val dataStore: DataStor
                 currentSearches.remove(normalizedLocation)
                 currentSearches.add(0, normalizedLocation)
 
-                preferences[PreferenceKeys.RECENT_SEARCHES] = currentSearches.take(5).toSet()
+                preferences[PreferenceKeys.RECENT_SEARCHES] = currentSearches.take(3).toSet()
             }
         } catch (e: IOException) {
             Log.e("SettingsRepository", "Error adding recent search", e)

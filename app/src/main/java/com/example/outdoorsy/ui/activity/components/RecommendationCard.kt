@@ -2,6 +2,7 @@ package com.example.outdoorsy.ui.activity.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.clickable
 
 @Composable
 internal fun RecommendationCard(
@@ -58,7 +58,7 @@ internal fun RecommendationCard(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    //change from primary to onSurface for better visibility on light/dark themes
+                    // change from primary to onSurface for better visibility on light/dark themes
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(24.dp)
                 )

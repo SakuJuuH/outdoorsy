@@ -29,7 +29,7 @@ fun ScreenTitle(title: String, modifier: Modifier = Modifier, subtitle: String? 
             text = title,
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-        // changed to onBackground from onSurface to better constrast
+            // changed to onBackground from onSurface to better constrast
             color = MaterialTheme.colorScheme.onBackground
         )
 

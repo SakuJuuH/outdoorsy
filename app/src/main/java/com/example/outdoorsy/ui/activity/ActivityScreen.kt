@@ -41,20 +41,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.activity.components.DatePickerField
 import com.example.outdoorsy.ui.activity.components.EditableFilteringInput
 import com.example.outdoorsy.ui.activity.components.HelpTooltip
 import com.example.outdoorsy.ui.activity.components.RecommendationCard
+import com.example.outdoorsy.ui.activity.components.ShopMessageCard
 import com.example.outdoorsy.ui.activity.components.TimePickerField
 import com.example.outdoorsy.ui.components.ScreenTitle
+import com.example.outdoorsy.ui.navigation.Screen
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import java.time.LocalDate
 import java.time.LocalTime
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.outdoorsy.ui.navigation.Screen
-import com.example.outdoorsy.ui.activity.components.ShopMessageCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -104,7 +104,7 @@ internal fun ActivityScreenContent(
     onNavigateToShop: () -> Unit
 ) {
     val isSearchEnabled = uiState.selectedLocation != null &&
-            uiState.selectedActivity != null
+        uiState.selectedActivity != null
 
     LazyColumn(modifier = modifier) {
         item {
@@ -315,7 +315,7 @@ internal fun ActivityScreenContent(
                             .size(64.dp)
                             .testTag("loading_indicator"),
                         color = MaterialTheme.colorScheme.primary,
-                        strokeWidth = 6.dp,
+                        strokeWidth = 6.dp
                     )
                 }
             }
