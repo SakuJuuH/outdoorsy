@@ -2,11 +2,11 @@ package com.example.outdoorsy.ui.history
 
 import android.app.Application
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsBike
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
+import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Waves
-import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.Terrain
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
@@ -78,11 +78,11 @@ class HistoryViewModel @Inject constructor(
 
     private fun getActivityIcon(activityName: String): ImageVector =
         when (activityName.lowercase()) {
-            "cycling", "bike" -> Icons.Filled.DirectionsBike
+            "cycling", "bike" -> Icons.AutoMirrored.Filled.DirectionsBike
             "beach", "beach activities" -> Icons.Filled.Waves
             "photography" -> Icons.Filled.PhotoCamera
             "hiking" -> Icons.Outlined.Terrain
-            "running", "jogging" -> Icons.Outlined.DirectionsRun
+            "running", "jogging" -> Icons.AutoMirrored.Outlined.DirectionsRun
             "dog walking", "walking" -> Icons.Filled.Pets
             else -> Icons.Outlined.Terrain
         }

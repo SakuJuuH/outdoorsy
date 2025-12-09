@@ -7,6 +7,6 @@ data class CategoryDto(
     val id: String,
     @SerializedName("categoryName")
     val name: String
-)
-
-fun CategoryDto.toDomain() = this.name
+) {
+    fun toDomain() = this.name
+}

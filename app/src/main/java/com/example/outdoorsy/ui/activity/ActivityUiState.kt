@@ -3,9 +3,9 @@ package com.example.outdoorsy.ui.activity
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.Location
-import java.time.LocalTime
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 val timeNow: LocalDateTime = LocalDateTime.now()
 val timePlusOne: LocalDateTime = timeNow.plusHours(1)

@@ -2,13 +2,11 @@ package com.example.outdoorsy.data.repository
 
 
 import com.example.outdoorsy.data.remote.WeatherApiService
-import com.example.outdoorsy.data.remote.dto.weather.CloudsDto
-import com.example.outdoorsy.data.remote.dto.weather.CoordDto
-import com.example.outdoorsy.data.remote.dto.weather.MainDto
-import com.example.outdoorsy.data.remote.dto.weather.WeatherDto
 import com.example.outdoorsy.data.remote.dto.weather.WeatherResponseDto
-import com.example.outdoorsy.data.remote.dto.weather.WeatherSysDto
-import com.example.outdoorsy.data.remote.dto.weather.WindDto
+import com.example.outdoorsy.data.remote.dto.weather.components.MainDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WeatherDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WeatherSysDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WindDto
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -85,11 +83,14 @@ class WeatherRepositoryImplTest {
 
     private fun createMockWeatherResponseDto(name: String, temp: Double): WeatherResponseDto {
         return WeatherResponseDto(
-            coord = CoordDto(0.0, 0.0),
             weather = listOf(
-                WeatherDto(id = 800, main = "Clouds", description = "scattered clouds", icon = "03d")
+                WeatherDto(
+                    id = 800,
+                    main = "Clouds",
+                    description = "scattered clouds",
+                    icon = "03d"
+                )
             ),
-            base = "stations",
             main = MainDto(
                 temp = temp,
                 feelsLike = temp,
@@ -102,13 +103,16 @@ class WeatherRepositoryImplTest {
             ),
             visibility = 10000,
             wind = WindDto(speed = 5.0, deg = 200, gust = 0.0),
-            clouds = CloudsDto(all = 20),
             dt = 1600000000L,
-            sys = WeatherSysDto(type = 1, id = 123, country = "GB", sunrise = 1600000000L, sunset = 1600040000L),
+            sys = WeatherSysDto(
+                type = 1,
+                id = 123,
+                country = "GB",
+                sunrise = 1600000000L,
+                sunset = 1600040000L
+            ),
             timezone = 3600,
-            id = 2643743,
             name = name,
-            cod = 200
         )
     }
 }

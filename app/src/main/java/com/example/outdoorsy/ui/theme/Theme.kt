@@ -18,14 +18,11 @@ import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     // --- MAIN BRAND & ACCENT COLORS ---
-    // In dark themes, primary colors are often slightly lighter/less saturated
-    // to have good contrast on dark backgrounds.
     primary = pineGreen, // Using the lighter pineGreen as the main interactive color.
     secondary = forestGreen, // The darker forestGreen works well for less prominent actions.
     tertiary = accentGold, // Gold remains a vibrant accent.
 
     // --- BACKGROUND & SURFACE COLORS ---
-    // These are the most important for a dark theme. We avoid pure black.
     background = appBackgroundDark, // A very dark green, creating a softer dark background.
     surface = forestGreen, // Dark green for cards, making them distinct from the background.
 
@@ -57,7 +54,7 @@ private val LightColorScheme = lightColorScheme(
     background = appBackgroundLight, // The main screen background
     surface = cardBackground, // Color for smaller cards like WeatherDetailCard
 
-    // --- CONTAINER COLORS ---  These are crucial for WeatherScreen
+    // --- CONTAINER COLORS ---
     primaryContainer = forestGreen, // Sets the background for the large top WeatherCard
     surfaceVariant = stoneGray, // Sets the background for the 5-Day Forecast card
 
@@ -71,9 +68,17 @@ private val LightColorScheme = lightColorScheme(
     onBackground = textPrimary, // General text on the main screen background
     onSurface = textPrimary, // General text on a card (surface)
 
-    // Crucial for WeatherScreen
     onPrimaryContainer = Color.White, // Text/Icons on the main WeatherCard
-    onSurfaceVariant = textPrimary // Text/Icons on the 5-Day Forecast card
+    onSurfaceVariant = textPrimary, // Text/Icons on the 5-Day Forecast card
+
+    surfaceContainer = offWhite, // Used by Navigation Bar
+    surfaceContainerHigh = cardBackground, // Used by Search Bar (Docked)
+    surfaceContainerHighest = offWhite,
+    surfaceContainerLow = appBackgroundLight,
+    surfaceContainerLowest = Color.White,
+
+    inverseSurface = textPrimary,
+    inverseOnSurface = Color.White
 )
 
 @Composable

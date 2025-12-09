@@ -1,16 +1,12 @@
 package com.example.outdoorsy.ui.weather
 
 
-import com.example.outdoorsy.domain.model.weather.Clouds
-import com.example.outdoorsy.domain.model.weather.Coord
-import com.example.outdoorsy.domain.model.weather.ForecastItem
-import com.example.outdoorsy.domain.model.weather.ForecastSys
-import com.example.outdoorsy.domain.model.weather.Main
-import com.example.outdoorsy.domain.model.weather.PartOfDay
-import com.example.outdoorsy.domain.model.weather.Weather
 import com.example.outdoorsy.domain.model.weather.WeatherResponse
-import com.example.outdoorsy.domain.model.weather.WeatherSys
-import com.example.outdoorsy.domain.model.weather.Wind
+import com.example.outdoorsy.domain.model.weather.components.ForecastItem
+import com.example.outdoorsy.domain.model.weather.components.Main
+import com.example.outdoorsy.domain.model.weather.components.Weather
+import com.example.outdoorsy.domain.model.weather.components.WeatherSys
+import com.example.outdoorsy.domain.model.weather.components.Wind
 import com.example.outdoorsy.ui.weather.mappers.toUiModel
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -82,12 +78,10 @@ class WeatherMappersTest {
 
     private fun createMockWeatherResponse(temp: Double, description: String): WeatherResponse {
         return WeatherResponse(
-            coord = Coord(0.0, 0.0),
             weather = listOf(Weather(800, "Clear", description, "01d")),
             main = Main(temp, temp, temp, temp, 1013, 0, 0, 10),
             visibility = 10000,
             wind = Wind(5.5, 0, 0.0),
-            clouds = Clouds(0),
             timeOfData = 1600000000,
             sys = WeatherSys("FI", 1600000000, 1600040000),
             timezone = 7200,
@@ -101,10 +95,7 @@ class WeatherMappersTest {
             main = Main(temp, temp, temp, temp, 1013, 0, 0, 50),
             weather = listOf(Weather(800, "Clear", "clear sky", "01d")),
             wind = Wind(5.0, 0, 0.0),
-            clouds = Clouds(0),
             pop = 0.0,
-            rain = null,
-            sys = ForecastSys(PartOfDay.DAY)
         )
     }
 }

@@ -1,32 +1,29 @@
 package com.example.outdoorsy.data.remote.dto.weather
 
+import com.example.outdoorsy.data.remote.dto.weather.components.MainDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WeatherDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WeatherSysDto
+import com.example.outdoorsy.data.remote.dto.weather.components.WindDto
 import com.example.outdoorsy.domain.model.weather.WeatherResponse
 
 data class WeatherResponseDto(
-    val coord: CoordDto,
     val weather: List<WeatherDto>,
-    val base: String,
     val main: MainDto,
     val visibility: Int,
     val wind: WindDto,
-    val clouds: CloudsDto,
     val dt: Long,
     val sys: WeatherSysDto,
     val timezone: Int,
-    val id: Int,
-    val name: String,
-    val cod: Int
-)
-
-fun WeatherResponseDto.toDomain(): WeatherResponse = WeatherResponse(
-    coord.toDomain(),
-    weather = weather.map { it.toDomain() },
-    main = main.toDomain(),
-    visibility = visibility,
-    wind = wind.toDomain(),
-    clouds = clouds.toDomain(),
-    timeOfData = dt,
-    sys = sys.toDomain(),
-    timezone = timezone,
-    name = name
-)
+    val name: String
+) {
+    fun toDomain() = WeatherResponse(
+        weather = weather.map { it.toDomain() },
+        main = main.toDomain(),
+        visibility = visibility,
+        wind = wind.toDomain(),
+        timeOfData = dt,
+        sys = sys.toDomain(),
+        timezone = timezone,
+        name = name
+    )
+}

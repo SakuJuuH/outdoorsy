@@ -14,8 +14,13 @@ import com.example.outdoorsy.data.local.entity.LocationEntity
 import com.example.outdoorsy.utils.DateTimeConverters
 
 @Database(
-    entities = [ActivityEntity::class, LocationEntity::class, ActivityLogEntity::class, CurrencyRateEntity::class],
-    version = 8,
+    entities = [
+        ActivityEntity::class,
+        LocationEntity::class,
+        ActivityLogEntity::class,
+        CurrencyRateEntity::class
+    ],
+    version = 9,
     exportSchema = true
 )
 @TypeConverters(DateTimeConverters::class)

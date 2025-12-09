@@ -27,7 +27,7 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SectionTitle(
-            title = stringResource(R.string.weather_screen_weather_detail_title)
+            title = stringResource(R.string.weather_screen_detail_title)
         )
 
         Row(
@@ -36,13 +36,13 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         ) {
             WeatherDetailCard(
                 icon = Icons.Default.WaterDrop,
-                label = stringResource(id = R.string.weather_screen_weather_detail_humidity),
+                label = stringResource(id = R.string.weather_screen_detail_humidity),
                 value = "${weatherData.humidity}%",
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
                 icon = Icons.Default.Air,
-                label = stringResource(id = R.string.weather_screen_weather_detail_wind_speed),
+                label = stringResource(id = R.string.weather_screen_detail_wind_speed),
                 value = "${weatherData.windSpeed} ${
                     when (weatherData.unit) {
                         TemperatureSystem.METRIC.code -> "m/s"
@@ -58,13 +58,13 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         ) {
             WeatherDetailCard(
                 icon = Icons.Default.Visibility,
-                label = stringResource(id = R.string.weather_screen_weather_detail_visibility),
+                label = stringResource(id = R.string.weather_screen_detail_visibility),
                 value = "${weatherData.visibility} km",
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
                 icon = Icons.Default.Speed,
-                label = stringResource(id = R.string.weather_screen_weather_detail_pressure),
+                label = stringResource(id = R.string.weather_screen_detail_pressure),
                 value = "${weatherData.pressure} hPa",
                 modifier = Modifier.weight(1f)
             )

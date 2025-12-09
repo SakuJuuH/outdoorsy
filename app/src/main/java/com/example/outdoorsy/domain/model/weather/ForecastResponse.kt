@@ -1,7 +1,6 @@
 package com.example.outdoorsy.domain.model.weather
 
-data class ForecastResponse(
-    val count: Int,
-    val listOfForecastItems: List<ForecastItem>,
-    val city: City
-)
+import com.example.outdoorsy.domain.model.weather.components.City
+import com.example.outdoorsy.domain.model.weather.components.ForecastItem
+
+data class ForecastResponse(val listOfForecastItems: List<ForecastItem>, val city: City)

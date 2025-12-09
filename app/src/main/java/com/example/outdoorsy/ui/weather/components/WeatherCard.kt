@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -51,12 +52,28 @@ internal fun WeatherCard(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Location
-                Text(
-                    text = weatherData.location,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Location
+                    Text(
+                        text = weatherData.location,
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+
+                    if (weatherData.isCurrentLocation) {
+                        Icon(
+                            imageVector = Icons.Default.LocationOn,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .align(Alignment.TopEnd),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 

@@ -1,8 +1,14 @@
 package com.example.outdoorsy.ui.activity
 
 import android.content.Context
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.outdoorsy.R
 import com.example.outdoorsy.data.remote.dto.assistant.AiAssistantAnswerDto
@@ -127,10 +133,18 @@ class ActivityScreenTest {
         val sampleState = ActivityUiState(searchPerformed = true, aiAnswer = sampleAnswer)
         renderWithState(sampleState)
 
+        composeTestRule.onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(context.getString(R.string.suitability)))
         composeTestRule.onNodeWithText(context.getString(R.string.suitability))
             .assertIsDisplayed()
+
+        composeTestRule.onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(context.getString(R.string.weather_tips)))
         composeTestRule.onNodeWithText(context.getString(R.string.weather_tips))
             .assertIsDisplayed()
+
+        composeTestRule.onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(context.getString(R.string.clothing_tips)))
         composeTestRule.onNodeWithText(context.getString(R.string.clothing_tips))
             .assertIsDisplayed()
     }

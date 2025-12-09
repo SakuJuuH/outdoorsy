@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
@@ -11,5 +12,5 @@ class Spacing(private val base: Dp = 4.dp) {
 
 val LocalSpacing = staticCompositionLocalOf { Spacing() }
 
-val androidx.compose.material3.MaterialTheme.spacing: Spacing
+val MaterialTheme.spacing: Spacing
     @Composable get() = LocalSpacing.current

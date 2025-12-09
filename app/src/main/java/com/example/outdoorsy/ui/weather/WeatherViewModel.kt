@@ -35,7 +35,7 @@ class WeatherViewModel @Inject constructor(
     private val locationRepository: LocationRepository
 ) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
-    private val _showRecentSearches = MutableStateFlow(false)
+    private val showRecentSearches = MutableStateFlow(false)
     private val _isLoading = MutableStateFlow(false)
 
     private val settingsFlow = combine(
@@ -60,7 +60,6 @@ class WeatherViewModel @Inject constructor(
     private val _clearFocusEvent = MutableSharedFlow<Unit>()
 
     val searchQuery: StateFlow<String> = _searchQuery
-    val showRecentSearches: StateFlow<Boolean> = _showRecentSearches
     val recentSearches: StateFlow<List<String>> = settingsRepository.getRecentSearches()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val isLoading: StateFlow<Boolean> = _isLoading
@@ -180,7 +179,7 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun setShowRecentSearches(show: Boolean) {
-        _showRecentSearches.value = show
+        showRecentSearches.value = show
     }
 
     fun searchAndAddLocation(city: String) {

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -42,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -50,6 +53,7 @@ import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.SectionTitle
+import com.example.outdoorsy.ui.theme.spacing
 import com.example.outdoorsy.ui.weather.components.ForecastCard
 import com.example.outdoorsy.ui.weather.components.WeatherCard
 import com.example.outdoorsy.ui.weather.components.WeatherDetailsGrid
@@ -178,9 +182,8 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                                     Icon(
                                         imageVector = Icons.Default.MyLocation,
                                         contentDescription = stringResource(
-                                            R.string.weather_screen_search_bar_location_icon_description
+                                            R.string.weather_search_bar_location_icon_description
                                         ),
-                                        // change from primary to onSurface for better visibility
                                         tint = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
@@ -199,19 +202,21 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (recentSearches.isNotEmpty()) {
-                    Column(
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.search_screen_content_recent),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.search_screen_content_recent),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
+                        }
 
-                        recentSearches.forEach { location ->
+                        items(recentSearches) { location ->
                             ListItem(
                                 headlineContent = { Text(location) },
                                 leadingContent = {
@@ -219,6 +224,8 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .clip(MaterialTheme.shapes.medium)
+                                    .padding(vertical = MaterialTheme.spacing(1))
                                     .clickable {
                                         viewModel.updateSearchQuery("")
                                         viewModel.searchAndAddLocation(location)
@@ -246,91 +253,93 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(64.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-                }
-            }
-
-            // --- Main Content ---
-            if (locations.isEmpty() && !isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Add a location to see the weather!",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-
-            if (locations.isNotEmpty() && !isLoading) {
-                // 1. Horizontal Pager for Main Cards
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxWidth()
-                ) { page ->
-                    val weatherData = locations.getOrNull(page) ?: return@HorizontalPager
-                    WeatherCard(
-                        weatherData = weatherData,
-                        onRemoveClick = { locationName ->
-                            viewModel.removeLocation(locationName)
-                        },
-                        modifier = Modifier.padding(horizontal = 4.dp)
-                    )
-                }
-
-                // 2. Page Indicator
-                WeatherPageIndicator(
-                    pagerState = pagerState,
-                    locations = locations
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Details and Forecast
-                if (currentWeatherData != null) {
-                    WeatherDetailsGrid(weatherData = currentWeatherData)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    SectionTitle(
-                        title = stringResource(
-                            id = R.string.weather_screen_weather_detail_five_day_forecast
-                        ),
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-
-                    ForecastCard(forecast = currentWeatherData.forecast)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-        }
-
-        // Invisible overlay to dismiss search bar when clicking outside
-        if (searchBarActive) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
-                        searchBarActive = false
-                        viewModel.setShowRecentSearches(false)
-                        keyboardController?.hide()
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Column {
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(64.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                        }
                     }
-            )
+
+                    // --- Main Content ---
+                    if (locations.isEmpty() && !isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.weather_screen_content_no_locations),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+
+                    if (locations.isNotEmpty() && !isLoading) {
+                        // 1. Horizontal Pager for Main Cards
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier.fillMaxWidth()
+                        ) { page ->
+                            val weatherData = locations.getOrNull(page) ?: return@HorizontalPager
+                            WeatherCard(
+                                weatherData = weatherData,
+                                onRemoveClick = { locationName ->
+                                    viewModel.removeLocation(locationName)
+                                },
+                                modifier = Modifier.padding(horizontal = 4.dp)
+                            )
+                        }
+
+                        // 2. Page Indicator
+                        WeatherPageIndicator(
+                            pagerState = pagerState,
+                            locations = locations
+                        )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // Details and Forecast
+                        if (currentWeatherData != null) {
+                            WeatherDetailsGrid(weatherData = currentWeatherData)
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            SectionTitle(
+                                title = stringResource(
+                                    id = R.string.weather_screen_weather_detail_five_day_forecast
+                                ),
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+
+                            ForecastCard(forecast = currentWeatherData.forecast)
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
+                if (searchBarActive) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                searchBarActive = false
+                                viewModel.setShowRecentSearches(false)
+                                keyboardController?.hide()
+                            }
+                    )
+                }
+            }
         }
     }
 }

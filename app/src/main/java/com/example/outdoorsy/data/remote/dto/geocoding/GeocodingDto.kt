@@ -11,12 +11,12 @@ data class GeocodingDto(
     val lon: Double,
     val country: String,
     val state: String?
-)
-
-fun GeocodingDto.toDomain(): LocationModel = LocationModel(
-    name = name,
-    country = country,
-    state = state,
-    latitude = lat,
-    longitude = lon
-)
+) {
+    fun toDomain(): LocationModel = LocationModel(
+        name = name,
+        country = country,
+        state = state,
+        latitude = lat,
+        longitude = lon
+    )
+}
