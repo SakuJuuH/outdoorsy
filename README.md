@@ -1,8 +1,6 @@
 # Outdoorsy 🏕️
 
-**Outdoorsy** is a modern Android outdoor activity planner that helps users plan activities based on
-time, location, and weather conditions. The app leverages AI to analyze weather forecasts and
-provide intelligent recommendations about activity suitability, clothing tips, and more.
+**Outdoorsy** is a modern Android outdoor activity planner that helps users plan activities based on time, location, and weather conditions. The app leverages AI to analyze weather forecasts and provide intelligent recommendations about activity suitability, clothing tips, and more.
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-purple?logo=kotlin)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material3-blue?logo=android)
@@ -23,25 +21,30 @@ provide intelligent recommendations about activity suitability, clothing tips, a
 
 ### 🏃 Activity Planning
 
-- Plan outdoor activities (hiking, gardening, camping, etc.)
-- Select location, date, and time range for your activity
+- Plan outdoor activities (hiking, gardening, camping, cycling, running, etc.)
+- Select location from saved locations
+- **Date and time range selection** with start/end dates and times
+- **Add custom activities** to your activity list
+- **Delete activities** you no longer need
 - **AI-powered analysis** that evaluates weather suitability
-- Receive suitability scores and labels (Excellent, Very Good, Good, Fair, Bad)
+- Receive suitability scores (1-5) and labels (Excellent, Very Good, Good, Fair, Bad)
 - Get personalized clothing recommendations based on weather
 - Weather-specific tips for your chosen activity
+- Quick navigation to shopping for recommended gear
 
 ### 📜 Activity History
 
-- View history of all planned activities
-- Track activity details including location, time, and conditions
+- View history of all planned activities **sorted from newest to oldest**
+- Track activity details including location, time range, date, and suitability
+- See suitability scores and labels for each activity
+- Activity-specific icons (cycling, hiking, running, beach, photography, dog walking)
 - Search through past activities
-- Activity-specific icons for visual clarity
 
 ### 🛒 Smart Shopping
 
 - Browse outdoor gear recommendations (hiking boots, camping tents, jackets, backpacks)
-- **AI-powered personalized recommendations** based on your planned activities
-- Real-time currency conversion (USD, EUR, GBP)
+- **AI-powered personalized recommendations** based on your planned activities' clothing suggestions
+- Real-time currency conversion (USD, EUR, GBP) with **local caching** for offline rate access
 - Integration with eBay's Browse API for product listings
 
 ### ⚙️ Settings & Customization
@@ -62,8 +65,7 @@ provide intelligent recommendations about activity suitability, clothing tips, a
 
 ## 🏗️ Architecture
 
-Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Model-View-ViewModel)
-** pattern, ensuring separation of concerns, testability, and maintainability.
+Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Model-View-ViewModel)** pattern, ensuring separation of concerns, testability, and maintainability.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -93,10 +95,11 @@ Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Mo
 │  │  │ - Weather     │  │  │  │  - Locations          │  │   │
 │  │  │ - Forecast    │  │  │  │  - Activities         │  │   │
 │  │  │ - eBay        │  │  │  │  - Activity Logs      │  │   │
-│  │  │ - Currency    │  │  │  ├───────────────────────┤  │   │
-│  │  │ - AI Assist   │  │  │  │   DataStore Prefs     │  │   │
-│  │  └───────────────┘  │  │  │  - Settings           │  │   │
-│  └─────────────────────┘  │  │  - Search History     │  │   │
+│  │  │ - Currency    │  │  │  │  - Currency Rates     │  │   │
+│  │  │ - AI Assist   │  │  │  ├───────────────────────┤  │   │
+│  │  └───────────────┘  │  │  │   DataStore Prefs     │  │   │
+│  └─────────────────────┘  │  │  - Settings           │  │   │
+│                           │  │  - Search History     │  │   │
 │                           │  └───────────────────────┘  │   │
 │                           └─────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
@@ -114,12 +117,14 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── dao/                   # Data Access Objects
 │   │   │   ├── ActivityDao.kt
 │   │   │   ├── ActivityLogDao.kt
+│   │   │   ├── CurrencyRateDao.kt # Currency rate caching
 │   │   │   └── LocationDao.kt
 │   │   ├── datastore/             # DataStore preferences
 │   │   │   └── SearchHistoryRepository.kt
 │   │   └── entity/                # Room entities
 │   │       ├── ActivityEntity.kt
 │   │       ├── ActivityLogEntity.kt
+│   │       ├── CurrencyRateEntity.kt
 │   │       └── LocationEntity.kt
 │   ├── remote/                    # Remote data sources
 │   │   ├── AiAssistantApiService.kt
@@ -134,18 +139,16 @@ app/src/main/java/com/example/outdoorsy/
 │   │       ├── ebay/
 │   │       ├── geocoding/
 │   │       └── weather/
-│   ├── repository/                # Repository implementations
-│   │   ├── ActivityLogRepositoryImpl.kt
-│   │   ├── ActivityRepositoryImpl.kt
-│   │   ├── AssistantRepositoryImpl.kt
-│   │   ├── CurrencyRepositoryImpl.kt
-│   │   ├── EbayRepositoryImpl.kt
-│   │   ├── ForecastRepositoryImpl.kt
-│   │   ├── LocationRepositoryImpl.kt
-│   │   ├── SettingsRepository.kt
-│   │   └── WeatherRepositoryImpl.kt
-│   └── test/                      # Test data
-│       └── ActivitiesData.kt
+│   └── repository/                # Repository implementations
+│       ├── ActivityLogRepositoryImpl.kt
+│       ├── ActivityRepositoryImpl.kt
+│       ├── AssistantRepositoryImpl.kt
+│       ├── CurrencyRepositoryImpl.kt
+│       ├── EbayRepositoryImpl.kt
+│       ├── ForecastRepositoryImpl.kt
+│       ├── LocationRepositoryImpl.kt
+│       ├── SettingsRepositoryImpl.kt
+│       └── WeatherRepositoryImpl.kt
 │
 ├── di/                            # Dependency Injection
 │   ├── EbayTokenHolder.kt
@@ -156,6 +159,7 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── EbayAuthInterceptor.kt
 │   │   └── OpenWeatherInterceptor.kt
 │   └── module/                    # Hilt Modules
+│       ├── CoroutinesModule.kt    # Dispatcher injection for testability
 │       ├── DatabaseModule.kt
 │       ├── DataStoreModule.kt
 │       ├── LocationModule.kt
@@ -172,16 +176,16 @@ app/src/main/java/com/example/outdoorsy/
 │   │   │   ├── EbayItem.kt
 │   │   │   └── Price.kt
 │   │   └── weather/               # Weather domain models
-│   │       ├── City.kt
-│   │       ├── Clouds.kt
-│   │       ├── Coord.kt
-│   │       ├── ForecastItem.kt
+│   │       ├── components/        # Weather components
+│   │       │   ├── City.kt
+│   │       │   ├── ForecastItem.kt
+│   │       │   ├── Main.kt
+│   │       │   ├── Weather.kt
+│   │       │   ├── WeatherSys.kt
+│   │       │   └── Wind.kt
 │   │       ├── ForecastResponse.kt
-│   │       ├── Main.kt
-│   │       ├── Weather.kt
-│   │       ├── WeatherResponse.kt
-│   │       └── Wind.kt
-│   ├── repository/                # Repository interfaces
+│   │       └── WeatherResponse.kt
+│   ├── repository/                # Repository interfaces (contracts)
 │   │   ├── ActivityLogRepository.kt
 │   │   ├── ActivityRepository.kt
 │   │   ├── AssistantRepository.kt
@@ -189,6 +193,7 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── EbayRepository.kt
 │   │   ├── ForecastRepository.kt
 │   │   ├── LocationRepository.kt
+│   │   ├── SettingsRepository.kt
 │   │   └── WeatherRepository.kt
 │   └── usecase/                   # Use cases
 │       ├── GetAiAssistant.kt
@@ -201,8 +206,11 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── ActivityUiState.kt
 │   │   ├── ActivityViewModel.kt
 │   │   └── components/
+│   │       ├── DatePickerField.kt      # Date selection
 │   │       ├── EditableFilteringInput.kt
+│   │       ├── HelpTooltip.kt          # Help tooltips
 │   │       ├── RecommendationCard.kt
+│   │       ├── ShopMessageCard.kt      # Navigation to shopping
 │   │       └── TimePickerField.kt
 │   ├── components/                # Shared UI components
 │   │   ├── AppBottomNavBar.kt
@@ -223,8 +231,6 @@ app/src/main/java/com/example/outdoorsy/
 │   ├── navigation/                # Navigation
 │   │   ├── AppNavHost.kt
 │   │   └── Screen.kt
-│   ├── search/                    # Search Screen
-│   │   └── SearchScreen.kt
 │   ├── settings/                  # Settings Screen
 │   │   ├── SettingsScreen.kt
 │   │   ├── SettingsUiState.kt
@@ -281,23 +287,96 @@ app/src/main/java/com/example/outdoorsy/
 
 ---
 
+## 🧪 Testing
+
+The project includes comprehensive **unit tests** and **UI/instrumented tests** for ensuring code quality and reliability.
+
+### Test Structure
+
+```
+app/src/test/java/com/example/outdoorsy/     # Unit Tests
+├── data/
+│   └── repository/
+│       ├── ActivityLogRepositoryImplTest.kt
+│       ├── ActivityRepositoryImplTest.kt
+│       ├── EbayRepositoryImplTest.kt
+│       ├── SettingsRepositoryImplTest.kt
+│       └── WeatherRepositoryImplTest.kt
+└── ui/
+    ├── activity/
+    │   └── ActivityViewModelTest.kt
+    ├── history/
+    │   └── HistoryViewModelTest.kt
+    ├── settings/
+    │   └── SettingsViewModelTest.kt
+    ├── shopping/
+    │   └── ShoppingViewModelTest.kt
+    └── weather/
+        ├── WeatherMappersTest.kt
+        └── WeatherViewModelTest.kt
+
+app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
+├── DatabaseTest.kt                    # Room database tests
+└── ui/
+    ├── activity/
+    │   └── ActivityScreenTest.kt
+    ├── history/
+    │   └── HistoryScreenTest.kt
+    ├── settings/
+    │   └── SettingsScreenTest.kt
+    ├── shopping/
+    │   └── ShoppingScreenTest.kt
+    └── weather/
+        └── components/
+            └── WeatherComponentsTest.kt
+```
+
+### Running Tests
+
+```bash
+# Run all unit tests
+./gradlew test
+
+# Run all instrumented tests (requires device/emulator)
+./gradlew connectedAndroidTest
+
+# Run specific test class
+./gradlew test --tests "com.example.outdoorsy.ui.history.HistoryViewModelTest"
+
+# Run tests with coverage report
+./gradlew testDebugUnitTestCoverage
+```
+
+### Testing Libraries
+
+| Library             | Purpose                 |
+| ------------------- | ----------------------- |
+| **JUnit 4**         | Unit test framework     |
+| **MockK**           | Kotlin mocking library  |
+| **Turbine**         | Testing Kotlin Flows    |
+| **Google Truth**    | Fluent assertions       |
+| **Compose UI Test** | Jetpack Compose testing |
+| **Espresso**        | Android UI testing      |
+
+---
+
 ## 🛠️ Tech Stack
 
-| Category                 | Technologies                    |
-|--------------------------|---------------------------------|
-| **Language**             | Kotlin 2.2.21                   |
-| **UI Framework**         | Jetpack Compose with Material 3 |
-| **Architecture**         | Clean Architecture + MVVM       |
-| **Dependency Injection** | Hilt 2.57.2                     |
-| **Networking**           | Retrofit 3.0 + OkHttp           |
-| **Local Database**       | Room 2.8.3                      |
-| **Preferences**          | DataStore Preferences           |
-| **Image Loading**        | Coil 3.3.0                      |
-| **Location Services**    | Google Play Services Location   |
-| **Background Work**      | WorkManager                     |
-| **Widget**               | Jetpack Glance                  |
-| **Permissions**          | Accompanist Permissions         |
-| **Testing**              | JUnit, Google Truth, Espresso   |
+| Category                 | Technologies                                                   |
+| ------------------------ | -------------------------------------------------------------- |
+| **Language**             | Kotlin 2.2.21                                                  |
+| **UI Framework**         | Jetpack Compose with Material 3                                |
+| **Architecture**         | Clean Architecture + MVVM                                      |
+| **Dependency Injection** | Hilt 2.57.2                                                    |
+| **Networking**           | Retrofit 3.0 + OkHttp                                          |
+| **Local Database**       | Room 2.8.3                                                     |
+| **Preferences**          | DataStore Preferences                                          |
+| **Image Loading**        | Coil 3.3.0                                                     |
+| **Location Services**    | Google Play Services Location                                  |
+| **Background Work**      | WorkManager                                                    |
+| **Widget**               | Jetpack Glance                                                 |
+| **Permissions**          | Accompanist Permissions                                        |
+| **Testing**              | JUnit, MockK, Turbine, Google Truth, Espresso, Compose UI Test |
 
 ---
 
@@ -307,9 +386,9 @@ app/src/main/java/com/example/outdoorsy/
 
 - **Purpose**: Current weather data and 5-day forecasts
 - **Endpoints Used**:
-    - `/data/2.5/weather` - Current weather
-    - `/data/2.5/forecast` - 5-day forecast
-    - `/geo/1.0/direct` - Geocoding (city to coordinates)
+  - `/data/2.5/weather` - Current weather
+  - `/data/2.5/forecast` - 5-day forecast
+  - `/geo/1.0/direct` - Geocoding (city to coordinates)
 - **Documentation**: [OpenWeatherMap API](https://openweathermap.org/api)
 
 ### 2. eBay Browse API
@@ -321,6 +400,7 @@ app/src/main/java/com/example/outdoorsy/
 ### 3. Currency API
 
 - **Purpose**: Real-time currency conversion for shopping prices
+- **Features**: Results are cached locally in Room database for offline access
 - **Supported Currencies**: USD, EUR, GBP
 - **Documentation**: [CurrencyAPI](https://currencyapi.com/)
 
@@ -339,16 +419,16 @@ app/src/main/java/com/example/outdoorsy/
 - JDK 11+
 - Android SDK 35+ (minimum) / 36 (target)
 - API keys for the following services:
-    - [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
-    - [eBay Developer Program](https://developer.ebay.com/) (free tier available)
-    - [CurrencyAPI](https://currencyapi.com/) (free tier available)
+  - [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
+  - [eBay Developer Program](https://developer.ebay.com/) (free tier available)
+  - [CurrencyAPI](https://currencyapi.com/) (free tier available)
 
 ### Setup Instructions
 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/SakuJuuH/outdoorsy.git
+   git clone https://github.com/yourusername/outdoorsy.git
    cd outdoorsy
    ```
 
@@ -365,18 +445,18 @@ app/src/main/java/com/example/outdoorsy/
 
 3. **Open in Android Studio**
 
-    - Open Android Studio
-    - Select "Open an existing project"
-    - Navigate to the cloned directory
+   - Open Android Studio
+   - Select "Open an existing project"
+   - Navigate to the cloned directory
 
 4. **Sync and Build**
 
-    - Wait for Gradle sync to complete
-    - Build the project: `Build > Make Project`
+   - Wait for Gradle sync to complete
+   - Build the project: `Build > Make Project`
 
 5. **Run the app**
-    - Select a device/emulator (API 35+)
-    - Click `Run 'app'`
+   - Select a device/emulator (API 35+)
+   - Click `Run 'app'`
 
 ### Permissions
 
@@ -389,25 +469,13 @@ The app requires the following permissions:
 
 ## 📱 Screens Overview
 
-| Screen       | Description                                                       |
-|--------------|-------------------------------------------------------------------|
-| **Weather**  | Main dashboard showing weather for saved locations with forecasts |
-| **History**  | View past activity plans with their conditions and suitability    |
-| **Activity** | Plan new activities with AI-powered weather analysis              |
-| **Shopping** | Browse and shop for outdoor gear with currency conversion         |
-| **Settings** | Customize temperature units, theme, language, and currency        |
-
----
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
-./gradlew test
-
-# Run instrumented tests
-./gradlew connectedAndroidTest
-```
+| Screen       | Description                                                                  |
+| ------------ | ---------------------------------------------------------------------------- |
+| **Weather**  | Main dashboard showing weather for saved locations with forecasts            |
+| **History**  | View past activity plans sorted by date (newest first) with suitability info |
+| **Activity** | Plan new activities with date/time selection and AI-powered weather analysis |
+| **Shopping** | Browse and shop for outdoor gear with currency conversion                    |
+| **Settings** | Customize temperature units, theme, language, and currency                   |
 
 ---
 
@@ -429,7 +497,7 @@ To add a new language:
 ## 📋 Requirements
 
 | Requirement | Value           |
-|-------------|-----------------|
+| ----------- | --------------- |
 | Minimum SDK | 35 (Android 15) |
 | Target SDK  | 36              |
 | Compile SDK | 36              |
@@ -448,13 +516,13 @@ To add a new language:
 - [ ] Implement activity reminders
 - [ ] Add weather alerts and warnings
 - [ ] Support for more languages
+- [ ] Add activity statistics and insights
 
 ---
 
 ## 📄 License
 
-This project is for educational purposes. Please ensure you have proper licenses for any APIs used
-in production.
+This project is for educational purposes. Please ensure you have proper licenses for any APIs used in production.
 
 ---
 

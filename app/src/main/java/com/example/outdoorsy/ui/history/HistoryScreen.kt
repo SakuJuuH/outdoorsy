@@ -23,13 +23,21 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.components.ScreenTitle
 import com.example.outdoorsy.ui.history.components.ActivityHistoryCard
+import com.example.outdoorsy.ui.history.model.ActivityHistoryItem
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
 
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
     val historyItems by viewModel.historyItems.collectAsState()
+    HistoryScreenContent(historyItems = historyItems, modifier = modifier)
+}
 
+@Composable
+internal fun HistoryScreenContent(
+    historyItems: List<ActivityHistoryItem>,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
