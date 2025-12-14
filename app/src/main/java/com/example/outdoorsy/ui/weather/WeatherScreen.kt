@@ -306,7 +306,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // Details and Forecast
+                        // 3. Details and Forecast
                         if (currentWeatherData != null) {
                             WeatherDetailsGrid(weatherData = currentWeatherData)
 

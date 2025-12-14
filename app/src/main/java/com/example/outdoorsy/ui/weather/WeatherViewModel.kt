@@ -70,6 +70,7 @@ class WeatherViewModel @Inject constructor(
         if (gpsItem != null) {
             val gpsCityName = gpsItem.location
 
+            // Filter out the GPS location from the saved list to avoid duplicates
             val filteredSavedList = savedList.filterNot { savedItem ->
                 savedItem?.location.equals(gpsCityName, ignoreCase = true)
             }
@@ -98,12 +99,15 @@ class WeatherViewModel @Inject constructor(
 
     fun loadCurrentLocationWeather() {
         viewModelScope.launch {
+            // Get the current location from the repository (may return null if not available)
             val location: Location? = locationRepository.getCurrentLocation()
             if (location == null) {
                 gpsWeather.value = null
                 return@launch
             }
             lastGpsLocation.value = location
+
+            // Collect latest settings to automatically refresh weather when settings change
             settingsFlow.collectLatest { settings ->
                 _isLoading.value = true
                 Log.d(
@@ -134,6 +138,7 @@ class WeatherViewModel @Inject constructor(
                     "WeatherViewModel",
                     "Fetching weather data for $locations locations"
                 )
+                // Fetch weather data for all locations in parallel using async/awaitAll
                 val deferredWeatherList = locations.map { location ->
                     async {
                         try {
@@ -185,6 +190,7 @@ class WeatherViewModel @Inject constructor(
     fun searchAndAddLocation(city: String) {
         if (city.isBlank()) return
 
+        // Sanitize and format the city name (e.g., "new york" -> "New York")
         val sanitizedCity = city.trim()
             .split("\\s+".toRegex())
             .joinToString(" ") { word ->
@@ -199,6 +205,7 @@ class WeatherViewModel @Inject constructor(
             try {
                 val foundLocation = locationRepository.getCoordinatesByLocation(sanitizedCity)
 
+                // Check if the searched location is the same as the current GPS location
                 val currentGpsLocationName = gpsWeather.value?.location
 
                 if (foundLocation?.name.equals(currentGpsLocationName, ignoreCase = true)) {
