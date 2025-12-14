@@ -30,16 +30,25 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/**
+ * Hilt module responsible for providing all Network-related dependencies,
+ * including OkHttpClient, Retrofit instances, and API Service interfaces.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    /** Provides a logging interceptor for debugging network requests. */
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    /**
+     * Provides the OkHttpClient specifically for OpenWeatherMap requests,
+     * including the [OpenWeatherInterceptor].
+     */
     @Provides
     @Singleton
     @OpenWeather
@@ -54,6 +63,10 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    /**
+     * Provides the OkHttpClient for standard eBay API requests,
+     * including the [EbayAuthInterceptor] for Bearer tokens.
+     */
     @Provides
     @Singleton
     @EbayApi
@@ -68,6 +81,10 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    /**
+     * Provides the OkHttpClient for eBay Authentication requests (fetching tokens),
+     * including the [EbayAccessAuthInterceptor] for Basic Auth.
+     */
     @Provides
     @Singleton
     @EbayAuth
@@ -82,6 +99,10 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    /**
+     * Provides the OkHttpClient for Currency API requests,
+     * including the [CurrencyApiAuthInterceptor].
+     */
     @Provides
     @Singleton
     @CurrencyApi
@@ -96,6 +117,7 @@ object NetworkModule {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    /** Provides the Retrofit instance for OpenWeatherMap. */
     @Provides
     @Singleton
     @OpenWeather
@@ -105,6 +127,7 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    /** Provides the Retrofit instance for eBay API. */
     @Provides
     @Singleton
     @EbayApi
@@ -114,6 +137,7 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    /** Provides the Retrofit instance for eBay Auth. */
     @Provides
     @Singleton
     @EbayAuth
@@ -123,6 +147,7 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    /** Provides the Retrofit instance for Currency API. */
     @Provides
     @Singleton
     @CurrencyApi
@@ -132,38 +157,45 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    /** Provides the WeatherApiService. */
     @Provides
     @Singleton
     fun provideWeatherApi(@OpenWeather retrofit: Retrofit): WeatherApiService =
         retrofit.create(WeatherApiService::class.java)
 
+    /** Provides the ForecastApiService. */
     @Provides
     @Singleton
     fun provideForecastApi(@OpenWeather retrofit: Retrofit): ForecastApiService =
         retrofit.create(ForecastApiService::class.java)
 
+    /** Provides the AiAssistantApiService. */
     @Provides
     @Singleton
     fun provideAssistantApi(@OpenWeather retrofit: Retrofit): AiAssistantApiService =
         retrofit.create(AiAssistantApiService::class.java)
 
+    /** Provides the EbayApiService. */
     @Provides
     @Singleton
     @EbayApi
     fun provideEbayApi(@EbayApi retrofit: Retrofit): EbayApiService =
         retrofit.create(EbayApiService::class.java)
 
+    /** Provides the EbayAuthService. */
     @Provides
     @Singleton
     @EbayAuth
     fun provideEbayAuthApi(@EbayAuth retrofit: Retrofit): EbayAuthService =
         retrofit.create(EbayAuthService::class.java)
 
+    /** Provides the CurrencyApiService. */
     @Provides
     @Singleton
     fun provideCurrencyApiService(@CurrencyApi retrofit: Retrofit): CurrencyApiService =
         retrofit.create(CurrencyApiService::class.java)
 
+    /** Provides the AssistantRepository manually (if not bound via Binds). */
     @Provides
     @Singleton
     fun provideAssistantRepository(
