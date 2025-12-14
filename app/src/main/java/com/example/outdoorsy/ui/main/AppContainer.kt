@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +26,7 @@ import com.example.outdoorsy.ui.weather.WeatherScreen
 import com.example.outdoorsy.ui.weather.WeatherViewModel
 
 @Composable
-fun AppContainer(mainNavController: NavHostController) {
+fun AppContainer() {
     val nestedNavController = rememberNavController()
 
     Scaffold(bottomBar = {
@@ -35,7 +34,7 @@ fun AppContainer(mainNavController: NavHostController) {
     }) { paddingValues ->
         NavHost(
             navController = nestedNavController,
-            startDestination = Screen.AppNav.Weather.route,
+            startDestination = Screen.AppNav.Activity.route,
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
