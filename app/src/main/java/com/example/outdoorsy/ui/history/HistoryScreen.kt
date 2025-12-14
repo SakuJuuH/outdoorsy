@@ -27,12 +27,21 @@ import com.example.outdoorsy.ui.history.model.ActivityHistoryItem
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.theme.spacing
 
+/**
+ * Main composable for the History screen.
+ * Displays a list of past activity searches with their details.
+ */
 @Composable
 fun HistoryScreen(modifier: Modifier = Modifier, viewModel: HistoryViewModel = hiltViewModel()) {
+    // Collect history items from ViewModel state
     val historyItems by viewModel.historyItems.collectAsState()
     HistoryScreenContent(historyItems = historyItems, modifier = modifier)
 }
 
+/**
+ * Stateless content composable for the History screen.
+ * Separated from HistoryScreen for easier testing and preview support.
+ */
 @Composable
 internal fun HistoryScreenContent(
     historyItems: List<ActivityHistoryItem>,
@@ -43,14 +52,15 @@ internal fun HistoryScreenContent(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Title
+        // Screen header with title and subtitle
         ScreenTitle(
             title = stringResource(R.string.history_screen_title),
             subtitle = stringResource(R.string.history_screen_view_previous_activity_search)
         )
 
-        // Activity List
+        // Display empty state or list of history items
         if (historyItems.isEmpty()) {
+            // Empty state: Show message when no history exists
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -65,6 +75,7 @@ internal fun HistoryScreenContent(
                 )
             }
         } else {
+            // Scrollable list of activity history cards, sorted by most recent first
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(

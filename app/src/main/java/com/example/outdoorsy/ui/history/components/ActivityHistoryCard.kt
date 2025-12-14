@@ -29,6 +29,10 @@ import androidx.constraintlayout.compose.Dimension
 import com.example.outdoorsy.ui.history.model.ActivityHistoryItem
 import com.example.outdoorsy.ui.theme.spacing
 
+/**
+ * Card component displaying a single activity history item.
+ * Shows activity name, location, time range, date, and weather suitability rating.
+ */
 @Composable
 internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
     Card(
@@ -41,6 +45,7 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
+        // Use ConstraintLayout for precise positioning of icon, details, and rating pill
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -48,7 +53,7 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
         ) {
             val (activityIcon, detailsColumn, ratingPill) = createRefs()
 
-            // Pin the Activity Icon to the start
+            // Activity icon positioned at the start (left side)
             Icon(
                 imageVector = item.activityIcon,
                 contentDescription = item.activityName,
@@ -58,11 +63,10 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                         centerVerticallyTo(parent)
                     }
                     .size(32.dp),
-                // change from primary to onSurface to improve visibility
                 tint = MaterialTheme.colorScheme.onSurface
             )
 
-            // Pin the Condition Rating Pill to the end
+            // Weather suitability rating pill positioned at the end (right side)
             ConditionRatingPill(
                 suitabilityLabel = item.suitabilityLabel,
                 suitabilityScore = item.suitabilityScore,
@@ -72,7 +76,7 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                 }
             )
 
-            // Pin the Details Column between the icon and the pill
+            // Details column positioned between icon and rating pill
             Column(
                 modifier = Modifier.constrainAs(detailsColumn) {
                     start.linkTo(activityIcon.end, margin = 24.dp)
@@ -81,17 +85,18 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                     width = Dimension.fillToConstraints
                 }
             ) {
+                // Activity name (bold, single line)
                 Text(
                     text = item.activityName,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1 // Prevent wrapping
+                    maxLines = 1
                 )
 
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing(1)))
 
-                // Location Info
+                // Location information with icon
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Filled.LocationOn,
@@ -108,7 +113,7 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                     )
                 }
 
-                // Time Info
+                // Time range information with icon
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Filled.Schedule,
@@ -125,6 +130,7 @@ internal fun ActivityHistoryCard(item: ActivityHistoryItem) {
                     )
                 }
 
+                // Date information with icon
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Filled.CalendarToday,
