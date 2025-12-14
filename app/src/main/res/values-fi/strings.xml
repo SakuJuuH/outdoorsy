@@ -42,6 +42,7 @@
     <string name="shop_message_card_button_text">Mene kauppaan</string>
     <string name="history_screen_title">Aktiiviteetti historia</string>
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
+    <string name="history_screen_no_history">Ei historiaa. Suunnittele aktiviteetti nähdäksesi se täällä.</string>
 
     <string name="search_screen_content_label">Hae</string>
     <string name="search_screen_content_suggestions">Ehdotukset</string>

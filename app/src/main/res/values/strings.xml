@@ -114,4 +114,5 @@
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
     <string name="weather_screen_content_no_locations">Add a location to see the weather!</string>
     <string name="shopping_screen_subtitle">View recommended gear based on your activity and local weather</string>
+    <string name="history_screen_no_history">No history yet. Plan an activity to see it here.</string>
 </resources>
