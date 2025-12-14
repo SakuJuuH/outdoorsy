@@ -11,6 +11,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Hilt module responsible for providing the DataStore instance.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
@@ -20,6 +23,9 @@ object DataStoreModule {
         name = USER_PREFERENCES_NAME
     )
 
+    /**
+     * Provides the singleton instance of Preferences DataStore.
+     */
     @Provides
     @Singleton
     fun provideDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> =

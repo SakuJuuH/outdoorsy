@@ -6,6 +6,9 @@ import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Interceptor that automatically appends the Currency API key as a query parameter to every request.
+ */
 @Singleton
 class CurrencyApiAuthInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

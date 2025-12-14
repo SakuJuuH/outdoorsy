@@ -6,6 +6,10 @@ import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Interceptor that adds the Bearer Token (Authorization header) to eBay API requests.
+ * It retrieves the current valid token from [EbayTokenHolder].
+ */
 @Singleton
 class EbayAuthInterceptor @Inject constructor(private val tokenHolder: EbayTokenHolder) :
     Interceptor {

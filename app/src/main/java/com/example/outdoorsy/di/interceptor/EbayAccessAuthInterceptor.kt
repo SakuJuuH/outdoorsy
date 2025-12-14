@@ -6,6 +6,10 @@ import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Interceptor that adds the Basic Authentication header (using the API Key) required for
+ * requesting an OAuth token from eBay.
+ */
 @Singleton
 class EbayAccessAuthInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

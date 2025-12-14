@@ -13,7 +13,7 @@ fun AppNavHost(navController: NavHostController) {
         startDestination = Screen.AppContainer.route
     ) {
         composable(Screen.AppContainer.route) {
-            AppContainer(mainNavController = navController)
+            AppContainer()
         }
     }
 }

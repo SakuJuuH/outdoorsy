@@ -6,6 +6,10 @@ import javax.inject.Singleton
 import okhttp3.Interceptor
 import okhttp3.Response
 
+/**
+ * Interceptor that automatically appends the OpenWeather API key ("appid") as a query parameter
+ * to every request.
+ */
 @Singleton
 class OpenWeatherInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

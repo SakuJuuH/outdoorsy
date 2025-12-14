@@ -13,15 +13,22 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Hilt module for Location-related dependencies.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LocationModule {
 
+    /** Binds the implementation [LocationRepositoryImpl] to the interface [LocationRepository]. */
     @Binds
     @Singleton
     abstract fun bindLocationRepository(impl: LocationRepositoryImpl): LocationRepository
 
     companion object {
+        /**
+         * Provides the FusedLocationProviderClient from Google Play Services.
+         */
         @Provides
         @Singleton
         fun provideFusedLocationProviderClient(
