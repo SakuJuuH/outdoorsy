@@ -31,25 +31,21 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `getCurrentWeatherByCity calls api and maps to domain`() = runTest {
-        // Given
         val city = "London"
         val units = "metric"
         val lang = "en"
         val mockDto = createMockWeatherResponseDto(name = "London", temp = 15.0)
 
-        // Mock the API call
         coEvery {
             mockWeatherApi.getCurrentWeatherByCity(city, units, lang)
         } returns mockDto
 
-        // When
         val result = repository.getCurrentWeatherByCity(city, units, lang)
 
-        // Then
-        // 1. Verify the API was called with exact parameters
+        // Verify the API was called with exact parameters
         coVerify { mockWeatherApi.getCurrentWeatherByCity(city, units, lang) }
 
-        // 2. Verify the result is the Domain Model (not the DTO)
+        // Verify the result is the Domain Model (not the DTO)
         assertEquals("London", result.name)
         assertEquals(15.0, result.main.temperature, 0.0)
         assertEquals("Clouds", result.weather.first().group)
@@ -57,26 +53,22 @@ class WeatherRepositoryImplTest {
 
     @Test
     fun `getCurrentWeatherByCoordinates calls api and maps to domain`() = runTest {
-        // Given
         val lat = 51.5
         val lon = -0.1
         val units = "imperial"
         val lang = "en"
         val mockDto = createMockWeatherResponseDto(name = "Coordinates Location", temp = 60.0)
 
-        // Mock the API call
         coEvery {
             mockWeatherApi.getCurrentWeatherByCoordinates(lat, lon, units, lang)
         } returns mockDto
 
-        // When
         val result = repository.getCurrentWeatherByCoordinates(lat, lon, units, lang)
 
-        // Then
-        // 1. Verify the API was called with exact parameters
+        // Verify the API was called with exact parameters
         coVerify { mockWeatherApi.getCurrentWeatherByCoordinates(lat, lon, units, lang) }
 
-        // 2. Verify mapping
+        // Verify mapping
         assertEquals("Coordinates Location", result.name)
         assertEquals(60.0, result.main.temperature, 0.0)
     }

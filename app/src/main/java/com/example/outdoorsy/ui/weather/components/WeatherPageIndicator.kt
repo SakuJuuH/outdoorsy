@@ -56,7 +56,7 @@ internal fun WeatherPageIndicator(
                     Icon(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = stringResource(
-                            R.string.weather_screen_gps_icon_description
+                            R.string.current_location
                         ),
                         modifier = Modifier.fillMaxSize(),
                         tint = color

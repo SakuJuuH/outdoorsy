@@ -139,7 +139,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                             viewModel.setShowRecentSearches(it)
                         },
                         placeholder = {
-                            Text(stringResource(id = R.string.weather_screen_search_bar_hint))
+                            Text(stringResource(id = R.string.search_city_or_location))
                         },
                         leadingIcon = {
                             Icon(
@@ -182,7 +182,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                                     Icon(
                                         imageVector = Icons.Default.MyLocation,
                                         contentDescription = stringResource(
-                                            R.string.weather_search_bar_location_icon_description
+                                            R.string.use_current_location
                                         ),
                                         tint = MaterialTheme.colorScheme.onSurface
                                     )
@@ -209,7 +209,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                     ) {
                         item {
                             Text(
-                                text = stringResource(id = R.string.search_screen_content_recent),
+                                text = stringResource(id = R.string.recent),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(vertical = 8.dp)
@@ -275,7 +275,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = stringResource(R.string.weather_screen_content_no_locations),
+                                text = stringResource(R.string.add_location_for_weather),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyLarge
                             )
@@ -283,7 +283,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                     }
 
                     if (locations.isNotEmpty() && !isLoading) {
-                        // 1. Horizontal Pager for Main Cards
+                        // Horizontal Pager for Main Cards
                         HorizontalPager(
                             state = pagerState,
                             modifier = Modifier.fillMaxWidth()
@@ -298,7 +298,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                             )
                         }
 
-                        // 2. Page Indicator
+                        // Page Indicators
                         WeatherPageIndicator(
                             pagerState = pagerState,
                             locations = locations
@@ -306,7 +306,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // 3. Details and Forecast
+                        // Details and Forecast
                         if (currentWeatherData != null) {
                             WeatherDetailsGrid(weatherData = currentWeatherData)
 
@@ -314,7 +314,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
                             SectionTitle(
                                 title = stringResource(
-                                    id = R.string.weather_screen_weather_detail_five_day_forecast
+                                    id = R.string.five_day_forecast
                                 ),
                                 modifier = Modifier.padding(start = 16.dp)
                             )

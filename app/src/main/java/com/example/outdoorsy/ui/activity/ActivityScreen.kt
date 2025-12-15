@@ -109,7 +109,7 @@ internal fun ActivityScreenContent(
     LazyColumn(modifier = modifier) {
         item {
             ScreenTitle(
-                title = stringResource(R.string.activity_screen_title),
+                title = stringResource(R.string.activity_planner),
                 subtitle = stringResource(R.string.activity_screen_subtitle)
             )
         }
@@ -140,7 +140,7 @@ internal fun ActivityScreenContent(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = R.string.add_activity_title),
+                        contentDescription = stringResource(id = R.string.add_activity),
                         tint = Color.White
                     )
                 }
@@ -173,7 +173,7 @@ internal fun ActivityScreenContent(
             item {
                 AlertDialog(
                     onDismissRequest = { onUpdateShowDialog(false) },
-                    title = { Text(text = stringResource(id = R.string.add_activity_title)) },
+                    title = { Text(text = stringResource(id = R.string.add_activity)) },
                     text = {
                         TextField(
                             value = uiState.newActivityName,
@@ -189,12 +189,12 @@ internal fun ActivityScreenContent(
                                 onUpdateShowDialog(false)
                             }
                         ) {
-                            Text(stringResource(id = R.string.confirm_button_label))
+                            Text(stringResource(id = R.string.confirm))
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { onUpdateShowDialog(false) }) {
-                            Text(stringResource(id = R.string.cancel_button_label))
+                            Text(stringResource(id = R.string.cancel))
                         }
                     }
                 )
@@ -207,7 +207,7 @@ internal fun ActivityScreenContent(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 DatePickerField(
-                    label = stringResource(id = R.string.start_time_label),
+                    label = stringResource(id = R.string.start_date_label),
                     selectedDate = uiState.selectedStartDate,
                     onDateSelected = { newDate ->
                         onUpdateStartDateTime(
@@ -221,7 +221,7 @@ internal fun ActivityScreenContent(
                 )
 
                 DatePickerField(
-                    label = stringResource(id = R.string.activity_screen_end_date_label),
+                    label = stringResource(id = R.string.end_date_label),
                     selectedDate = uiState.selectedEndDate,
                     onDateSelected = { newDate ->
                         onUpdateEndDateTime(
@@ -243,7 +243,7 @@ internal fun ActivityScreenContent(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 TimePickerField(
-                    label = stringResource(id = R.string.activity_screen_start_time_label),
+                    label = stringResource(id = R.string.start_time_label),
                     selectedTime = uiState.selectedStartTime,
                     onTimeSelected = { newTime ->
                         onUpdateStartDateTime(
@@ -298,7 +298,7 @@ internal fun ActivityScreenContent(
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text(stringResource(id = R.string.search_button_label))
+                Text(stringResource(id = R.string.search))
             }
         }
 

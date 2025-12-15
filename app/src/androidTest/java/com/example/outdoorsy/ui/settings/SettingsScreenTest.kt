@@ -55,29 +55,29 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.settings))
             .assertIsDisplayed()
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_section_header_general))
+        composeTestRule.onNodeWithText(context.getString(R.string.general))
             .assertIsDisplayed()
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_section_header_units))
+        composeTestRule.onNodeWithText(context.getString(R.string.units))
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_language_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.language))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(LocaleHelper.getLanguageName(sampleState.language))
             .assertIsDisplayed() // Subtitle
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_app_theme_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.app_theme))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(context.getString(AppTheme.fromCode(sampleState.appTheme).displayName))
             .assertIsDisplayed() // Subtitle
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_currency))
+        composeTestRule.onNodeWithText(context.getString(R.string.currency))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(context.getString(Currencies.fromCode(sampleState.currency).displayName))
             .assertIsDisplayed() // Subtitle
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_unit_item_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.unit_system))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(context.getString(TemperatureSystem.fromCode(sampleState.temperatureUnit).displayName))
             .assertIsDisplayed() // Subtitle
@@ -98,10 +98,10 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_language_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.language))
             .performClick()
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_language_dialog_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.select_language))
             .assertIsDisplayed()
 
         for (language in AppLanguage.entries) {
@@ -128,9 +128,9 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_app_theme_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.app_theme))
             .performClick()
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_app_theme_dialog_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.select_app_theme))
             .assertIsDisplayed()
 
         for (theme in AppTheme.entries) {
@@ -158,9 +158,9 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_currency))
+        composeTestRule.onNodeWithText(context.getString(R.string.currency))
             .performClick()
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_select_currency))
+        composeTestRule.onNodeWithText(context.getString(R.string.select_currency))
             .assertIsDisplayed()
 
         for (currency in Currencies.entries) {
@@ -188,9 +188,9 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_unit_item_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.unit_system))
             .performClick()
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_unit_dialog_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.select_unit_system))
             .assertIsDisplayed()
         for (unit in TemperatureSystem.entries) {
             val name = context.getString(unit.displayName)
@@ -219,7 +219,7 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_language_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.language))
             .performClick()
 
         val finnishText = LocaleHelper.getLanguageName(AppLanguage.FINNISH.code)
@@ -251,7 +251,7 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_currency))
+        composeTestRule.onNodeWithText(context.getString(R.string.currency))
             .performClick()
 
         composeTestRule.onNodeWithText(context.getString(android.R.string.cancel))
@@ -259,7 +259,7 @@ class SettingsScreenTest {
 
         assertFalse(callbackCalled)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_select_currency))
+        composeTestRule.onNodeWithText(context.getString(R.string.select_currency))
             .assertDoesNotExist()
     }
 
@@ -280,7 +280,7 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_app_theme_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.app_theme))
             .performClick()
 
         val darkThemeText = context.getString(AppTheme.DARK.displayName)

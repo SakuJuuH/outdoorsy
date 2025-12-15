@@ -50,7 +50,7 @@ internal fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                 AsyncImage(
                     model = item.imageUrl,
                     contentDescription = stringResource(
-                        id = R.string.shopping_screen_product_image_description,
+                        id = R.string.product_image_for,
                         item.title
                     ),
                     modifier = Modifier
@@ -108,7 +108,7 @@ internal fun ProductCard(item: EbayItem, modifier: Modifier = Modifier) {
                         val intent = Intent(Intent.ACTION_VIEW, item.link.toUri())
                         context.startActivity(intent)
                     },
-                    text = stringResource(id = R.string.shopping_screen_view_listing_button),
+                    text = stringResource(id = R.string.view_items),
                     type = ButtonType.PRIMARY
                 )
             }

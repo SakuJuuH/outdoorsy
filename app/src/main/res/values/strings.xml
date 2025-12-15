@@ -1,31 +1,23 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-
-    <!-- Navigation Items -->
-    <string name="nav_search">Search</string>
-    <string name="nav_weather">Weather</string>
-    <string name="nav_history">History</string>
-    <string name="nav_activity">Activity</string>
-    <string name="nav_shopping">Shopping</string>
-    <string name="nav_settings">Settings</string>
-
-    <!-- ui - components - Button -->
+    <string name="weather">Weather</string>
+    <string name="history">History</string>
+    <string name="activity">Activity</string>
+    <string name="shopping">Shopping</string>
+    <string name="settings">Settings</string>
     <string name="button_primary">Primary Button</string>
     <string name="button_secondary">Secondary Button</string>
-    <string name="button_disabled">Disabled</string>
-
-    <!-- ui - screens - ActivityScreen -->
-    <string name="activity_screen_title">Activity Planner</string>"
+    <string name="disabled">Disabled</string>
+    <string name="activity_planner">Activity Planner</string>"
     <string name="location_label">Select Location</string>
     <string name="location_prompt">Choose a location…</string>
     <string name="activity_label">Select Activity</string>
     <string name="activity_prompt">Choose an activity…</string>
-    <string name="start_time_label">Select Start Date</string>
-    <string name="activity_screen_end_date_label">Select End Date</string>
-    <string name="activity_screen_start_time_label">Select Start Time</string>
+    <string name="start_date_label">Select Start Date</string>
+    <string name="end_date_label">Select End Date</string>
+    <string name="start_time_label">Select Start Time</string>
     <string name="end_time_label">Select End Time</string>
-    <string name="time_prompt">Choose a time…</string>
-    <string name="search_button_label">Search</string>
+    <string name="search">Search</string>
     <string name="no_matches_found">No matches found</string>
     <string name="time_error_adjusted">End time was automatically adjusted.</string>
     <string name="time_error_invalid">End time must be after start time.</string>
@@ -33,86 +25,62 @@
     <string name="suitability">Suitability</string>
     <string name="weather_tips">Weather Tips</string>
     <string name="clothing_tips">Clothing Tips</string>
-    <string name="hide_options">Hide options</string>
-    <string name="show_options">Show options</string>
-    <string name="add_activity_title">Add activity</string>
+    <string name="add_activity">Add activity</string>
     <string name="add_activity_prompt">Type new activity name…</string>
-    <string name="confirm_button_label">Confirm</string>
-    <string name="cancel_button_label">Cancel</string>
-    <string name="shop_message_card_description">Click below to see the recommended clothing items for the activity in the Shopping page</string>
-    <string name="shop_message_card_button_text">Go to Shop</string>
-
-
-    <!-- ui - screens - HistoryScreen -->
-    <string name="history_screen_title">Activity History</string>
-    <string name="history_screen_view_previous_activity_search">View your previous activity searches and conditions</string>
-
-    <!-- ui - screens - SearchScreen -->
-    <string name="search_screen_content_label">Search</string>
-    <string name="search_screen_content_suggestions">Suggestions</string>
-    <string name="search_screen_content_recent">Recent</string>
-    <string name="search_screen_history_row_button">Remove</string>
-
-    <!-- ui - screens - SettingsScreen -->
-    <string name="settings_screen_title">Settings</string>
-    <string name="settings_screen_section_header_general">General</string>
-    <string name="settings_screen_language_title">Language</string>
-    <string name="settings_screen_app_theme_title">App theme</string>
-    <string name="settings_screen_currency">Currency</string>
-    <string name="settings_screen_select_currency">Select currency</string>
-    <string name="settings_screen_dialog_dismiss_button">Dismiss</string>
-    <string name="settings_screen_section_header_units">Units</string>
-    <string name="settings_screen_unit_item_title">Unit System</string>
-    <string name="settings_screen_language_dialog_title">Select Language</string>
-    <string name="settings_screen_dialog_confirm_button">OK</string>
-    <string name="settings_screen_unit_dialog_title">Select Unit System</string>
-    <string name="settings_screen_navigate_icon">Navigate to setting</string>
-    <string name="settings_screen_language_icon">Language setting</string>
-    <string name="settings_screen_app_theme_icon">App theme setting</string>
-    <string name="settings_screen_currency_icon">Currency setting</string>
-    <string name="settings_screen_unit_icon">Temperature unit setting</string>
-    <string name="settings_screen_app_theme_light">Light theme</string>
-    <string name="settings_screen_app_theme_dark">Dark theme</string>
-    <string name="settings_screen_app_theme_system">Use device theme</string>
-
-    <!-- ui - screens - ShoppingScreen -->
-
-    <string name="shopping_screen_title">Weather Gear Shop</string>
-    <string name="shopping_screen_recommended_items_section_title">Recommended for Current Weather</string>
-    <string name="shopping_screen_all_items_section_title">All Items</string>
-    <string name="shopping_screen_view_listing_button">View Item</string>
-    <string name="shopping_screen_product_image_description">Product image for %1$s</string>
-
-
-    <!-- ui - screens - WeatherScreen -->
-
-    <string name="weather_screen_detail_title">Weather Details</string>
-    <string name="weather_screen_detail_humidity">Humidity</string>
-    <string name="weather_screen_detail_wind_speed">Wind Speed</string>
-    <string name="weather_screen_detail_visibility">Visibility</string>
-    <string name="weather_screen_detail_pressure">Pressure</string>
-    <string name="weather_screen_weather_detail_sunrise">Sunrise</string>
-    <string name="weather_screen_weather_detail_sunset">Sunset</string>
-    <string name="weather_screen_weather_detail_five_day_forecast">5-Day Forecast</string>
-    <string name="weather_screen_search_bar_hint">Search for a city or location…</string>
-    <string name="weather_screen_search_bar_icon_description">Search</string>
-    <string name="weather_search_bar_location_icon_description">Use Current Location</string>
-    <string name="weather_screen_gps_icon_description">Current Location</string>
-    <string name="weather_screen_remove_location_description">Remove location</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="shop_card_description">Click below to see the recommended clothing items for the activity in the Shopping page</string>
+    <string name="go_to_shop">Go to Shop</string>
+    <string name="activity_history">Activity History</string>
+    <string name="view_previous_activity_search">View your previous activity searches and conditions</string>
+    <string name="general">General</string>
+    <string name="language">Language</string>
+    <string name="app_theme">App theme</string>
+    <string name="currency">Currency</string>
+    <string name="select_currency">Select currency</string>
+    <string name="units">Units</string>
+    <string name="unit_system">Unit System</string>
+    <string name="select_language">Select Language</string>
+    <string name="select_unit_system">Select Unit System</string>
+    <string name="language_setting">Language setting</string>
+    <string name="app_theme_setting">App theme setting</string>
+    <string name="currency_setting">Currency setting</string>
+    <string name="temperature_unit_setting">Temperature unit setting</string>
+    <string name="light_theme">Light theme</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="use_device_theme">Use device theme</string>
+    <string name="weather_gear_shop">Weather Gear Shop</string>
+    <string name="recommended_weather_items">Recommended for Current Weather</string>
+    <string name="all_items">All Items</string>
+    <string name="view_items">View Item</string>
+    <string name="product_image_for">Product image for %1$s</string>
+    <string name="weather_details">Weather Details</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="visibility">Visibility</string>
+    <string name="pressure">Pressure</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
+    <string name="five_day_forecast">5-Day Forecast</string>
+    <string name="search_city_or_location">Search for a city or location…</string>
+    <string name="use_current_location">Use Current Location</string>
+    <string name="current_location">Current Location</string>
+    <string name="remove_location">Remove location</string>
     <string name="widget_description">Shows current weather for saved location</string>
-    <string name="widget_no_data">No data</string>
-    <string name="widget_tap_to_open">Tap to open app</string>
-    <string name="settings_screen_app_theme_dialog_title">Select App Theme</string>
-    <string name="settings_screen_unit_metric">Metric (°C)</string>
-    <string name="settings_screen_unit_imperial">Imperial (°F)</string>
-    <string name="settings_screen_currency_usd">US Dollar ($)</string>
-    <string name="settings_screen_currency_eur">Euro (€)</string>
-    <string name="settings_screen_currency_gbp">British Pound (£)</string>
+    <string name="no_data">No data</string>
+    <string name="tap_to_open_app">Tap to open app</string>
+    <string name="select_app_theme">Select App Theme</string>
+    <string name="unit_metric">Metric (°C)</string>
+    <string name="unit_imperial">Imperial (°F)</string>
+    <string name="currency_usd">US Dollar ($)</string>
+    <string name="currency_eur">Euro (€)</string>
+    <string name="currency_gbp">British Pound (£)</string>
     <string name="activity_screen_subtitle">Plan an activity based on the weather conditions for a specific location</string>
     <string name="no_activities">There are no activities! Please add one first</string>
     <string name="no_locations">There are no locations! Add them in the Weather page. Check the tooltip for more information</string>
     <string name="location_tooltip">Locations are managed from the Weather page. Any locations added there will be available to use in the activity planner</string>
-    <string name="weather_screen_content_no_locations">Add a location to see the weather!</string>
+    <string name="add_location_for_weather">Add a location to see the weather!</string>
     <string name="shopping_screen_subtitle">View recommended gear based on your activity and local weather</string>
-    <string name="history_screen_no_history">No history yet. Plan an activity to see it here.</string>
+    <string name="no_activity_history">No history yet. Plan an activity to see it here.</string>
+    <string name="recent">Recent</string>
 </resources>

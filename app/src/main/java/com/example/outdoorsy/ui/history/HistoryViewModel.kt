@@ -1,6 +1,5 @@
 package com.example.outdoorsy.ui.history
 
-import android.app.Application
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.automirrored.outlined.DirectionsRun
@@ -11,7 +10,6 @@ import androidx.compose.material.icons.outlined.Terrain
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.outdoorsy.data.local.datastore.SearchHistoryRepository
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
@@ -23,7 +21,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 
 /**
  * ViewModel for managing activity history data.
@@ -31,19 +28,9 @@ import kotlinx.coroutines.launch
  */
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    application: Application,
-    private val activityLogRepository: ActivityLogRepository,
-    private val activityRepository: ActivityRepository
+    activityLogRepository: ActivityLogRepository,
+    activityRepository: ActivityRepository
 ) : ViewModel() {
-    // Repository for managing recent search queries (DataStore-backed)
-    private val searchHistoryRepository = SearchHistoryRepository(application)
-
-    /**
-     * Flow of recent search queries for location suggestions.
-     */
-    val recentSearches = searchHistoryRepository.recentSearches
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
     /**
      * Flow of activity history items, combining logs with activity metadata.
      * Sorted by most recent first (descending by startDateTime).
@@ -70,7 +57,7 @@ class HistoryViewModel @Inject constructor(
         // Look up activity metadata, fallback to generic name if not found
         val activity = activityMap[activityName]
         val activityName = activity?.name ?: "Activity"
-        
+
         // Parse location string into city and state components
         val locationParts = location.split(", ")
         val city = locationParts.getOrElse(0) { location }
@@ -113,31 +100,4 @@ class HistoryViewModel @Inject constructor(
             "dog walking", "walking" -> Icons.Filled.Pets
             else -> Icons.Outlined.Terrain // Default icon for unknown activities
         }
-
-    /**
-     * Adds a search query to recent searches history.
-     */
-    fun submitQuery(query: String) {
-        viewModelScope.launch {
-            searchHistoryRepository.addQuery(query)
-        }
-    }
-
-    /**
-     * Removes a specific query from search history.
-     */
-    fun removeQuery(query: String) {
-        viewModelScope.launch {
-            searchHistoryRepository.removeQuery(query)
-        }
-    }
-
-    /**
-     * Clears all search history.
-     */
-    fun clearAll() {
-        viewModelScope.launch {
-            searchHistoryRepository.clear()
-        }
-    }
 }

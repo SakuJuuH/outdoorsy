@@ -102,7 +102,6 @@ class CurrencyRepositoryImpl @Inject constructor(
                 Log.w("CurrencyRepo", "API returned no currency rates.")
             }
         } catch (e: Exception) {
-            // Log the error but don't crash. The app can proceed with potentially stale data if available.
             Log.e("CurrencyRepo", "Failed to fetch and cache currency rates", e)
         }
     }

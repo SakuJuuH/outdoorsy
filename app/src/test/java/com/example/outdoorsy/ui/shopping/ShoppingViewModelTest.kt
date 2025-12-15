@@ -1,14 +1,19 @@
 package com.example.outdoorsy.ui.shopping
 
 import android.util.Log
-import com.example.outdoorsy.domain.repository.SettingsRepository
 import com.example.outdoorsy.domain.model.ebay.EbayItem
 import com.example.outdoorsy.domain.model.ebay.Price
 import com.example.outdoorsy.domain.repository.ActivityRepository
 import com.example.outdoorsy.domain.repository.CurrencyRepository
 import com.example.outdoorsy.domain.repository.EbayRepository
-import io.mockk.*
+import com.example.outdoorsy.domain.repository.SettingsRepository
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -17,7 +22,10 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -26,17 +34,21 @@ class ShoppingViewModelTest {
 
     @MockK
     private lateinit var ebayRepository: EbayRepository
+
     @MockK
     private lateinit var currencyRepository: CurrencyRepository
+
     @MockK
     private lateinit var settingsRepository: SettingsRepository
+
     @MockK
     private lateinit var activityRepository: ActivityRepository
 
     private lateinit var viewModel: ShoppingViewModel
     private val testDispatcher = StandardTestDispatcher()
 
-    private val sampleHikingBoots = EbayItem("1", "Hiking Boots", Price("100.0", "USD"), "", "", emptyList())
+    private val sampleHikingBoots =
+        EbayItem("1", "Hiking Boots", Price("100.0", "USD"), "", "", emptyList())
 
     @Before
     fun setup() {
@@ -80,7 +92,6 @@ class ShoppingViewModelTest {
 
     @Test
     fun `init sets error state when fetching fails`() = runTest {
-        // ARRANGE
         val errorMessage = "Failed to load items."
         every { settingsRepository.getCurrency() } returns flowOf("USD")
         coEvery { activityRepository.getClothingItems() } returns emptyList()
@@ -88,16 +99,16 @@ class ShoppingViewModelTest {
         // This mock will cause the ViewModel's INTERNAL try-catch block to be entered.
         coEvery { ebayRepository.getItems(any(), any(), any()) } throws Exception("Network error")
 
-        // ACT
         initializeViewModel()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // ASSERT
-        // Now that the ViewModel handles the crash internally without propagating it,
-        // the test can simply check the final UI state.
         val state = viewModel.uiState.value
         assertFalse("isLoading should be false after an error", state.isLoading)
-        assertEquals("Error message was not set correctly in the catch block", errorMessage, state.error)
+        assertEquals(
+            "Error message was not set correctly in the catch block",
+            errorMessage,
+            state.error
+        )
     }
 
 

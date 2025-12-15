@@ -27,7 +27,7 @@
 - **Add custom activities** to your activity list
 - **Delete activities** you no longer need
 - **AI-powered analysis** that evaluates weather suitability
-- Receive suitability scores (1-5) and labels (Excellent, Very Good, Good, Fair, Bad)
+- Receive suitability scores (Very Good, Good, Fair, Bad, Very Bad)
 - Get personalized clothing recommendations based on weather
 - Weather-specific tips for your chosen activity
 - Quick navigation to shopping for recommended gear
@@ -38,7 +38,6 @@
 - Track activity details including location, time range, date, and suitability
 - See suitability scores and labels for each activity
 - Activity-specific icons (cycling, hiking, running, beach, photography, dog walking)
-- Search through past activities
 
 ### 🛒 Smart Shopping
 
@@ -54,7 +53,7 @@
 - Language support (English/Finnish)
 - Currency preference for shopping
 
-### 📱 Home Screen Widget
+### 📱 Home Screen Widget (WIP)
 
 - Glance-based weather widget for quick access
 - Displays current location weather at a glance
@@ -69,7 +68,7 @@ Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Mo
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      Presentation Layer                      │
+│                      Presentation Layer                     │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
 │  │   Screens   │  │  ViewModels │  │   UI Components     │  │
 │  │  (Compose)  │  │   (State)   │  │   (Reusable)        │  │
@@ -77,17 +76,17 @@ Outdoorsy follows **Clean Architecture** principles combined with the **MVVM (Mo
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
-┌─────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────┐
 │                       Domain Layer                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────────────────┐  │
 │  │   Models    │  │  Use Cases  │  │ Repository Interfaces│  │
-│  │  (Entities) │  │  (Business) │  │   (Contracts)       │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
+│  │  (Entities) │  │  (Business) │  │   (Contracts)        │  │
+│  └─────────────┘  └─────────────┘  └──────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                        Data Layer                            │
+│                        Data Layer                           │
 │  ┌─────────────────────┐  ┌─────────────────────────────┐   │
 │  │      Remote         │  │           Local             │   │
 │  │  ┌───────────────┐  │  │  ┌───────────────────────┐  │   │
@@ -119,8 +118,6 @@ app/src/main/java/com/example/outdoorsy/
 │   │   │   ├── ActivityLogDao.kt
 │   │   │   ├── CurrencyRateDao.kt # Currency rate caching
 │   │   │   └── LocationDao.kt
-│   │   ├── datastore/             # DataStore preferences
-│   │   │   └── SearchHistoryRepository.kt
 │   │   └── entity/                # Room entities
 │   │       ├── ActivityEntity.kt
 │   │       ├── ActivityLogEntity.kt
@@ -162,7 +159,6 @@ app/src/main/java/com/example/outdoorsy/
 │       ├── CoroutinesModule.kt    # Dispatcher injection for testability
 │       ├── DatabaseModule.kt
 │       ├── DataStoreModule.kt
-│       ├── LocationModule.kt
 │       ├── NetworkModule.kt
 │       └── RepositoryModule.kt
 │
@@ -172,7 +168,6 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── ActivityLog.kt
 │   │   ├── Location.kt
 │   │   ├── ebay/                  # eBay domain models
-│   │   │   ├── Category.kt
 │   │   │   ├── EbayItem.kt
 │   │   │   └── Price.kt
 │   │   └── weather/               # Weather domain models
@@ -238,15 +233,13 @@ app/src/main/java/com/example/outdoorsy/
 │   │   └── components/
 │   │       ├── BaseSettingsItem.kt
 │   │       ├── SettingsItem.kt
-│   │       ├── SettingsItemWithSwitch.kt
 │   │       └── SingleChoiceDialog.kt
 │   ├── shopping/                  # Shopping Screen
 │   │   ├── ShoppingScreen.kt
 │   │   ├── ShoppingUiState.kt
 │   │   ├── ShoppingViewModel.kt
 │   │   └── components/
-│   │       ├── ProductCard.kt
-│   │       └── RecommendedItemsSection.kt
+│   │       └── ProductCard.kt
 │   ├── theme/                     # App Theme
 │   │   ├── Color.kt
 │   │   ├── Spacing.kt
@@ -342,15 +335,12 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 
 # Run specific test class
 ./gradlew test --tests "com.example.outdoorsy.ui.history.HistoryViewModelTest"
-
-# Run tests with coverage report
-./gradlew testDebugUnitTestCoverage
 ```
 
 ### Testing Libraries
 
 | Library             | Purpose                 |
-| ------------------- | ----------------------- |
+|---------------------|-------------------------|
 | **JUnit 4**         | Unit test framework     |
 | **MockK**           | Kotlin mocking library  |
 | **Turbine**         | Testing Kotlin Flows    |
@@ -363,7 +353,7 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 ## 🛠️ Tech Stack
 
 | Category                 | Technologies                                                   |
-| ------------------------ | -------------------------------------------------------------- |
+|--------------------------|----------------------------------------------------------------|
 | **Language**             | Kotlin 2.2.21                                                  |
 | **UI Framework**         | Jetpack Compose with Material 3                                |
 | **Architecture**         | Clean Architecture + MVVM                                      |
@@ -390,12 +380,14 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
   - `/data/2.5/forecast` - 5-day forecast
   - `/geo/1.0/direct` - Geocoding (city to coordinates)
 - **Documentation**: [OpenWeatherMap API](https://openweathermap.org/api)
+- **Key Instructions**: [OpenWeatherMap API key instructions](./docs/openweathermap-apikey-instructions.md)
 
 ### 2. eBay Browse API
 
 - **Purpose**: Product search for outdoor gear recommendations
 - **Features**: OAuth 2.0 authentication, product listings with images and prices
 - **Documentation**: [eBay Browse API](https://developer.ebay.com/api-docs/buy/browse/overview.html)
+- **Key Instructions**: [ebay Browse API key instructions](./docs/ebay-apikey-instructions.md)
 
 ### 3. Currency API
 
@@ -403,11 +395,14 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 - **Features**: Results are cached locally in Room database for offline access
 - **Supported Currencies**: USD, EUR, GBP
 - **Documentation**: [CurrencyAPI](https://currencyapi.com/)
+- **Key Instructions**: [Currency API key instructions](./docs/currencyapi-apikey-instructions.md)
 
 ### 4. AI Assistant API
 
 - **Purpose**: Intelligent activity feasibility analysis
 - **Features**: Weather-based recommendations, clothing tips, suitability scoring
+- **Documentation**: [OpenWeatherMap API](https://openweathermap.org/api/one-call-3#ai_weather_assistant)
+- **Key Instructions**: [OpenWeatherMap API key instructions](./docs/openweathermap-apikey-instructions.md)
 
 ---
 
@@ -419,7 +414,7 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 - JDK 11+
 - Android SDK 35+ (minimum) / 36 (target)
 - API keys for the following services:
-  - [OpenWeatherMap](https://openweathermap.org/api) (free tier available)
+  - [OpenWeatherMap](https://openweathermap.org/api) (free tier available, but One Call API 3.0 required for AI features)
   - [eBay Developer Program](https://developer.ebay.com/) (free tier available)
   - [CurrencyAPI](https://currencyapi.com/) (free tier available)
 
@@ -428,13 +423,13 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/outdoorsy.git
+   git clone https://github.com/SakuJuuH/outdoorsy.git
    cd outdoorsy
    ```
 
 2. **Configure API keys**
 
-   Create or edit the `local.properties` file in the project root:
+   Create a `local.properties` or rename the `local.properties.example` file in the project root:
 
    ```properties
    sdk.dir=/path/to/your/Android/sdk
@@ -452,7 +447,7 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 4. **Sync and Build**
 
    - Wait for Gradle sync to complete
-   - Build the project: `Build > Make Project`
+   - Build the project: `Build > Assemble Project`
 
 5. **Run the app**
    - Select a device/emulator (API 35+)
@@ -470,7 +465,7 @@ The app requires the following permissions:
 ## 📱 Screens Overview
 
 | Screen       | Description                                                                  |
-| ------------ | ---------------------------------------------------------------------------- |
+|--------------|------------------------------------------------------------------------------|
 | **Weather**  | Main dashboard showing weather for saved locations with forecasts            |
 | **History**  | View past activity plans sorted by date (newest first) with suitability info |
 | **Activity** | Plan new activities with date/time selection and AI-powered weather analysis |
@@ -497,18 +492,19 @@ To add a new language:
 ## 📋 Requirements
 
 | Requirement | Value           |
-| ----------- | --------------- |
-| Minimum SDK | 35 (Android 15) |
+|-------------|-----------------|
+| Minimum SDK | 36 (Android 16) |
 | Target SDK  | 36              |
 | Compile SDK | 36              |
 | Kotlin      | 2.2.21          |
 | Gradle      | 8.13.1          |
 
+Internet access is required for most of the app's functionality.
+
 ---
 
 ## 🔮 Future Improvements
 
-- [ ] Add more outdoor activities
 - [ ] Implement notifications for optimal activity times
 - [ ] Add social features (share activities with friends)
 - [ ] Integrate more shopping platforms
@@ -522,7 +518,7 @@ To add a new language:
 
 ## 📄 License
 
-This project is for educational purposes. Please ensure you have proper licenses for any APIs used in production.
+This project is for educational purposes, licensed under the [MIT license](LICENSE). Please ensure you have proper licenses for any APIs used in production.
 
 ---
 
@@ -539,9 +535,3 @@ This project is for educational purposes. Please ensure you have proper licenses
 ## 📞 Contact
 
 For questions or feedback, please open an issue on GitHub.
-
----
-
-<p align="center">
-  Made with ❤️ using Kotlin and Jetpack Compose
-</p>

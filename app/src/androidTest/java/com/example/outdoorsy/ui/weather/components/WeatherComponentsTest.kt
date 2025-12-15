@@ -1,5 +1,6 @@
 package com.example.outdoorsy.ui.weather.components
 
+import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.ui.test.assertIsDisplayed
@@ -7,9 +8,12 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.outdoorsy.R
 import com.example.outdoorsy.ui.theme.WeatherAppTheme
 import com.example.outdoorsy.ui.weather.model.DailyForecast
 import com.example.outdoorsy.ui.weather.model.WeatherData
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -18,9 +22,15 @@ class WeatherComponentsTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private lateinit var context: Context
+
+    @Before
+    fun setup() {
+        context = InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
     @Test
     fun weatherCard_displaysCorrectInfo() {
-        // Given
         val sampleWeather = WeatherData(
             location = "London",
             temp = 15,
@@ -39,7 +49,6 @@ class WeatherComponentsTest {
             unit = "metric"
         )
 
-        // When
         composeTestRule.setContent {
             WeatherAppTheme {
                 WeatherCard(
@@ -49,7 +58,6 @@ class WeatherComponentsTest {
             }
         }
 
-        // Then
         composeTestRule.onNodeWithText("London").assertIsDisplayed()
         composeTestRule.onNodeWithText("15°C").assertIsDisplayed()
         composeTestRule.onNodeWithText("Cloudy").assertIsDisplayed()
@@ -59,7 +67,6 @@ class WeatherComponentsTest {
 
     @Test
     fun weatherCard_showsRemoveButton_whenNotCurrentLocation() {
-        // Given
         var removeClicked = false
         val sampleWeather = WeatherData(
             location = "Paris",
@@ -79,7 +86,6 @@ class WeatherComponentsTest {
             unit = "metric"
         )
 
-        // When
         composeTestRule.setContent {
             WeatherAppTheme {
                 WeatherCard(
@@ -89,17 +95,16 @@ class WeatherComponentsTest {
             }
         }
 
-        // Then
-        // The content description for the remove button (defined in WeatherCard.kt)
-        composeTestRule.onNodeWithContentDescription("Remove location").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.remove_location))
+            .assertIsDisplayed()
 
-        composeTestRule.onNodeWithContentDescription("Remove location").performClick()
+        composeTestRule.onNodeWithContentDescription(context.getString(R.string.remove_location))
+            .performClick()
         assert(removeClicked)
     }
 
     @Test
     fun weatherDetailCard_displaysLabelAndValue() {
-        // When
         composeTestRule.setContent {
             WeatherAppTheme {
                 WeatherDetailCard(
@@ -110,27 +115,23 @@ class WeatherComponentsTest {
             }
         }
 
-        // Then
-        composeTestRule.onNodeWithText("Humidity").assertIsDisplayed()
+        composeTestRule.onNodeWithText(context.getString(R.string.humidity)).assertIsDisplayed()
         composeTestRule.onNodeWithText("65%").assertIsDisplayed()
     }
 
     @Test
     fun forecastCard_displaysDailyItems() {
-        // Given
         val forecastList = listOf(
             DailyForecast("Mon", 20, 15, "Rainy", "10d"),
             DailyForecast("Tue", 22, 16, "Cloudy", "03d")
         )
 
-        // When
         composeTestRule.setContent {
             WeatherAppTheme {
                 ForecastCard(forecast = forecastList)
             }
         }
 
-        // Then
         // Verify Day 1
         composeTestRule.onNodeWithText("Mon").assertIsDisplayed()
         composeTestRule.onNodeWithText("20°").assertIsDisplayed() // High

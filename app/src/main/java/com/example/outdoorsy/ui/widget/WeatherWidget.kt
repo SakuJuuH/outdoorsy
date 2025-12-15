@@ -212,7 +212,7 @@ class WeatherWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = context.getString(R.string.widget_no_data),
+                    text = context.getString(R.string.no_data),
                     style = TextStyle(
                         color = GlanceTheme.colors.onPrimaryContainer,
                         fontWeight = FontWeight.Bold,
@@ -221,7 +221,7 @@ class WeatherWidget : GlanceAppWidget() {
                 )
                 Spacer(modifier = GlanceModifier.height(4.dp))
                 Text(
-                    text = context.getString(R.string.widget_tap_to_open),
+                    text = context.getString(R.string.tap_to_open_app),
                     style = TextStyle(
                         fontSize = 12.sp,
                         color = GlanceTheme.colors.onSurfaceVariant

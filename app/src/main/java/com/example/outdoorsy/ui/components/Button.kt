@@ -95,7 +95,7 @@ fun CustomButtonPreview() {
 
             CustomButton(
                 onClick = { },
-                text = stringResource(id = R.string.button_disabled),
+                text = stringResource(id = R.string.disabled),
                 type = ButtonType.PRIMARY,
                 enabled = false
             )

@@ -7,8 +7,8 @@ const val EBAY_BASE_URL = "https://api.ebay.com"
 const val CURRENCY_BASE_URL = "https://api.currencyapi.com/"
 
 enum class TemperatureSystem(val code: String, val displayName: Int, val symbol: String) {
-    METRIC("metric", R.string.settings_screen_unit_metric, "°C"),
-    IMPERIAL("imperial", R.string.settings_screen_unit_imperial, "°F");
+    METRIC("metric", R.string.unit_metric, "°C"),
+    IMPERIAL("imperial", R.string.unit_imperial, "°F");
 
     companion object {
         fun fromCode(code: String): TemperatureSystem = entries.find { it.code == code } ?: METRIC
@@ -17,17 +17,13 @@ enum class TemperatureSystem(val code: String, val displayName: Int, val symbol:
 
 enum class AppLanguage(val code: String) {
     ENGLISH("en"),
-    FINNISH("fi");
-
-    companion object {
-        fun fromCode(code: String): AppLanguage = entries.find { it.code == code } ?: ENGLISH
-    }
+    FINNISH("fi")
 }
 
 enum class Currencies(val code: String, val displayName: Int, val symbol: String) {
-    USD("USD", R.string.settings_screen_currency_usd, "$"),
-    EUR("EUR", R.string.settings_screen_currency_eur, "€"),
-    GBP("GBP", R.string.settings_screen_currency_gbp, "£");
+    USD("USD", R.string.currency_usd, "$"),
+    EUR("EUR", R.string.currency_eur, "€"),
+    GBP("GBP", R.string.currency_gbp, "£");
 
     companion object {
         fun fromCode(code: String): Currencies = entries.find { it.code == code } ?: GBP
@@ -35,9 +31,9 @@ enum class Currencies(val code: String, val displayName: Int, val symbol: String
 }
 
 enum class AppTheme(val code: String, val displayName: Int) {
-    LIGHT("light", R.string.settings_screen_app_theme_light),
-    DARK("dark", R.string.settings_screen_app_theme_dark),
-    SYSTEM("system", R.string.settings_screen_app_theme_system);
+    LIGHT("light", R.string.light_theme),
+    DARK("dark", R.string.dark_theme),
+    SYSTEM("system", R.string.use_device_theme);
 
     companion object {
         fun fromCode(code: String): AppTheme = entries.find { it.code == code } ?: SYSTEM

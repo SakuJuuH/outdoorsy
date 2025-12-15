@@ -1,6 +1,5 @@
 package com.example.outdoorsy.ui.activity
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.outdoorsy.R
@@ -179,7 +178,6 @@ class ActivityViewModel @Inject constructor(
         }
     }
 
-    // TODO: Remove Log statements
     fun performSearch() {
         val activity = _uiState.value.selectedActivity
         val location = _uiState.value.selectedLocation
@@ -189,7 +187,7 @@ class ActivityViewModel @Inject constructor(
         val endTime = _uiState.value.selectedEndTime
 
         viewModelScope.launch {
-            var forecast: ForecastResponse? = null
+            var forecast: ForecastResponse?
             try {
                 forecast = getForecast(
                     lat = location?.latitude,
@@ -198,8 +196,8 @@ class ActivityViewModel @Inject constructor(
                     units = "metric",
                     language = "en"
                 )
-            } catch (e: Exception) {
-                Log.e("Forecast", "Error fetching forecast", e)
+            } catch (_: Exception) {
+                throw Exception("Error fetching forecast")
             }
 
             if (activity == null || location == null) {
@@ -227,7 +225,6 @@ class ActivityViewModel @Inject constructor(
                 }
 
                 val response = getAiAssistant(prompt)
-                Log.d("Response", "$response")
                 val aiAnswer = Gson().fromJson(response.answer, AiAssistantAnswerDto::class.java)
                 activityRepository.setClothingItems(aiAnswer.clothingItems)
 
@@ -250,10 +247,7 @@ class ActivityViewModel @Inject constructor(
                         aiAnswer = aiAnswer
                     )
                 }
-
-                Log.d("UI State", uiState.value.aiAnswer.toString())
-            } catch (e: Exception) {
-                Log.e("ActivitySearch", "Error calling AI Assistant", e)
+            } catch (_: Exception) {
                 _uiState.update {
                     it.copy(
                         searchPerformed = false,
