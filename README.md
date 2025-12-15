@@ -118,8 +118,6 @@ app/src/main/java/com/example/outdoorsy/
 │   │   │   ├── ActivityLogDao.kt
 │   │   │   ├── CurrencyRateDao.kt # Currency rate caching
 │   │   │   └── LocationDao.kt
-│   │   ├── datastore/             # DataStore preferences
-│   │   │   └── SearchHistoryRepository.kt
 │   │   └── entity/                # Room entities
 │   │       ├── ActivityEntity.kt
 │   │       ├── ActivityLogEntity.kt
@@ -161,7 +159,6 @@ app/src/main/java/com/example/outdoorsy/
 │       ├── CoroutinesModule.kt    # Dispatcher injection for testability
 │       ├── DatabaseModule.kt
 │       ├── DataStoreModule.kt
-│       ├── LocationModule.kt
 │       ├── NetworkModule.kt
 │       └── RepositoryModule.kt
 │
@@ -171,7 +168,6 @@ app/src/main/java/com/example/outdoorsy/
 │   │   ├── ActivityLog.kt
 │   │   ├── Location.kt
 │   │   ├── ebay/                  # eBay domain models
-│   │   │   ├── Category.kt
 │   │   │   ├── EbayItem.kt
 │   │   │   └── Price.kt
 │   │   └── weather/               # Weather domain models
@@ -237,15 +233,13 @@ app/src/main/java/com/example/outdoorsy/
 │   │   └── components/
 │   │       ├── BaseSettingsItem.kt
 │   │       ├── SettingsItem.kt
-│   │       ├── SettingsItemWithSwitch.kt
 │   │       └── SingleChoiceDialog.kt
 │   ├── shopping/                  # Shopping Screen
 │   │   ├── ShoppingScreen.kt
 │   │   ├── ShoppingUiState.kt
 │   │   ├── ShoppingViewModel.kt
 │   │   └── components/
-│   │       ├── ProductCard.kt
-│   │       └── RecommendedItemsSection.kt
+│   │       └── ProductCard.kt
 │   ├── theme/                     # App Theme
 │   │   ├── Color.kt
 │   │   ├── Spacing.kt
@@ -499,7 +493,7 @@ To add a new language:
 
 | Requirement | Value           |
 |-------------|-----------------|
-| Minimum SDK | 35 (Android 15) |
+| Minimum SDK | 36 (Android 16) |
 | Target SDK  | 36              |
 | Compile SDK | 36              |
 | Kotlin      | 2.2.21          |
