@@ -10,10 +10,10 @@ generate an `EBAY_BASIC_KEY` which is a Base64 encoded string of the Client ID a
    the hamburger menu or clicking the **Register now** button and navigating to the **Sign In**
    section.
 
-   > [!IMPORTANT]
-   >
-   > After registering a new account, it will take a couple of days for eBay to verify your account
-   before you can start using the API.
+> [!IMPORTANT]
+>
+> After registering a new account, it will take a couple of days for eBay to verify your account
+> before you can start using the API.
 
 ## Step 2: Generate Application Keys
 
@@ -23,10 +23,10 @@ generate an `EBAY_BASIC_KEY` which is a Base64 encoded string of the Client ID a
 
    You should create a **Production Keyset** for this project.
 
-   > [!IMPORTANT]
-   >
-   > Sandbox environment is recommended for development but does not contain real eBay
-   listings, therefore its better to use the production one for developing this project.
+> [!IMPORTANT]
+>
+> Sandbox environment is recommended for development but does not contain real eBay
+> listings, therefore its better to use the production one for developing this project.
 
 3. Click **Create a Keyset** for your chosen environment.
 4. Fill in the required application details if prompted.
