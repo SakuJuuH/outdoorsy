@@ -93,4 +93,5 @@
     <string name="no_activities">Ei aktiviteetteja! Lisää yksi ensin</string>
     <string name="no_locations">Ei sijainteja! Lisää ne Sää-sivulle. Katso lisätietoja työkaluvihjeestä</string>
     <string name="location_tooltip">Sijainnit hallitaan Sää-sivulta. Kaikki sinne lisätyt sijainnit ovat käytettävissä aktiviteettien suunnittelussa</string>
+    <string name="search_screen_content_recent">Nykyiset</string>
 </resources>
