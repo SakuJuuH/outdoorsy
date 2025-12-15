@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">WeatherApp</string>
 
-    <string name="nav_search">Hae</string>
     <string name="nav_weather">Sää</string>
     <string name="nav_activity">Aktiviteetti</string>
     <string name="nav_shopping">Shoppaile</string>
@@ -20,7 +19,6 @@
     <string name="activity_screen_end_date_label">Valitse päättymispäivä</string>
     <string name="activity_screen_start_time_label">Valitse aloitus aika</string>
     <string name="end_time_label">Valitse lopetus aika</string>
-    <string name="time_prompt">Valitse aika…</string>
     <string name="search_button_label">Hae</string>
     <string name="location_label">Valitse sijainti</string>
     <string name="location_prompt">Valitse sijainti…</string>
@@ -30,8 +28,6 @@
     <string name="suitability">Soveltuvuus</string>
     <string name="weather_tips">Säävinkkejä</string>
     <string name="clothing_tips">Pukeutumis vinkkejä</string>
-    <string name="hide_options">Piilota vaihtoehdot</string>
-    <string name="show_options">Näytä vaihtoehdot</string>
     <string name="add_activity_title">Lisää aktiviteetti</string>
     <string name="add_activity_prompt">Kirjoita uuden aktiviteetin nimi…</string>
     <string name="confirm_button_label">Vahvistaa</string>
@@ -44,11 +40,6 @@
     <string name="history_screen_view_previous_activity_search">Tarkastele aiempia aktiivisuus hakuja ja ehtoja</string>
     <string name="history_screen_no_history">Ei historiaa. Suunnittele aktiviteetti nähdäksesi se täällä.</string>
 
-    <string name="search_screen_content_label">Hae</string>
-    <string name="search_screen_content_suggestions">Ehdotukset</string>
-    <string name="search_screen_content_recent">Nykyiset</string>
-    <string name="search_screen_history_row_button">Poista</string>
-
     <string name="settings_screen_title">Asetukset</string>
     <string name="settings_screen_section_header_general">Yleiset</string>
     <string name="settings_screen_language_title">Kieli</string>
@@ -57,12 +48,9 @@
     <string name="no_matches_found">Osumia ei löytynyt</string>
     <string name="settings_screen_currency">Valuutta</string>
     <string name="settings_screen_select_currency">Valitse valuutta</string>
-    <string name="settings_screen_dialog_dismiss_button">Hylkää</string>
     <string name="settings_screen_section_header_units">Yksiköt</string>
     <string name="settings_screen_unit_item_title">Yksikköjärjestelmä</string>
-    <string name="settings_screen_dialog_confirm_button">OK</string>
     <string name="settings_screen_unit_dialog_title">Valitse yksikköjärjestelmä</string>
-    <string name="settings_screen_navigate_icon">Siirry asetukseen</string>
     <string name="settings_screen_language_icon">Kieli asetus</string>
     <string name="settings_screen_app_theme_icon">Sovelluksen teema asetus</string>
     <string name="settings_screen_currency_icon">Valuutta asetus</string>
@@ -93,7 +81,6 @@
     <string name="weather_screen_weather_detail_sunset">Auringonlasku</string>
     <string name="weather_screen_weather_detail_five_day_forecast">5 päivän ennuste</string>
     <string name="weather_screen_search_bar_hint">Hae kaupunkia tai sijaintia</string>
-    <string name="weather_screen_search_bar_icon_description">Hae</string>
     <string name="weather_search_bar_location_icon_description">Käytä nykyistä sijaintia</string>
     <string name="weather_screen_gps_icon_description">Nykyinen sijainti</string>
     <string name="weather_screen_remove_location_description">Poista sijainti</string>
