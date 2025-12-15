@@ -24,13 +24,11 @@ import retrofit2.Response
 @OptIn(ExperimentalCoroutinesApi::class)
 class EbayRepositoryImplTest {
 
-    // 1. Mocks for all dependencies of the repository
     private lateinit var mockApiService: EbayApiService
     private lateinit var mockAuthService: EbayAuthService
     private lateinit var mockTokenHolder: EbayTokenHolder
     private lateinit var repository: EbayRepositoryImpl
 
-    // We also need to mock the Lazy wrappers
     private lateinit var lazyApiService: Lazy<EbayApiService>
     private lateinit var lazyAuthService: Lazy<EbayAuthService>
 
@@ -52,7 +50,6 @@ class EbayRepositoryImplTest {
 
     @Test
     fun `getItems fetches new token when current token is invalid`() = runTest {
-        // --- Arrange ---
         every { mockTokenHolder.isValid() } returns false
         coEvery { mockAuthService.getToken() } returns EbayTokenResponseDto(
             accessToken = "new-dummy-token",
@@ -63,32 +60,26 @@ class EbayRepositoryImplTest {
             mockApiService.getItems(any(), any(), any(), any(), any())
         } returns Response.success(EbayItemResponseDto(itemSummaries = emptyList()))
 
-        // --- Act ---
         repository.getItems("hiking", 10)
 
-        // --- Assert ---
         coVerify(exactly = 1) { mockAuthService.getToken() }
         coVerify(exactly = 1) { mockTokenHolder.updateToken("new-dummy-token", 3600) }
     }
 
     @Test
     fun `getItems does NOT fetch new token when current token is valid`() = runTest {
-        // --- Arrange ---
         every { mockTokenHolder.isValid() } returns true
         coEvery {
             mockApiService.getItems(any(), any(), any(), any(), any())
         } returns Response.success(EbayItemResponseDto(itemSummaries = emptyList()))
 
-        // --- Act ---
         repository.getItems("hiking", 10)
 
-        // --- Assert ---
         coVerify(exactly = 0) { mockAuthService.getToken() }
     }
 
     @Test
     fun `getItems returns mapped domain models on successful API response`() = runTest {
-        // --- Arrange ---
         every { mockTokenHolder.isValid() } returns true
 
         val fakeApiResponse = EbayItemResponseDto(
@@ -105,15 +96,12 @@ class EbayRepositoryImplTest {
             )
         )
 
-        // Mock the API service call, now using specific matchers for clarity
         coEvery {
             mockApiService.getItems(query = "boots", limit = 1, filter = any())
         } returns Response.success(fakeApiResponse)
 
-        // --- Act ---
         val result = repository.getItems("boots", 1)
 
-        // --- Assert ---
         assertEquals(1, result.size)
         assertEquals("123", result.first().itemId)
         assertEquals("Hiking Boots", result.first().title)
@@ -123,16 +111,13 @@ class EbayRepositoryImplTest {
 
     @Test
     fun `getItems returns empty list on API failure`() = runTest {
-        // --- Arrange ---
         every { mockTokenHolder.isValid() } returns true
         coEvery {
             mockApiService.getItems(any(), any(), any(), any(), any())
         } returns Response.error(404, mockk(relaxed = true))
 
-        // --- Act ---
         val result = repository.getItems("query", 10)
 
-        // --- Assert ---
         assertEquals(true, result.isEmpty())
     }
 }

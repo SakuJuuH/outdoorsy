@@ -17,17 +17,14 @@ class WeatherMappersTest {
 
     @Test
     fun `toUiModel maps basic fields correctly`() {
-        // Given
         val mockWeatherResponse = createMockWeatherResponse(
             temp = 25.6, // Should round to 25 (toInt truncates) or be handled as Int
             description = "clear sky"
         )
         val mockForecast = emptyList<ForecastItem>()
 
-        // When
         val uiModel = mockWeatherResponse.toUiModel(mockForecast, "metric")
 
-        // Then
         assertEquals("Test City", uiModel.location)
         assertEquals(25, uiModel.temp) // 25.6.toInt() is 25
         assertEquals("Clear sky", uiModel.condition) // Should capitalize
@@ -37,9 +34,7 @@ class WeatherMappersTest {
 
     @Test
     fun `toDailyForecasts groups items by day and calculates high low`() {
-        // Given
         val calendar = Calendar.getInstance(TimeZone.getDefault())
-        // Reset to noon to avoid timezone edge cases in simple tests
         calendar.set(Calendar.HOUR_OF_DAY, 12)
 
         val todaySec = calendar.timeInMillis / 1000
@@ -58,10 +53,8 @@ class WeatherMappersTest {
 
         val mockWeatherResponse = createMockWeatherResponse(20.0, "clouds")
 
-        // When
         val uiModel = mockWeatherResponse.toUiModel(forecastItems, "metric")
 
-        // Then
         val dailyForecast = uiModel.forecast
         assertEquals(2, dailyForecast.size)
 

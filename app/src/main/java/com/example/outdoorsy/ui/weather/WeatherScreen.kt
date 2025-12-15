@@ -283,7 +283,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                     }
 
                     if (locations.isNotEmpty() && !isLoading) {
-                        // 1. Horizontal Pager for Main Cards
+                        // Horizontal Pager for Main Cards
                         HorizontalPager(
                             state = pagerState,
                             modifier = Modifier.fillMaxWidth()
@@ -298,7 +298,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
                             )
                         }
 
-                        // 2. Page Indicator
+                        // Page Indicators
                         WeatherPageIndicator(
                             pagerState = pagerState,
                             locations = locations
@@ -306,7 +306,7 @@ fun WeatherScreen(modifier: Modifier = Modifier, viewModel: WeatherViewModel = h
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // 3. Details and Forecast
+                        // Details and Forecast
                         if (currentWeatherData != null) {
                             WeatherDetailsGrid(weatherData = currentWeatherData)
 

@@ -1,6 +1,5 @@
 package com.example.outdoorsy.ui.history
 
-import android.app.Application
 import com.example.outdoorsy.domain.model.Activity
 import com.example.outdoorsy.domain.model.ActivityLog
 import com.example.outdoorsy.domain.repository.ActivityLogRepository
@@ -8,7 +7,6 @@ import com.example.outdoorsy.domain.repository.ActivityRepository
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -25,6 +23,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HistoryViewModelTest {
@@ -36,18 +35,12 @@ class HistoryViewModelTest {
     @MockK
     private lateinit var activityRepository: ActivityRepository
 
-    @MockK
-    private lateinit var application: Application
-
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(testDispatcher)
-
-        // Mock application context for SearchHistoryRepository
-        every { application.applicationContext } returns mockk(relaxed = true)
     }
 
     @After
@@ -60,7 +53,7 @@ class HistoryViewModelTest {
         every { activityLogRepository.getAllActivityLogs() } returns flowOf(emptyList())
         every { activityRepository.getAllActivities() } returns flowOf(emptyList())
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -86,7 +79,7 @@ class HistoryViewModelTest {
         every { activityLogRepository.getAllActivityLogs() } returns flowOf(listOf(activityLog))
         every { activityRepository.getAllActivities() } returns flowOf(listOf(activity))
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -103,7 +96,9 @@ class HistoryViewModelTest {
         assertEquals("FI", item.state)
         assertEquals("Excellent", item.suitabilityLabel)
         assertEquals(5, item.suitabilityScore)
-        assertEquals("Dec 6, 2025", item.date)
+
+        val dateFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy")
+        assertEquals(now.format(dateFormatter), item.date)
     }
 
     @Test
@@ -131,10 +126,15 @@ class HistoryViewModelTest {
         val activities = listOf(Activity(name = "Running"), Activity(name = "Hiking"))
 
         // Provide logs in wrong order (older first) to test sorting
-        every { activityLogRepository.getAllActivityLogs() } returns flowOf(listOf(olderLog, newerLog))
+        every { activityLogRepository.getAllActivityLogs() } returns flowOf(
+            listOf(
+                olderLog,
+                newerLog
+            )
+        )
         every { activityRepository.getAllActivities() } returns flowOf(activities)
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -163,7 +163,7 @@ class HistoryViewModelTest {
         every { activityLogRepository.getAllActivityLogs() } returns flowOf(listOf(activityLog))
         every { activityRepository.getAllActivities() } returns flowOf(listOf(Activity(name = "Cycling")))
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -191,7 +191,7 @@ class HistoryViewModelTest {
         // Activity is not in the list
         every { activityRepository.getAllActivities() } returns flowOf(emptyList())
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -219,7 +219,7 @@ class HistoryViewModelTest {
         every { activityLogRepository.getAllActivityLogs() } returns flowOf(listOf(activityLog))
         every { activityRepository.getAllActivities() } returns flowOf(listOf(Activity(name = "Running")))
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -248,7 +248,7 @@ class HistoryViewModelTest {
         every { activityLogRepository.getAllActivityLogs() } returns flowOf(listOf(activityLog))
         every { activityRepository.getAllActivities() } returns flowOf(listOf(Activity(name = "Running")))
 
-        viewModel = HistoryViewModel(application, activityLogRepository, activityRepository)
+        viewModel = HistoryViewModel(activityLogRepository, activityRepository)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.historyItems.collect()
@@ -257,7 +257,10 @@ class HistoryViewModelTest {
 
         val items = viewModel.historyItems.value
         assertEquals(1, items.size)
-        assertEquals("9:00 AM - 11:30 AM", items.first().timeRange)
+
+        val formatter = DateTimeFormatter.ofPattern("h:mm a")
+        val expectedRange = "${start.format(formatter)} - ${end.format(formatter)}"
+        assertEquals(expectedRange, items.first().timeRange)
     }
 }
 

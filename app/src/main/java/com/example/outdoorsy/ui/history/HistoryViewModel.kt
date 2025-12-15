@@ -57,7 +57,7 @@ class HistoryViewModel @Inject constructor(
         // Look up activity metadata, fallback to generic name if not found
         val activity = activityMap[activityName]
         val activityName = activity?.name ?: "Activity"
-        
+
         // Parse location string into city and state components
         val locationParts = location.split(", ")
         val city = locationParts.getOrElse(0) { location }

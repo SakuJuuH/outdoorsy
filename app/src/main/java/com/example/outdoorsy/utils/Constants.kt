@@ -17,7 +17,7 @@ enum class TemperatureSystem(val code: String, val displayName: Int, val symbol:
 
 enum class AppLanguage(val code: String) {
     ENGLISH("en"),
-    FINNISH("fi");
+    FINNISH("fi")
 }
 
 enum class Currencies(val code: String, val displayName: Int, val symbol: String) {

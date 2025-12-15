@@ -62,10 +62,10 @@ class ShoppingScreenTest {
 
     @Test
     fun shoppingScreen_showsLoadingIndicator_whenLoadingAndListsAreEmpty() {
-        val loadingState = ShoppingUiState(isLoading = true, items = emptyList(), recommendedItems = emptyList())
+        val loadingState =
+            ShoppingUiState(isLoading = true, items = emptyList(), recommendedItems = emptyList())
         renderShoppingScreen(loadingState)
 
-        // For now, we confirm that no items are shown, which implies loading.
         composeTestRule.onNodeWithText(sampleRecommendedItem.title).assertDoesNotExist()
         composeTestRule.onNodeWithText(sampleRegularItem.title).assertDoesNotExist()
     }

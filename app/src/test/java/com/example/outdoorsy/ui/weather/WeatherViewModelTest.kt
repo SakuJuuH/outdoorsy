@@ -81,7 +81,6 @@ class WeatherViewModelTest {
 
     @Test
     fun `loadCurrentLocationWeather fetches data successfully when location exists`() = runTest {
-        // Given
         val mockLocation = Location(name = "Kerava", latitude = 60.4, longitude = 25.1)
         val mockWeatherResponse = mockk<WeatherResponse>(relaxed = true) {
             every { name } returns "Kerava"
@@ -113,7 +112,6 @@ class WeatherViewModelTest {
             )
         } returns mockForecastResponse
 
-        // When
         viewModel = WeatherViewModel(
             getCurrentWeather,
             getForecast,
@@ -121,14 +119,12 @@ class WeatherViewModelTest {
             locationRepository
         )
 
-        // **FIX: Collect the flow to activate stateIn(WhileSubscribed)**
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.weatherList.collect()
         }
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Then
         val weatherList = viewModel.weatherList.value
         assertTrue("Weather list should not be empty", weatherList.isNotEmpty())
         assertEquals("Kerava", weatherList[0]?.location)
@@ -138,7 +134,6 @@ class WeatherViewModelTest {
 
     @Test
     fun `searchAndAddLocation saves location when valid city found`() = runTest {
-        // Given
         val query = "Tampere"
         val mockLocation = Location(name = "Tampere", latitude = 61.5, longitude = 23.7)
 
@@ -153,18 +148,15 @@ class WeatherViewModelTest {
             locationRepository
         )
 
-        // When
         viewModel.searchAndAddLocation(query)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Then
         coVerify { locationRepository.saveLocation(mockLocation) }
         coVerify { settingsRepository.addRecentSearch("Tampere") }
     }
 
     @Test
     fun `searchAndAddLocation does nothing if location not found`() = runTest {
-        // Given
         // Matching "Invalidcity" because ViewModel sanitizes input
         coEvery { locationRepository.getCoordinatesByLocation("Invalidcity") } returns null
 
@@ -175,17 +167,14 @@ class WeatherViewModelTest {
             locationRepository
         )
 
-        // When
         viewModel.searchAndAddLocation("InvalidCity")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Then
         coVerify(exactly = 0) { locationRepository.saveLocation(any()) }
     }
 
     @Test
     fun `removeLocation calls delete on repository`() = runTest {
-        // Given
         val cityToRemove = "Helsinki"
         coEvery { locationRepository.deleteByName(cityToRemove) } returns Unit
 
@@ -196,25 +185,22 @@ class WeatherViewModelTest {
             locationRepository
         )
 
-        // When
         viewModel.removeLocation(cityToRemove)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Then
         coVerify { locationRepository.deleteByName(cityToRemove) }
     }
 
     @Test
     fun `weatherList combines GPS and Saved locations correctly`() = runTest {
-        // Given
         val gpsLocation = Location(name = "GPS City", latitude = 10.0, longitude = 10.0)
         val savedLocation = Location(name = "Saved City", latitude = 20.0, longitude = 20.0)
 
-        // 1. Mock Response for GPS (Must have a unique name)
+        // Mock Response for GPS (Must have a unique name)
         val gpsResponse = mockk<WeatherResponse>(relaxed = true) {
             every { name } returns "GPS City"
         }
-        // 2. Mock Response for Saved (Must have a DIFFERENT unique name)
+        // Mock Response for Saved (Must have a DIFFERENT unique name)
         val savedResponse = mockk<WeatherResponse>(relaxed = true) {
             every { name } returns "Saved City"
         }
@@ -223,11 +209,8 @@ class WeatherViewModelTest {
             every { listOfForecastItems } returns emptyList()
         }
 
-        // Setup Repositories
         coEvery { locationRepository.getCurrentLocation() } returns gpsLocation
         every { locationRepository.getAllLocations() } returns flowOf(listOf(savedLocation))
-
-        // --- SPECIFIC MOCKS TO PREVENT DUPLICATION ---
 
         // Match the call for GPS coordinates (10.0, 10.0)
         coEvery {
@@ -239,12 +222,10 @@ class WeatherViewModelTest {
             getCurrentWeather(lat = 20.0, lon = 20.0, city = any(), units = any(), language = any())
         } returns savedResponse
 
-        // Forecast can remain generic
         coEvery {
             getForecast(any(), any(), any(), any(), any())
         } returns mockForecast
 
-        // When
         viewModel = WeatherViewModel(
             getCurrentWeather,
             getForecast,
@@ -252,14 +233,12 @@ class WeatherViewModelTest {
             locationRepository
         )
 
-        // Collect flow to trigger updates
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.weatherList.collect()
         }
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Then
         val list = viewModel.weatherList.value
 
         assertEquals("Should have 2 items (1 GPS + 1 Saved)", 2, list.size)

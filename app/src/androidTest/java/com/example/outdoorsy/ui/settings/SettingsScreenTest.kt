@@ -55,7 +55,7 @@ class SettingsScreenTest {
             }
         }
 
-        composeTestRule.onNodeWithText(context.getString(R.string.settings_screen_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.settings))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(context.getString(R.string.general))
             .assertIsDisplayed()

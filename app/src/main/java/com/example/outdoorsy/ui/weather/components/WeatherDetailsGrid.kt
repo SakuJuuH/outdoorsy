@@ -80,7 +80,6 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
-                // update sunset  icon to appropriate one
                 icon = Icons.Default.WbTwilight,
                 label = stringResource(id = R.string.sunset),
                 value = weatherData.sunset,
