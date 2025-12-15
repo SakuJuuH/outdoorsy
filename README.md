@@ -346,7 +346,7 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 ### Testing Libraries
 
 | Library             | Purpose                 |
-| ------------------- | ----------------------- |
+|---------------------|-------------------------|
 | **JUnit 4**         | Unit test framework     |
 | **MockK**           | Kotlin mocking library  |
 | **Turbine**         | Testing Kotlin Flows    |
@@ -359,7 +359,7 @@ app/src/androidTest/java/com/example/outdoorsy/  # Instrumented Tests
 ## 🛠️ Tech Stack
 
 | Category                 | Technologies                                                   |
-| ------------------------ | -------------------------------------------------------------- |
+|--------------------------|----------------------------------------------------------------|
 | **Language**             | Kotlin 2.2.21                                                  |
 | **UI Framework**         | Jetpack Compose with Material 3                                |
 | **Architecture**         | Clean Architecture + MVVM                                      |
@@ -471,7 +471,7 @@ The app requires the following permissions:
 ## 📱 Screens Overview
 
 | Screen       | Description                                                                  |
-| ------------ | ---------------------------------------------------------------------------- |
+|--------------|------------------------------------------------------------------------------|
 | **Weather**  | Main dashboard showing weather for saved locations with forecasts            |
 | **History**  | View past activity plans sorted by date (newest first) with suitability info |
 | **Activity** | Plan new activities with date/time selection and AI-powered weather analysis |
