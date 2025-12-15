@@ -18,10 +18,6 @@ enum class TemperatureSystem(val code: String, val displayName: Int, val symbol:
 enum class AppLanguage(val code: String) {
     ENGLISH("en"),
     FINNISH("fi");
-
-    companion object {
-        fun fromCode(code: String): AppLanguage = entries.find { it.code == code } ?: ENGLISH
-    }
 }
 
 enum class Currencies(val code: String, val displayName: Int, val symbol: String) {

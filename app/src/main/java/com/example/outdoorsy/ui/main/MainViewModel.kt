@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
+class MainViewModel @Inject constructor(settingsRepository: SettingsRepository) :
     ViewModel() {
 
     val appTheme: StateFlow<String> = settingsRepository.getAppTheme()

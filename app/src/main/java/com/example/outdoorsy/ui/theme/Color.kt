@@ -29,8 +29,8 @@ val stoneGray = Color(0xFFBDBDBD)
 // Darker text for better contrast on light backgrounds
 val textPrimary = Color(0xFF0d1f15)
 
-// Secondary text - darker for better readability
-val textSecondary = Color(0xFF1b4332)
+// Secondary text - darker for better readability (unused)
+// val textSecondary = Color(0xFF1b4332)
 
 // Light background with better contrast potential
 val appBackgroundLight = Color(0xFFE8F0E8)

@@ -100,8 +100,8 @@ internal fun WeatherCard(
                 Text(
                     text = "${weatherData.temp}${
                         when (weatherData.unit) {
-                            TemperatureSystem.METRIC.code -> "°C"
-                            else -> "°F"
+                            TemperatureSystem.METRIC.code -> TemperatureSystem.METRIC.symbol
+                            else -> TemperatureSystem.IMPERIAL.symbol
                         }
                     }",
                     style = MaterialTheme.typography.displayLarge,
