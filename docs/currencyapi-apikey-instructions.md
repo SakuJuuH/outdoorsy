@@ -26,6 +26,7 @@ To use the key in the Outdoorsy project, you need to add it to a `local.properti
 
 1.  In Android Studio, navigate to the root directory of the project.
 2.  Create a file named `local.properties` if it doesn't already exist.
-3.  Add the following line to your `local.properties` file, pasting your key after the equals sign:
-
+3.  Add the following line to your `local.properties` file, pasting your key after the equals sign: `CURRENCY_API_KEY=YOUR_API_KEY_HERE`
+4.  Replace "YOUR_API_KEY_HERE" with the key you copied from the dashboard. Make sure to keep the quotation marks.
+5.  Rebuild the project in Android Studio (Build > Rebuild Project). The Gradle build script is configured to read this key and make it securely available to the app.
     
