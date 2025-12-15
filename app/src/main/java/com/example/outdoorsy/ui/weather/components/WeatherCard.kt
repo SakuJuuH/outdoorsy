@@ -142,7 +142,7 @@ internal fun WeatherCard(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(
-                            id = R.string.weather_screen_remove_location_description
+                            id = R.string.remove_location
                         ),
                         modifier = Modifier.size(20.dp),
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)

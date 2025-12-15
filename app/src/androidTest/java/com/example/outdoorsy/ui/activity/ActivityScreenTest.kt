@@ -54,7 +54,7 @@ class ActivityScreenTest {
         val sampleState = ActivityUiState()
         renderWithState(sampleState)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.activity_screen_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.activity_planner))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(context.getString(R.string.activity_screen_subtitle))
             .assertIsDisplayed()
@@ -65,7 +65,7 @@ class ActivityScreenTest {
         val sampleState = ActivityUiState(showActivityDialog = true)
         renderWithState(sampleState)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.add_activity_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.add_activity))
             .assertIsDisplayed()
     }
 
@@ -83,7 +83,7 @@ class ActivityScreenTest {
         )
         renderWithState(sampleState)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.search_button_label))
+        composeTestRule.onNodeWithText(context.getString(R.string.search))
             .assertIsEnabled()
     }
 

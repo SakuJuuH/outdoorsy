@@ -54,8 +54,8 @@ internal fun HistoryScreenContent(
     ) {
         // Screen header with title and subtitle
         ScreenTitle(
-            title = stringResource(R.string.history_screen_title),
-            subtitle = stringResource(R.string.history_screen_view_previous_activity_search)
+            title = stringResource(R.string.activity_history),
+            subtitle = stringResource(R.string.view_previous_activity_search)
         )
 
         // Display empty state or list of history items
@@ -68,7 +68,7 @@ internal fun HistoryScreenContent(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.history_screen_no_history),
+                    text = stringResource(R.string.no_activity_history),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center

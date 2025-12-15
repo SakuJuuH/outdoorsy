@@ -14,26 +14,26 @@ sealed class Screen(val route: String) {
 
     sealed class AppNav(route: String, val title: Int, val icon: ImageVector) : Screen(route) {
         object Weather :
-            AppNav("weather_screen", R.string.nav_weather, Icons.Outlined.Cloud)
+            AppNav("weather_screen", R.string.weather, Icons.Outlined.Cloud)
 
         object History :
-            AppNav("history_screen", R.string.nav_history, Icons.Outlined.History)
+            AppNav("history_screen", R.string.history, Icons.Outlined.History)
 
         object Activity :
             AppNav(
                 "activity_screen",
-                R.string.nav_activity,
+                R.string.activity,
                 icon = Icons.Outlined.TaskAlt
             )
 
         object Shopping : AppNav(
             "shopping_screen",
-            R.string.nav_shopping,
+            R.string.shopping,
             Icons.Outlined.ShoppingBasket
         )
 
         object Settings :
-            AppNav("settings_screen", R.string.nav_settings, Icons.Outlined.Settings)
+            AppNav("settings_screen", R.string.settings, Icons.Outlined.Settings)
     }
 }
 

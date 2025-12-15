@@ -59,7 +59,7 @@ fun ShoppingContent(uiState: ShoppingUiState, modifier: Modifier = Modifier) {
         // 1. Header
         item {
             ScreenTitle(
-                title = stringResource(id = R.string.shopping_screen_title),
+                title = stringResource(id = R.string.weather_gear_shop),
                 subtitle = stringResource(id = R.string.shopping_screen_subtitle)
             )
         }
@@ -70,7 +70,7 @@ fun ShoppingContent(uiState: ShoppingUiState, modifier: Modifier = Modifier) {
             item {
                 Text(
                     text = stringResource(
-                        id = R.string.shopping_screen_recommended_items_section_title
+                        id = R.string.recommended_weather_items
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
@@ -86,7 +86,7 @@ fun ShoppingContent(uiState: ShoppingUiState, modifier: Modifier = Modifier) {
         // --- All Items Section ---
         item {
             SectionTitle(
-                title = stringResource(id = R.string.shopping_screen_all_items_section_title),
+                title = stringResource(id = R.string.all_items),
                 modifier = Modifier.padding(start = 16.dp)
             )
         }

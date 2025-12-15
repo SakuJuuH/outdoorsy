@@ -56,7 +56,7 @@ class ShoppingScreenTest {
         val initialState = ShoppingUiState()
         renderShoppingScreen(initialState)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.shopping_screen_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.weather_gear_shop))
             .assertIsDisplayed()
     }
 
@@ -87,11 +87,11 @@ class ShoppingScreenTest {
         )
         renderShoppingScreen(successState)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.shopping_screen_recommended_items_section_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.recommended_weather_items))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(sampleRecommendedItem.title).assertIsDisplayed()
 
-        composeTestRule.onNodeWithText(context.getString(R.string.shopping_screen_all_items_section_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.all_items))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(sampleRegularItem.title).assertIsDisplayed()
     }
@@ -104,10 +104,10 @@ class ShoppingScreenTest {
         )
         renderShoppingScreen(stateWithNoRecommendations)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.shopping_screen_recommended_items_section_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.recommended_weather_items))
             .assertDoesNotExist()
 
-        composeTestRule.onNodeWithText(context.getString(R.string.shopping_screen_all_items_section_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.all_items))
             .assertIsDisplayed()
         composeTestRule.onNodeWithText(sampleRegularItem.title).assertIsDisplayed()
     }

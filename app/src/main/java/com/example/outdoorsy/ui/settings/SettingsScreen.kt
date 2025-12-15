@@ -80,27 +80,27 @@ internal fun SettingsScreenContent(
             .background(MaterialTheme.colorScheme.background)
     ) {
         // Title Area
-        ScreenTitle(title = stringResource(R.string.settings_screen_title))
+        ScreenTitle(title = stringResource(R.string.settings))
 
         // --- General Section ---
         SectionTitle(
-            title = stringResource(id = R.string.settings_screen_section_header_general),
+            title = stringResource(id = R.string.general),
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         SettingsItem(
             icon = Icons.Default.Language,
-            title = stringResource(id = R.string.settings_screen_language_title),
+            title = stringResource(id = R.string.language),
             subtitle = LocaleHelper.getLanguageName(uiState.language),
-            iconContentDescription = stringResource(id = R.string.settings_screen_language_icon),
+            iconContentDescription = stringResource(id = R.string.language_setting),
             onClick = { showLanguageDialog = true }
         )
 
         SettingsItem(
             icon = Icons.Default.Brightness4,
-            title = stringResource(id = R.string.settings_screen_app_theme_title),
+            title = stringResource(id = R.string.app_theme),
             subtitle = stringResource(id = AppTheme.fromCode(uiState.appTheme).displayName),
-            iconContentDescription = stringResource(id = R.string.settings_screen_app_theme_icon),
+            iconContentDescription = stringResource(id = R.string.app_theme_setting),
             onClick = { showThemeDialog = true }
         )
 
@@ -108,34 +108,34 @@ internal fun SettingsScreenContent(
 
         // --- Units Section ---
         SectionTitle(
-            title = stringResource(id = R.string.settings_screen_section_header_units),
+            title = stringResource(id = R.string.units),
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         // Currency
         SettingsItem(
             icon = Icons.Default.AttachMoney,
-            title = stringResource(id = R.string.settings_screen_currency),
+            title = stringResource(id = R.string.currency),
             subtitle = stringResource(id = Currencies.fromCode(uiState.currency).displayName),
-            iconContentDescription = stringResource(id = R.string.settings_screen_currency_icon),
+            iconContentDescription = stringResource(id = R.string.currency_setting),
             onClick = { showCurrencyDialog = true }
         )
 
         // Temperature Unit
         SettingsItem(
             icon = Icons.Default.Thermostat,
-            title = stringResource(id = R.string.settings_screen_unit_item_title),
+            title = stringResource(id = R.string.unit_system),
             subtitle = stringResource(
                 id = TemperatureSystem.fromCode(uiState.temperatureUnit).displayName
             ),
-            iconContentDescription = stringResource(id = R.string.settings_screen_unit_icon),
+            iconContentDescription = stringResource(id = R.string.temperature_unit_setting),
             onClick = { showUnitDialog = true }
         )
     }
 
     if (showLanguageDialog) {
         SingleChoiceDialog(
-            title = stringResource(id = R.string.settings_screen_language_dialog_title),
+            title = stringResource(id = R.string.select_language),
             options = AppLanguage.entries,
             initialSelection = AppLanguage.entries.find { it.code == uiState.language },
             onConfirm = { language ->
@@ -149,7 +149,7 @@ internal fun SettingsScreenContent(
 
     if (showThemeDialog) {
         SingleChoiceDialog(
-            title = stringResource(R.string.settings_screen_app_theme_dialog_title),
+            title = stringResource(R.string.select_app_theme),
             options = AppTheme.entries,
             initialSelection = AppTheme.entries.find { it.code == uiState.appTheme },
             onConfirm = { theme ->
@@ -163,7 +163,7 @@ internal fun SettingsScreenContent(
 
     if (showUnitDialog) {
         SingleChoiceDialog(
-            title = stringResource(id = R.string.settings_screen_unit_dialog_title),
+            title = stringResource(id = R.string.select_unit_system),
             options = TemperatureSystem.entries,
             initialSelection = TemperatureSystem.entries.find {
                 it.code == uiState.temperatureUnit
@@ -179,7 +179,7 @@ internal fun SettingsScreenContent(
 
     if (showCurrencyDialog) {
         SingleChoiceDialog(
-            title = stringResource(id = R.string.settings_screen_select_currency),
+            title = stringResource(id = R.string.select_currency),
             options = Currencies.entries,
             initialSelection = Currencies.entries.find { it.code == uiState.currency },
             onConfirm = { currency ->

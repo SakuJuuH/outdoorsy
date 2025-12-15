@@ -32,7 +32,7 @@ fun ShopMessageCard(modifier: Modifier = Modifier, onNavigateToShop: () -> Unit)
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
-                text = stringResource(R.string.shop_message_card_description),
+                text = stringResource(R.string.shop_card_description),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
@@ -40,7 +40,7 @@ fun ShopMessageCard(modifier: Modifier = Modifier, onNavigateToShop: () -> Unit)
                 onClick = onNavigateToShop,
                 modifier = Modifier.fillMaxWidth(0.8f)
             ) {
-                Text(text = stringResource(R.string.shop_message_card_button_text))
+                Text(text = stringResource(R.string.go_to_shop))
             }
         }
     }

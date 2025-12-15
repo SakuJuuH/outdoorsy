@@ -27,7 +27,7 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SectionTitle(
-            title = stringResource(R.string.weather_screen_detail_title)
+            title = stringResource(R.string.weather_details)
         )
 
         Row(
@@ -36,13 +36,13 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         ) {
             WeatherDetailCard(
                 icon = Icons.Default.WaterDrop,
-                label = stringResource(id = R.string.weather_screen_detail_humidity),
+                label = stringResource(id = R.string.humidity),
                 value = "${weatherData.humidity}%",
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
                 icon = Icons.Default.Air,
-                label = stringResource(id = R.string.weather_screen_detail_wind_speed),
+                label = stringResource(id = R.string.wind_speed),
                 value = "${weatherData.windSpeed} ${
                     when (weatherData.unit) {
                         TemperatureSystem.METRIC.code -> "m/s"
@@ -58,13 +58,13 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         ) {
             WeatherDetailCard(
                 icon = Icons.Default.Visibility,
-                label = stringResource(id = R.string.weather_screen_detail_visibility),
+                label = stringResource(id = R.string.visibility),
                 value = "${weatherData.visibility} km",
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
                 icon = Icons.Default.Speed,
-                label = stringResource(id = R.string.weather_screen_detail_pressure),
+                label = stringResource(id = R.string.pressure),
                 value = "${weatherData.pressure} hPa",
                 modifier = Modifier.weight(1f)
             )
@@ -75,14 +75,14 @@ internal fun WeatherDetailsGrid(weatherData: WeatherData, modifier: Modifier = M
         ) {
             WeatherDetailCard(
                 icon = Icons.Default.WbSunny,
-                label = stringResource(id = R.string.weather_screen_weather_detail_sunrise),
+                label = stringResource(id = R.string.sunrise),
                 value = weatherData.sunrise,
                 modifier = Modifier.weight(1f)
             )
             WeatherDetailCard(
                 // update sunset  icon to appropriate one
                 icon = Icons.Default.WbTwilight,
-                label = stringResource(id = R.string.weather_screen_weather_detail_sunset),
+                label = stringResource(id = R.string.sunset),
                 value = weatherData.sunset,
                 modifier = Modifier.weight(1f)
             )

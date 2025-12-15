@@ -63,9 +63,9 @@ class HistoryScreenTest {
     fun `history screen displays title and subtitle`() {
         renderWithItems(emptyList())
 
-        composeTestRule.onNodeWithText(context.getString(R.string.history_screen_title))
+        composeTestRule.onNodeWithText(context.getString(R.string.activity_history))
             .assertIsDisplayed()
-        composeTestRule.onNodeWithText(context.getString(R.string.history_screen_view_previous_activity_search))
+        composeTestRule.onNodeWithText(context.getString(R.string.view_previous_activity_search))
             .assertIsDisplayed()
     }
 
@@ -73,7 +73,7 @@ class HistoryScreenTest {
     fun `history screen displays empty state when no items`() {
         renderWithItems(emptyList())
 
-        composeTestRule.onNodeWithText(context.getString(R.string.history_screen_no_history))
+        composeTestRule.onNodeWithText(context.getString(R.string.no_activity_history))
             .assertIsDisplayed()
     }
 
@@ -198,7 +198,7 @@ class HistoryScreenTest {
         val items = listOf(createSampleHistoryItem())
         renderWithItems(items)
 
-        composeTestRule.onNodeWithText(context.getString(R.string.history_screen_no_history))
+        composeTestRule.onNodeWithText(context.getString(R.string.no_activity_history))
             .assertDoesNotExist()
     }
 }
